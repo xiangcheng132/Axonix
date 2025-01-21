@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common/Index" />
+            <option value="$PROJECT_DIR$/module_emergency" />
+            <option value="$PROJECT_DIR$/module_emergency/emergencyMain" />
+            <option value="$PROJECT_DIR$/module_nav" />
+            <option value="$PROJECT_DIR$/module_nav/navMain" />
+            <option value="$PROJECT_DIR$/module_social" />
+            <option value="$PROJECT_DIR$/module_social/socialMain" />
+            <option value="$PROJECT_DIR$/module_user" />
+            <option value="$PROJECT_DIR$/module_user/userMain" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
