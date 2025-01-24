@@ -1,7 +1,7 @@
 import os
 import pyaudio
 import threading
-import keyboard  # 用于监听键盘事件
+import keyboard 
 from vosk import Model, KaldiRecognizer
 
 # 定义一个全局变量用于控制程序是否运行
