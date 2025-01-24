@@ -1,1 +1,6 @@
 python 3.10
+pyaudio
+vosk
+threading
+numpy
+pyttsx3
