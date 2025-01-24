@@ -1,2 +1,3 @@
 语音转文字（aud_doc)
 采用vosk现有的模型，需自行下载所需要的模型，然后替换到transfer文件夹中
+下载地址：https://alphacephei.com/vosk/models
