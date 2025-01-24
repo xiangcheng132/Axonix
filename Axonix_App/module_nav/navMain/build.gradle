@@ -19,6 +19,10 @@ android {
                 arguments.put("AROUTER_MODULE_NAME", project.name)
             }
         }
+        ndk {
+            //设置支持的SO库架构
+            abiFilters  "armeabi","armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
     }
 
     buildTypes {
@@ -30,6 +34,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true // 确保启用 BuildConfig
     }
 }
 
@@ -45,4 +53,18 @@ dependencies {
 
     implementation libs.arouter.api // 引入 ARouter 核心库
     annotationProcessor libs.arouter.compiler // 引入 ARouter 编译器（注解）
+
+//    implementation 'com.amap.api:3dmap:9.1.0' //手机不支持，暂无法调试
+    implementation 'com.amap.api:location:6.1.0'
+    implementation 'com.amap.api:search:6.1.0'
+
+    implementation 'com.amap.api:3dmap:8.0.0'
+//    implementation 'com.amap.api:location:6.1.0'
+//    implementation 'com.amap.api:search:6.1.0'
+//    implementation 'navi-3dmap-location-search:latest.integration'
+
+//    implementation project(':common:Index')
+
+
+
 }
