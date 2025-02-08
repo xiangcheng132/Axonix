@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 定义一个上下文，id可以自定义 -->
+    <context id="AxonixContext" targetRuntime="MyBatis3">
+
+        <!-- 配置注释生成器（这里关闭所有注释，可根据需要调整） -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <!-- 数据库连接配置 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/axonix?useUnicode=true&amp;characterEncoding=utf8&amp;currentSchema=axonix"
+                        userId="root"
+                        password="123456">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <!-- 生成 Java Model 类的配置 -->
+        <javaModelGenerator targetPackage="com.Axonix.demo.model"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成 SQL Mapper XML 文件的配置 -->
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成 Mapper 接口的配置 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.Axonix.demo.mapper"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 配置需要生成代码的数据库表，指定 schema 以防止匹配多个数据库 -->
+        <table schema="axonix" tableName="users" domainObjectName="User" />
+        <table schema="axonix" tableName="emergency_contacts" domainObjectName="EmergencyContact" />
+        <table schema="axonix" tableName="emergency_requests" domainObjectName="EmergencyRequest" />
+        <table schema="axonix" tableName="messages" domainObjectName="Message" />
+        <table schema="axonix" tableName="forum_posts" domainObjectName="ForumPost" />
+        <table schema="axonix" tableName="forum_comments" domainObjectName="ForumComment" />
+        <table schema="axonix" tableName="operation_logs" domainObjectName="OperationLog" />
+        <table schema="axonix" tableName="facilities" domainObjectName="Facility" />
+        <table schema="axonix" tableName="payments" domainObjectName="Payment" />
+        <table schema="axonix" tableName="notifications" domainObjectName="Notification" />
+        <table schema="axonix" tableName="location_shares" domainObjectName="LocationShare" />
+        <table schema="axonix" tableName="friend_relationships" domainObjectName="FriendRelationship" />
+        <table schema="axonix" tableName="forum_categories" domainObjectName="ForumCategory" />
+        <table schema="axonix" tableName="third_party_api_logs" domainObjectName="ThirdPartyApiLog" />
+        <table schema="axonix" tableName="sign_language_translation_logs" domainObjectName="SignLanguageTranslationLog" />
+
+    </context>
+</generatorConfiguration>

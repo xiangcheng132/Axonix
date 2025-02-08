@@ -1,0 +1,183 @@
+-- 1. 创建数据库 Axonix
+CREATE DATABASE IF NOT EXISTS Axonix
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+USE Axonix;
+
+-- ================================
+-- 2. 按依赖关系顺序创建数据表
+-- ================================
+
+-- 2.1 用户表 (users)
+CREATE TABLE IF NOT EXISTS `users` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  role ENUM('user','admin') DEFAULT 'user',
+  disability_type VARCHAR(100),
+  preferences JSON,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.2 紧急联系人表 (emergency_contacts)
+CREATE TABLE IF NOT EXISTS `emergency_contacts` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  relationship VARCHAR(100),
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_contact_user FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.3 求助记录表 (emergency_requests)
+CREATE TABLE IF NOT EXISTS `emergency_requests` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  location JSON,
+  contact_id INT,
+  status ENUM('pending', 'processing', 'completed') DEFAULT 'pending',
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_emergency_user FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_emergency_contact FOREIGN KEY (contact_id) REFERENCES emergency_contacts(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.4 消息表 (messages)
+CREATE TABLE IF NOT EXISTS `messages` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sender_id INT NOT NULL,
+  receiver_id INT NOT NULL,
+  content TEXT,
+  type ENUM('text','voice','video') DEFAULT 'text',
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_message_sender FOREIGN KEY (sender_id) REFERENCES users(id),
+  CONSTRAINT fk_message_receiver FOREIGN KEY (receiver_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.5 论坛帖子表 (forum_posts)
+CREATE TABLE IF NOT EXISTS `forum_posts` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content TEXT,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_post_user FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.6 论坛评论表 (forum_comments)
+CREATE TABLE IF NOT EXISTS `forum_comments` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  post_id INT NOT NULL,
+  user_id INT NOT NULL,
+  content TEXT,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES forum_posts(id),
+  CONSTRAINT fk_comment_user FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.7 操作日志表 (operation_logs)
+CREATE TABLE IF NOT EXISTS `operation_logs` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT NOT NULL,
+  action VARCHAR(255) NOT NULL,
+  target_id INT,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_log_admin FOREIGN KEY (admin_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.8 无障碍设施表 (facilities)
+CREATE TABLE IF NOT EXISTS `facilities` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  facility_type VARCHAR(100),
+  location JSON,
+  description TEXT,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.9 支付记录表 (payments)
+CREATE TABLE IF NOT EXISTS `payments` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  payment_method VARCHAR(50),
+  transaction_id VARCHAR(100),
+  status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_payment_user FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.10 通知表 (notifications)
+CREATE TABLE IF NOT EXISTS `notifications` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(255),
+  message TEXT,
+  type VARCHAR(50),
+  read_status BOOLEAN DEFAULT FALSE,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.11 位置共享记录表 (location_shares)
+CREATE TABLE IF NOT EXISTS `location_shares` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,       -- 发起共享的用户
+  shared_with INT NOT NULL,   -- 共享给的目标用户
+  start_time DATETIME NOT NULL,
+  end_time DATETIME,          -- 结束时间，若为空表示仍在共享
+  last_location JSON,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_locshare_user FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_locshare_shared FOREIGN KEY (shared_with) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.12 好友关系表 (friend_relationships)
+CREATE TABLE IF NOT EXISTS `friend_relationships` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  friend_user_id INT NOT NULL,
+  status ENUM('pending', 'accepted', 'blocked') DEFAULT 'pending',
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_friend_user FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_friend_friend FOREIGN KEY (friend_user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.13 论坛分类表 (forum_categories)
+CREATE TABLE IF NOT EXISTS `forum_categories` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.14 第三方 API 日志表 (third_party_api_logs)
+CREATE TABLE IF NOT EXISTS `third_party_api_logs` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  service_name VARCHAR(255) NOT NULL,
+  request_data TEXT,
+  response_data TEXT,
+  status VARCHAR(50),
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2.15 手语翻译日志表 (sign_language_translation_logs)
+CREATE TABLE IF NOT EXISTS `sign_language_translation_logs` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  original_video_url VARCHAR(255),
+  translated_text TEXT,
+  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_sign_lang_user FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
