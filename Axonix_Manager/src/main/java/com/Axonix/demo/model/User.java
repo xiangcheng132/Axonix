@@ -1,5 +1,7 @@
 package com.Axonix.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class User {
@@ -16,7 +18,7 @@ public class User {
     private String role;
 
     private String disabilityType;
-
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createdtime;
 
     private Date updatedtime;

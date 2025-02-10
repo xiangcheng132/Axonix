@@ -3,8 +3,11 @@ package com.Axonix.demo.mapper;
 import com.Axonix.demo.model.User;
 import com.Axonix.demo.model.UserExample;
 import java.util.List;
+
+//import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+//@Mapper
 public interface UserMapper {
     long countByExample(UserExample example);
 
