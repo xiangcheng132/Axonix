@@ -25,7 +25,7 @@ public class PaymentController {
         return paymentService.deleteById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("/insert")
     public int insert(@RequestBody Payment record) {
         return paymentService.insert(record);
     }

@@ -26,7 +26,7 @@ public class ThirdPartyApiLogController {
         return thirdPartyApiLogService.deleteById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("/insert")
     public int insert(@RequestBody ThirdPartyApiLogWithBLOBs record) {
         return thirdPartyApiLogService.insert(record);
     }

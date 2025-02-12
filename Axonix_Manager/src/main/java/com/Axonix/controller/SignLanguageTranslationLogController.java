@@ -25,7 +25,7 @@ public class SignLanguageTranslationLogController {
         return signLanguageTranslationLogService.deleteById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("/insert")
     public int insert(@RequestBody SignLanguageTranslationLog record) {
         return signLanguageTranslationLogService.insert(record);
     }
