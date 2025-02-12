@@ -11,7 +11,7 @@
             <property name="suppressAllComments" value="true" />
         </commentGenerator>
 
-        <!-- 数据库连接配置 -->
+        <!-- 数据库连接配置  （可能需修改）-->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/axonix?useUnicode=true&amp;characterEncoding=utf8&amp;currentSchema=axonix"
                         userId="root"

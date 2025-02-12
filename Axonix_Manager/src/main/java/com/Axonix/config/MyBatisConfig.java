@@ -20,10 +20,10 @@ public class MyBatisConfig {
     @Bean
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/axonix?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("123456");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");//驱动类，一般分为"com.mysql.jdbc.Driver"和"com.mysql.cj.jdbc.Driver",后者为新版的
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/axonix?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC");//数据库地址
+        dataSource.setUsername("root");//数据库用户名
+        dataSource.setPassword("123456");//数据库密码
         return dataSource;
     }
 
