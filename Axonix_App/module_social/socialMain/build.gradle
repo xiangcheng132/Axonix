@@ -1,13 +1,18 @@
-plugins {
-    alias(libs.plugins.android.application)
-}
+def isAppModule = project.findProperty("isAppModule")?.toString()?.toBoolean() ?: false
 
+if (isAppModule) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 android {
     namespace 'com.Axonix.socialmain'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.Axonix.socialmain"
+        if (isAppModule) {
+            applicationId "com.Axonix.socialmain"
+        }
         minSdk 27
         targetSdk 34
         versionCode 1
@@ -45,4 +50,10 @@ dependencies {
 
     implementation libs.arouter.api // 引入 ARouter 核心库
     annotationProcessor libs.arouter.compiler // 引入 ARouter 编译器（注解）
+
+    implementation project(':common:Index')
+//    implementation project(':module_emergency:emergencyMain')
+//    implementation project(':module_nav:navMain')
+//    implementation project(':app')
+//    implementation project(':module_user:userMain')
 }

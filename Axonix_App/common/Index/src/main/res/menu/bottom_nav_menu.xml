@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_emergency"
+        android:icon="@drawable/ic_menu_help"
+        android:title="求助"/>
+
+    <item
+        android:id="@+id/nav_nav"
+        android:icon="@drawable/ic_menu_nav"
+        android:title="导航"/>
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_menu_home"
+        android:title="首页"/>
+    <item
+        android:id="@+id/nav_social"
+        android:icon="@drawable/ic_menu_social"
+        android:title="社区"/>
+    <item
+        android:id="@+id/nav_user"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="我的"/>
+</menu>

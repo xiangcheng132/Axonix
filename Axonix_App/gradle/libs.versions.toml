@@ -8,7 +8,8 @@ material = "1.12.0"
 activity = "1.10.0"
 constraintlayout = "2.2.0"
 
-arouter = "1.5.2" # ARouter 的版本号
+arouter = "1.5.2"
+transportationConsumer = "3.0.0" # ARouter 的版本号
 
 
 [libraries]
@@ -23,6 +24,9 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 #路由
 arouter-api = { group = "com.alibaba", name = "arouter-api", version.ref = "arouter" }
 arouter-compiler = { group = "com.alibaba", name = "arouter-compiler", version.ref = "arouter" }
+transportation-consumer = { group = "com.google.android.libraries.mapsplatform.transportation", name = "transportation-consumer", version.ref = "transportationConsumer" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
 

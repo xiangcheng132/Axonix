@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.Axonix">
+
+    <!-- 允许访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:name=".MyApplication"
@@ -15,15 +21,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Axonix_App"
         tools:targetApi="31">
+
+        <!-- ARouter 需要的 meta-data 配置 -->
+        <meta-data
+            android:name="AROUTER_AUTO_INIT"
+            android:value="true"/>
+        <meta-data
+            android:name="AROUTER_AUTO_LOG"
+            android:value="true"/>
+
+        <!-- App 入口 Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 其他模块的 Activity 需要在主模块注册 -->
+<!--        <activity android:name="com.Axonix.navmain.NavActivity" android:exported="true"/>-->
+
+
     </application>
 
 </manifest>

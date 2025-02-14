@@ -11,15 +11,17 @@
         android:theme="@style/Theme.Axonix_App">
         <meta-data android:name="com.amap.api.v2.apikey" android:value="0dcfd95dadb0e0949a7c0e319562b2a7"/>
 <!--        <service android:name="com.amap.api.location.APSService" />-->
-        <activity
-            android:name=".NavActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--        <activity-->
+<!--            android:name=".NavActivity"-->
+<!--            android:exported="true">-->
+<!--&lt;!&ndash;            作为子模块时注释intent-filter&ndash;&gt;-->
+<!--&lt;!&ndash;            <intent-filter>&ndash;&gt;-->
+<!--&lt;!&ndash;                <action android:name="android.intent.action.MAIN" />&ndash;&gt;-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+<!--&lt;!&ndash;                <category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </intent-filter>&ndash;&gt;-->
+<!--        </activity>-->
+
     </application>
 
     <!--允许访问网络，必选权限-->

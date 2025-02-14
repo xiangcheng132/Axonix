@@ -1,13 +1,18 @@
-plugins {
-    alias(libs.plugins.android.application)
-}
+def isAppModule = project.findProperty("isAppModule")?.toString()?.toBoolean() ?: false
 
+if (isAppModule) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 android {
     namespace 'com.Axonix.navmain'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.Axonix.navmain"
+        if (isAppModule) {
+            applicationId "com.Axonix.navmain"
+        }
         minSdk 27
         targetSdk 34
         versionCode 1
@@ -63,8 +68,10 @@ dependencies {
 //    implementation 'com.amap.api:search:6.1.0'
 //    implementation 'navi-3dmap-location-search:latest.integration'
 
-//    implementation project(':common:Index')
 
-
-
+    implementation project(':common:Index')
+//    implementation project(':module_emergency:emergencyMain')
+//    implementation project(':app')
+//    implementation project(':module_social:socialMain')
+//    implementation project(':module_user:userMain')
 }
