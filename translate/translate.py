@@ -1,21 +1,33 @@
-import asyncio # 我也不知道为啥一定得用这个处理异步运算的包就可以运行，总之不要改动涉及这个包的行
+import asyncio
+from fastapi import FastAPI, HTTPException
 from googletrans import Translator
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class TranslationRequest(BaseModel):
+    text: str
+    dest_language: str
 
 async def translate_text(text, dest_language):
     translator = Translator()
-    translation = await translator.translate(text, dest=dest_language)  # Await the translation call
+    # 使用 asyncio.to_thread 将同步代码放到线程池中运行
+    translation = await asyncio.to_thread(translator.translate, text, dest=dest_language)
     return translation.text
 
-async def main():
-    print("欢迎使用文字翻译工具！")
-    text = input("请输入要翻译的文字: ")
-    dest_language = input("请输入目标语言代码（例如：'en' 表示英语，'es' 表示西班牙语，'zh-cn' 表示简体中文）: ")
-
+@app.post("/translate/")
+async def translate(request: TranslationRequest):
     try:
-        translated_text = await translate_text(text, dest_language)  # Await the translation
-        print(f"翻译结果: {translated_text}")
+        translated_text = await translate_text(request.text, request.dest_language)
+        return {"translated_text": translated_text}
     except Exception as e:
-        print(f"翻译过程中出现错误: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    asyncio.run(main())  # Run the main async function
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+#调用需先进入translate目录
+#cd translate
+#uvicorn translaor:app --reload
+
