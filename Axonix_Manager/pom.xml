@@ -40,19 +40,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-        <!-- MyBatis 依赖 -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.13</version>  <!-- 请使用最新稳定版本 -->
-        </dependency>
+<!--        &lt;!&ndash; MyBatis 依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.mybatis</groupId>-->
+<!--            <artifactId>mybatis</artifactId>-->
+<!--            <version>3.5.13</version>  &lt;!&ndash; 请使用最新稳定版本 &ndash;&gt;-->
+<!--        </dependency>-->
 
-        <!-- MyBatis-Spring 依赖（如果使用 Spring 整合） -->
-        <dependency>
-            <groupId>org.mybatis.spring</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>2.0.6</version>
-        </dependency>
+<!--        &lt;!&ndash; MyBatis-Spring 依赖（如果使用 Spring 整合） &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.mybatis.spring</groupId>-->
+<!--            <artifactId>mybatis-spring</artifactId>-->
+<!--            <version>2.0.6</version>-->
+<!--        </dependency>-->
 
         <!-- MyBatis Generator（如果使用代码生成器） -->
         <dependency>
@@ -79,8 +79,29 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
 
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>5.0.1</version>
+        </dependency>
 
     </dependencies>
 

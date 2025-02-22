@@ -3,17 +3,20 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/axonix?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC #数据库地址
-    username: root #用户名
-    password: 123456 #密码
-    driver-class-name: com.mysql.cj.jdbc.Driver #驱动类
+    url: jdbc:mysql://localhost:3306/axonix?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource  # 使用 HikariCP 连接池（默认推荐）
+
 
 
 mybatis:
-  mapper-locations: classpath:/mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.Axonix.demo.model
 
 #logging:
 #  level:
 #    org.springframework: DEBUG
 #    org.mybatis: DEBUG
+#    com.Axonix.demo.mapper: DEBUG

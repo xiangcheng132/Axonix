@@ -4,6 +4,7 @@ import com.Axonix.demo.mapper.UserMapper;
 import com.Axonix.demo.model.User;
 import com.Axonix.demo.model.UserExample;
 import com.Axonix.service.UserService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+//    @PostConstruct
+//    public void testMapper() {
+//        System.out.println("UserMapper Bean: " + userMapper);
+//    }
 
     @Override
     public long countUsers(UserExample example) {
