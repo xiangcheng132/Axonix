@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/forum-posts")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ForumPostController {
 
     @Autowired

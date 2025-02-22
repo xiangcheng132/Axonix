@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/third-party-api-logs")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ThirdPartyApiLogController {
 
     @Autowired

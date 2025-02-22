@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sign-language-translation-logs")
+@CrossOrigin(origins = "http://localhost:5173")
 public class SignLanguageTranslationLogController {
 
     @Autowired
