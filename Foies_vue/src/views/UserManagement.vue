@@ -23,6 +23,9 @@
     <!-- 按钮触发获取用户信息 -->
     <button @click="fetchUserData" class="fetch-user-button">获取用户信息</button>
   </div>
+  <div>
+    
+  </div>
 </template>
 
 <script>
