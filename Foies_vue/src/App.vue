@@ -1,19 +1,11 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view />
+  </div>
 </template>
-  
-  <script>
-  // JS部分
-  import AdminDashboard from './views/AdminDashboard.vue';
-  
-  export default {
-    name: 'App',
-    components: {
-      AdminDashboard,
-    }
-  }
-  </script>
-  
-  <style>
-  </style>
-  
+
+<script>
+export default {
+  name: 'App'
+}
+</script>

@@ -1,48 +1,86 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import AdminDashboard from '../views/AdminDashboard.vue'; // 导入 管理后端 主页
-import UserManagement from '../views/UserManagement.vue'; // 导入 用户管理 页面
-import DataAnalysis from '../views/DataAnalysis.vue'; // 导入 数据处理与分析 页面
-import ServiceIntegration from '../views/ServiceIntegration.vue'; // 导入 服务接口与集成 页面
-import DataPrivacy from '../views/DataPrivacy.vue'; // 导入 数据隐私与加密 页面
-import AdaptivePrecisionEnhancement from '../views/AdaptivePrecisionEnhancement.vue'; // 导入 自适应精度增强 页面
+import Vue from 'vue'
+import Router from 'vue-router'
 
-const routes = [
+Vue.use(Router)
+
+import Layout from '@/layout'
+
+export const constantRoutes = [
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
+
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
+
   {
     path: '/',
-    name: 'AdminDashboard',
-    component: AdminDashboard // 默认展示 管理后端 主页
+    component: Layout,
+    redirect: '/dashboard',
+    children: [{
+      path: 'dashboard',
+      name: 'Dashboard',
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: '首页', icon: 'dashboard' }
+    }]
   },
-  {
-    path: '/user-management',
-    name: 'UserManagement',
-    component: UserManagement // 点击链接时跳转到 用户管理 页面
-  },
-  {
-    path: '/data-analysis',
-    name: 'DataAnalysis',
-    component: DataAnalysis // 点击链接时跳转到 数据处理与分析 页面
-  },
-  {
-    path: '/service-integration',
-    name: 'ServiceIntegration',
-    component: ServiceIntegration // 点击链接时跳转到 服务接口与集成 页面
-  },
-  {
-    path: '/data-privacy',
-    name: 'DataPrivacy',
-    component: DataPrivacy // 点击链接时跳转到 数据隐私与加密 页面
-  },
-  {
-    path: '/adaptive-precision-enhancement',
-    name: 'AdaptivePrecisionEnhancement',
-    component: AdaptivePrecisionEnhancement // 点击链接时跳转到 数据隐私与加密 页面
-  },
-  // 其他路由配置
-];
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-});
+  {
+    path: '/example',
+    component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: '案例', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/table/index'),
+        meta: { title: '表格', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '树状表', icon: 'tree' }
+      }
+    ]
+  },
 
-export default router;
+  {
+    path: '/form',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: '表单', icon: 'form' }
+      }
+    ]
+  },
+
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
+]
+
+const createRouter = () => new Router({
+  // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRoutes
+})
+
+const router = createRouter()
+
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function resetRouter() {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // reset router
+}
+
+export default router
