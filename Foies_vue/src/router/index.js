@@ -53,6 +53,190 @@ export const constantRoutes = [
   },
 
   {
+    path: '/User',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'User',
+        component: () => import('@/views/User/index'),
+        meta: { title: '用户管理', icon: 'user' }
+      }
+    ]
+  },
+
+  {
+    path: '/Forum',
+    component: Layout,
+    redirect: '/Forum',
+    name: 'Forum',
+    meta: { title: '论坛管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'ForumPost',
+        name: 'ForumPost',
+        component: () => import('@/views/ForumPost/index'),
+        meta: { title: '论坛帖子管理', icon: 'table' }
+      },
+      {
+        path: 'ForumComment',
+        name: 'ForumComment',
+        component: () => import('@/views/ForumComment/index'),
+        meta: { title: '论坛评论管理', icon: 'table' }
+      },
+      {
+        path: 'ForumCategory',
+        name: 'ForumCategory',
+        component: () => import('@/views/ForumCategory/index'),
+        meta: { title: '论坛分类管理', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/ThirdPartyApiLog',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'ThirdPartyApiLog',
+        component: () => import('@/views/ThirdPartyApiLog/index'),
+        meta: { title: '第三方api管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/SignLanguageTranslationLog',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'SignLanguageTranslationLog',
+        component: () => import('@/views/SignLanguageTranslationLog/index'),
+        meta: { title: '手语翻译管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/Payment',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Payment',
+        component: () => import('@/views/Payment/index'),
+        meta: { title: '支付管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/OperationLog',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'OperationLog',
+        component: () => import('@/views/OperationLog/index'),
+        meta: { title: '操作记录管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/Notification',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Notification',
+        component: () => import('@/views/Notification/index'),
+        meta: { title: '通知管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/Message',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Message',
+        component: () => import('@/views/Message/index'),
+        meta: { title: '消息管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/LocationShare',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'LocationShare',
+        component: () => import('@/views/LocationShare/index'),
+        meta: { title: '位置共享管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/FriendRelationship',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'FriendRelationship',
+        component: () => import('@/views/FriendRelationship/index'),
+        meta: { title: '好友关系管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/Facility',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Facility',
+        component: () => import('@/views/Facility/index'),
+        meta: { title: '设施管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/EmergencyRequest',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'EmergencyRequest',
+        component: () => import('@/views/EmergencyRequest/index'),
+        meta: { title: '紧急求助管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/EmergencyContact',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'EmergencyContact',
+        component: () => import('@/views/EmergencyContact/index'),
+        meta: { title: '紧急联系人管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/form',
     component: Layout,
     children: [
