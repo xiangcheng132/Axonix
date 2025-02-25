@@ -1,80 +1,91 @@
 <template>
-    <div class="app-container">
-      <el-table
-        v-loading="listLoading"
-        :data="list"
-        element-loading-text="Loading"
-        border
-        fit
-        highlight-current-row
-      >
-        <el-table-column align="center" label="ID" width="95">
-          <template slot-scope="scope">
-            {{ scope.$index }}
-          </template>
-        </el-table-column>
-        <el-table-column label="Title">
-          <template slot-scope="scope">
-            {{ scope.row.title }}
-          </template>
-        </el-table-column>
-        <el-table-column label="Author" width="110" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.author }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="Pageviews" width="110" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.pageviews }}
-          </template>
-        </el-table-column>
-        <el-table-column class-name="status-col" label="Status" width="110" align="center">
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-          <template slot-scope="scope">
-            <i class="el-icon-time" />
-            <span>{{ scope.row.display_time }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-  </template>
-  
-  <script>
-  import { getList } from '@/api/table'
-  
-  export default {
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+  <div class="app-container">
+    <el-button type="primary" @click="handleAdd">添加用户</el-button>
+    <el-table :data="users" border>
+      <el-table-column prop="id" label="ID" width="80" />
+      <el-table-column prop="username" label="用户名" />
+      <el-table-column prop="email" label="邮箱" />
+      <el-table-column prop="phone" label="电话" />
+      <el-table-column prop="disability_type" label="残疾类型">
+        <template slot-scope="scope">
+          {{ scope.row.disability_type || '无' }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="preferences" label="语言偏好">
+        <template slot-scope="scope">
+          {{ parsePreferences(scope.row.preferences) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="createdTime" label="创建时间">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.createdTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="updatedTime" label="最后一次更新时间">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.updatedTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="role" label="角色" width="100" />
+      <el-table-column label="操作" width="200">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+
+<script>
+import UserAPI from '@/api/user_api';
+
+export default {
+  data() {
+    return {
+      users: []
+    };
+  },
+  created() {
+    this.fetchUsers();
+  },
+  methods: {
+    async fetchUsers() {
+      try {
+        const response = await UserAPI.getUsers();
+        this.users = response.data.map(user => ({
+          ...user,
+          preferences: this.parsePreferences(user.preferences)
+        }));
+      } catch (error) {
+        console.error('获取用户列表失败', error);
       }
     },
-    data() {
-      return {
-        list: null,
-        listLoading: true
+    handleAdd() {
+      this.$router.push('/add-user');
+    },
+    handleEdit(user) {
+      this.$router.push({ path: '/edit-user', query: { id: user.id } });
+    },
+    async handleDelete(id) {
+      try {
+        await UserAPI.deleteUser(id);
+        this.fetchUsers();
+      } catch (error) {
+        console.error('删除用户失败', error);
       }
     },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      fetchData() {
-        this.listLoading = true
-        getList().then(response => {
-          this.list = response.data.items
-          this.listLoading = false
-        })
+    parsePreferences(preferences) {
+      try {
+        return preferences ? JSON.parse(preferences).language || '无' : '无';
+      } catch (error) {
+        console.error('解析用户偏好失败:', error);
+        return '无';
       }
+    },
+    formatDate(date) {
+      return date ? new Date(date).toLocaleString() : '无';
     }
   }
-  </script>
-  
+};
+</script>
