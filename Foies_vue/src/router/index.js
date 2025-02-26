@@ -22,6 +22,18 @@ export const constantRoutes = [
     path: '/add-user',
     component: () => import('@/views/User/AddUser.vue')
   },
+
+  {
+    path: '/log-detail',
+    name: 'LogDetail',
+    component: () => import('@/views/ThirdPartyApiLog/LogDetail.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    path: '/add-log',
+    component: () => import('@/views/ThirdPartyApiLog/AddThirdPartyApiLog.vue')
+  },
   
   {
     path: '/',
