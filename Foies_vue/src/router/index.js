@@ -24,6 +24,11 @@ export const constantRoutes = [
   },
   
   {
+    path: '/edit-user',
+    component: () => import('@/views/User/EditUser.vue')
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
