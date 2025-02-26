@@ -6,26 +6,31 @@
       <el-table-column prop="username" label="用户名" />
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="phone" label="电话" />
-      <el-table-column prop="disability_type" label="残疾类型">
+      <el-table-column prop="disabilityType" label="残疾类型">
         <template slot-scope="scope">
-          {{ scope.row.disability_type || '无' }}
+          {{ scope.row.disabilityType || '无' }}
         </template>
       </el-table-column>
+
       <el-table-column prop="preferences" label="语言偏好">
         <template slot-scope="scope">
-          {{ parsePreferences(scope.row.preferences) }}
+          {{ scope.row.preferences }}
         </template>
       </el-table-column>
-      <el-table-column prop="createdTime" label="创建时间">
+
+
+      <el-table-column prop="createdtime" label="创建时间">
         <template slot-scope="scope">
-          {{ formatDate(scope.row.createdTime) }}
+          {{ formatDate(scope.row.createdtime) }}
         </template>
       </el-table-column>
-      <el-table-column prop="updatedTime" label="最后一次更新时间">
+
+      <el-table-column prop="updatedtime" label="最后一次更新时间">
         <template slot-scope="scope">
-          {{ formatDate(scope.row.updatedTime) }}
+          {{ formatDate(scope.row.updatedtime) }}
         </template>
       </el-table-column>
+
       <el-table-column prop="role" label="角色" width="100" />
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
@@ -55,12 +60,13 @@ export default {
         const response = await UserAPI.getUsers();
         this.users = response.data.map(user => ({
           ...user,
-          preferences: this.parsePreferences(user.preferences)
         }));
+        console.log(response);
       } catch (error) {
-        console.error('获取用户列表失败', error);
+        console.error("获取用户列表失败", error);
       }
     },
+
     handleAdd() {
       this.$router.push('/add-user');
     },
@@ -73,14 +79,6 @@ export default {
         this.fetchUsers();
       } catch (error) {
         console.error('删除用户失败', error);
-      }
-    },
-    parsePreferences(preferences) {
-      try {
-        return preferences ? JSON.parse(preferences).language || '无' : '无';
-      } catch (error) {
-        console.error('解析用户偏好失败:', error);
-        return '无';
       }
     },
     formatDate(date) {
