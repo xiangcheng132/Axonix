@@ -75,7 +75,7 @@ export default {
             // 直接提交整个log对象，不需要额外转换
             await ThirdPartyApiLogApi.addLog(this.log);
             this.$message.success('日志添加成功');
-            this.$router.push('@/'); 
+            this.$router.push('/ThirdPartyApiLog/index'); 
           } catch (error) {
             this.$message.error('添加日志失败');
             console.error(error);
