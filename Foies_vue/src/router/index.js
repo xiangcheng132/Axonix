@@ -36,6 +36,11 @@ export const constantRoutes = [
   },
 
   {
+    path: '/add-notification',
+    component: () => import('@/views/Notification/AddNotification.vue')
+  },
+
+  {
     path: '/add-payment-log',
     component: () => import('@/views/Payment/AddPaymentLog.vue')
   },
@@ -49,6 +54,12 @@ export const constantRoutes = [
   {
     path: '/edit-user',
     component: () => import('@/views/User/EditUser.vue')
+  },
+
+  {
+    path: '/edit-notification',
+    component: () => import('@/views/Notification/EditNotification.vue'),
+    props: route => ({ id: route.query.id }) 
   },
 
   {
