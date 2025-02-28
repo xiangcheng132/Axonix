@@ -1,0 +1,2 @@
+1./users/getByExample preferences值为null
+2./sign-language-translation-logs/list translatedText值为null

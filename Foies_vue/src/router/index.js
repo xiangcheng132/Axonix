@@ -34,7 +34,18 @@ export const constantRoutes = [
     path: '/add-log',
     component: () => import('@/views/ThirdPartyApiLog/AddThirdPartyApiLog.vue')
   },
+
+  {
+    path: '/add-payment-log',
+    component: () => import('@/views/Payment/AddPaymentLog.vue')
+  },
   
+  {
+    path: '/payment-log-detail/:id', 
+    name: 'PaymentLogDetail',
+    component: () => import('@/views/Payment/LogDetail.vue')
+  },
+
   {
     path: '/edit-user',
     component: () => import('@/views/User/EditUser.vue')
