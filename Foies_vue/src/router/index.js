@@ -41,6 +41,18 @@ export const constantRoutes = [
   },
 
   {
+    path: '/edit-SignLanguageTranslationLog',
+    name: 'LogDetail',
+    component: () => import('@/views/SignLanguageTranslationLog/EditSignLanguageTranslationLog.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    path: '/add-SignLanguageTranslationlog',
+    component: () => import('@/views/SignLanguageTranslationLog/AddSignLanguageTranslationLog.vue')
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
