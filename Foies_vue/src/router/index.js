@@ -7,23 +7,70 @@ import Layout from '@/layout'
 
 export const constantRoutes = [
   {
+    //登录路由
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
 
   {
+    //页面未找到
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
 
   {
+    //添加用户
     path: '/add-user',
     component: () => import('@/views/User/AddUser.vue')
   },
 
   {
+    //添加第三方api接口日志
+    path: '/add-log',
+    component: () => import('@/views/ThirdPartyApiLog/AddThirdPartyApiLog.vue')
+  },
+
+  {
+    //添加通知
+    path: '/add-notification',
+    component: () => import('@/views/Notification/AddNotification.vue')
+  },
+  
+  {
+    //添加支付日志
+    path: '/add-payment-log',
+    component: () => import('@/views/Payment/AddPaymentLog.vue')
+  },
+
+  {
+    //查看修改用户
+    path: '/edit-user',
+    component: () => import('@/views/User/EditUser.vue')
+  },
+
+  {
+    //添加操作记录日志
+    path: '/add-operation-log',
+    component: () => import('@/views/OperationLog/AddOperationLog.vue')
+  },
+
+  {
+    //添加手语翻译记录
+    path: '/add-SignLanguageTranslationlog',
+    component: () => import('@/views/SignLanguageTranslationLog/AddSignLanguageTranslationLog.vue')
+  },
+
+  {
+    //查看修改支付日志
+    path: '/payment-log-detail/:id', 
+    name: 'PaymentLogDetail',
+    component: () => import('@/views/Payment/LogDetail.vue')
+  },
+
+  {
+    //查看修改第三方api接口日志
     path: '/log-detail',
     name: 'LogDetail',
     component: () => import('@/views/ThirdPartyApiLog/LogDetail.vue'),
@@ -31,38 +78,14 @@ export const constantRoutes = [
   },
 
   {
-    path: '/add-log',
-    component: () => import('@/views/ThirdPartyApiLog/AddThirdPartyApiLog.vue')
-  },
-
-  {
-    path: '/add-notification',
-    component: () => import('@/views/Notification/AddNotification.vue')
-  },
-
-  {
-    path: '/add-payment-log',
-    component: () => import('@/views/Payment/AddPaymentLog.vue')
-  },
-  
-  {
-    path: '/payment-log-detail/:id', 
-    name: 'PaymentLogDetail',
-    component: () => import('@/views/Payment/LogDetail.vue')
-  },
-
-  {
-    path: '/edit-user',
-    component: () => import('@/views/User/EditUser.vue')
-  },
-
-  {
+    //查看修改通知
     path: '/edit-notification',
     component: () => import('@/views/Notification/EditNotification.vue'),
     props: route => ({ id: route.query.id }) 
   },
 
   {
+    //查看修改手语翻译记录
     path: '/edit-SignLanguageTranslationLog',
     name: 'LogDetail',
     component: () => import('@/views/SignLanguageTranslationLog/EditSignLanguageTranslationLog.vue'),
@@ -70,8 +93,17 @@ export const constantRoutes = [
   },
 
   {
-    path: '/add-SignLanguageTranslationlog',
-    component: () => import('@/views/SignLanguageTranslationLog/AddSignLanguageTranslationLog.vue')
+    //查看修改操作记录日志
+    path: '/edit-operation-log',
+    component: () => import('@/views/OperationLog/EditOperationLog.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //查看修改消息
+    path: '/edit-message',
+    component: () => import('@/views/Message/EditMessage.vue'),
+    props: route => ({ id: route.query.id }) 
   },
 
   {
@@ -84,28 +116,6 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '案例', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '表格', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '树状表', icon: 'tree' }
-      }
-    ]
   },
 
   {
@@ -292,35 +302,19 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '表单', icon: 'form' }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  router.matcher = newRouter.matcher
 }
 
 export default router
