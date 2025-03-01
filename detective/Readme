@@ -7,3 +7,67 @@ print(torch.cuda.is_available())  # 如果返回 True，则表示支持 GPU
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 其中 cu121 表示 CUDA 12.1 版本，你可以根据你的 CUDA 版本选择合适的安装命令。
+
+MACos的API实现下主要功能：
+
+接口说明：
+
+POST /start：启动实时检测
+
+GET /results：获取最新检测结果
+
+POST /stop：停止检测
+
+返回数据格式：
+
+json
+{
+    "results": [
+        {
+            "object": "person",
+            "distance": 150.5,
+            "confidence": 0.85,
+            "position": {
+                "x1": 100,
+                "y1": 200,
+                "x2": 300,
+                "y2": 400
+            }
+        }
+    ]
+}
+特点：
+
+使用多线程处理视频流检测
+
+线程安全的数据访问（使用锁机制）
+
+自动管理摄像头资源
+
+支持GPU加速（自动检测MPS可用性）
+
+可调节的检测频率（当前设置为10FPS）
+
+使用方式：
+# 启动服务
+python api.py
+
+# 启动检测
+curl -X POST http://localhost:5000/start
+
+# 获取结果
+curl http://localhost:5000/results
+
+# 停止检测
+curl -X POST http://localhost:5000/stop
+性能优化：
+
+检测频率可调（修改detection_loop中的sleep时间）
+
+置信度阈值可调（当前设置为0.4）
+
+自动缩放输入帧到模型所需尺寸
+
+使用GPU加速推理（如果可用）
+
+注意：实际部署时需要根据摄像头参数调整FOCAL_LENGTH值，可以通过校准流程获得准确的焦距值。
