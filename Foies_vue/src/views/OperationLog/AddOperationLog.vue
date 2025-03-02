@@ -36,7 +36,7 @@ export default {
                 adminId: '',
                 action: '',
                 targetId: '',
-                timestamp: ''
+                timestamp: new Date() // 自动填充为当前时间
             },
             rules: {
                 adminId: [{ required: true, message: '请输入管理员ID', trigger: 'blur' }],
@@ -52,9 +52,12 @@ export default {
                 if (valid) {
                     try {
                         const formData = { ...this.operationLog };
+
+                        // 格式化时间为 ISO 字符串
                         if (formData.timestamp) {
                             formData.timestamp = new Date(formData.timestamp).toISOString();
                         }
+
                         await OperationLogApi.addOperationLog(formData);
                         this.$message.success('操作日志添加成功');
                         this.$router.push('/OperationLog/index');

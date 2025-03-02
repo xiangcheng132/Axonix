@@ -9,7 +9,13 @@
           {{ formatDate(scope.row.createdtime) }}
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" />
+      <el-table-column prop="status" label="状态">
+        <template slot-scope="scope">
+          <el-tag :type="getStatusTag(scope.row.status)">
+            {{ formatStatus(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleView(scope.row)">查看</el-button>
@@ -66,6 +72,24 @@ export default {
 
     formatDate(date) {
       return date ? new Date(date).toLocaleString() : '无';
+    },
+
+    // 状态映射表
+    formatStatus(status) {
+      const statusMap = {
+        success: '成功',
+        failure: '失败'
+      };
+      return statusMap[status] || '未知';
+    },
+
+    // 颜色映射表
+    getStatusTag(status) {
+      const tagMap = {
+        success: 'success',
+        failure: 'danger'
+      };
+      return tagMap[status] || 'info';
     }
   }
 };

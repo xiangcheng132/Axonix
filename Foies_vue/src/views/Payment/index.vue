@@ -6,7 +6,13 @@
             <el-table-column prop="userId" label="用户ID" />
             <el-table-column prop="transactionId" label="交易ID" />
             <el-table-column prop="amount" label="金额" />
-            <el-table-column prop="status" label="状态" />
+            <el-table-column prop="status" label="状态">
+                <template slot-scope="scope">
+                    <el-tag :type="getStatusTag(scope.row.status)">
+                        {{ formatStatus(scope.row.status) }}
+                    </el-tag>
+                </template>
+            </el-table-column>
             <el-table-column prop="createdtime" label="创建时间">
                 <template slot-scope="scope">
                     {{ formatDate(scope.row.createdtime) }}
@@ -62,6 +68,26 @@ export default {
         },
         formatDate(date) {
             return date ? new Date(date).toLocaleString() : '无';
+        },
+
+        // 状态映射表
+        formatStatus(status) {
+            const statusMap = {
+                pending: '待处理',
+                completed: '已完成',
+                failed: '失败'
+            };
+            return statusMap[status] || '未知';
+        },
+
+        // 颜色映射表
+        getStatusTag(status) {
+            const tagMap = {
+                pending: 'warning',
+                completed: 'success',
+                failed: 'danger'
+            };
+            return tagMap[status] || 'info';
         }
     }
 };

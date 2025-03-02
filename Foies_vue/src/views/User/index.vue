@@ -18,7 +18,9 @@
       <el-table-column prop="updatedtime" label="最后一次更新时间">
         <template slot-scope="scope">{{ formatDate(scope.row.updatedtime) }}</template>
       </el-table-column>
-      <el-table-column prop="role" label="角色" width="100" />
+      <el-table-column prop="role" label="角色" width="100">
+        <template slot-scope="scope">{{ formatRole(scope.row.role) }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
@@ -70,6 +72,9 @@ export default {
     },
     formatDate(date) {
       return date ? new Date(date).toLocaleString() : '无'
+    },
+    formatRole(role) {
+      return role === 'admin' ? '管理员' : role === 'user' ? '用户' : role;
     }
   }
 }

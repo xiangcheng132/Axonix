@@ -8,7 +8,9 @@
             <el-table-column prop="type" label="类型" />
             <el-table-column prop="readStatus" label="已读状态">
                 <template slot-scope="scope">
-                    {{ scope.row.readStatus ? '已读' : '未读' }}
+                    <el-tag :type="getReadStatusTag(scope.row.readStatus)">
+                        {{ scope.row.readStatus === 0 ? '未读' : '已读' }}
+                    </el-tag>
                 </template>
             </el-table-column>
             <el-table-column prop="createdtime" label="创建时间">
@@ -53,7 +55,6 @@ export default {
         handleView(notification) {
             this.$router.push({ path: '/edit-notification', query: { id: notification.id } });
         },
-
         async handleDelete(id) {
             try {
                 await NotificationApi.deleteNotification(id);
@@ -65,6 +66,11 @@ export default {
         },
         formatDate(date) {
             return date ? new Date(date).toLocaleString() : '无';
+        },
+
+        // 根据已读状态返回不同的颜色
+        getReadStatusTag(readStatus) {
+            return readStatus === 0 ? 'danger' : 'success';
         }
     }
 };
