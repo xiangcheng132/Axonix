@@ -37,7 +37,7 @@ export const constantRoutes = [
     path: '/add-notification',
     component: () => import('@/views/Notification/AddNotification.vue')
   },
-  
+
   {
     //添加支付日志
     path: '/add-payment-log',
@@ -62,9 +62,22 @@ export const constantRoutes = [
     component: () => import('@/views/SignLanguageTranslationLog/AddSignLanguageTranslationLog.vue')
   },
 
+
+  {
+    //添加紧急求助记录
+    path: '/add-emergency-request',
+    component: () => import('@/views/EmergencyRequest/AddEmergencyRequest.vue')
+  },
+
+  {
+    //添加紧急联系人
+    path: '/add-emergency-contact',
+    component: () => import('@/views/EmergencyContact/AddEmergencyContact.vue')
+  },
+
   {
     //查看修改支付日志
-    path: '/payment-log-detail/:id', 
+    path: '/payment-log-detail/:id',
     name: 'PaymentLogDetail',
     component: () => import('@/views/Payment/LogDetail.vue')
   },
@@ -74,14 +87,14 @@ export const constantRoutes = [
     path: '/log-detail',
     name: 'LogDetail',
     component: () => import('@/views/ThirdPartyApiLog/LogDetail.vue'),
-    props: route => ({ id: route.query.id }) 
+    props: route => ({ id: route.query.id })
   },
 
   {
     //查看修改通知
     path: '/edit-notification',
     component: () => import('@/views/Notification/EditNotification.vue'),
-    props: route => ({ id: route.query.id }) 
+    props: route => ({ id: route.query.id })
   },
 
   {
@@ -89,21 +102,34 @@ export const constantRoutes = [
     path: '/edit-SignLanguageTranslationLog',
     name: 'LogDetail',
     component: () => import('@/views/SignLanguageTranslationLog/EditSignLanguageTranslationLog.vue'),
-    props: route => ({ id: route.query.id }) 
+    props: route => ({ id: route.query.id })
   },
 
   {
     //查看修改操作记录日志
     path: '/edit-operation-log',
     component: () => import('@/views/OperationLog/EditOperationLog.vue'),
-    props: route => ({ id: route.query.id }) 
+    props: route => ({ id: route.query.id })
   },
 
   {
     //查看修改消息
     path: '/edit-message',
     component: () => import('@/views/Message/EditMessage.vue'),
-    props: route => ({ id: route.query.id }) 
+    props: route => ({ id: route.query.id })
+  },
+
+  {
+    //查看修改紧急求助记录
+    path: '/edit-emergency-request',
+    component: () => import('@/views/EmergencyRequest/EditEmergencyRequest.vue'),
+    props: route => ({ id: route.query.id })
+  },
+  {
+    //查看修改紧急求助记录
+    path: '/edit-emergency-contact',
+    component: () => import('@/views/EmergencyContact/EditEmergencyContact.vue'),
+    props: route => ({ id: route.query.id })
   },
 
   {

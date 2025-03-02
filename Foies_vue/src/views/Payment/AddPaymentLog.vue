@@ -44,7 +44,7 @@ export default {
                 transactionId: '',
                 amount: '',
                 status: 'pending',
-                createdtime: '' // 统一字段名
+                createdtime: new Date() // 将创建时间设置为当前时间
             },
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],

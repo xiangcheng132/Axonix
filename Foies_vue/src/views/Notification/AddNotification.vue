@@ -49,7 +49,7 @@ export default {
                 type: '',
                 message: '',
                 readStatus: false,
-                createdtime: ''
+                createdtime: new Date() // 自动填充为当前时间
             },
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
@@ -67,9 +67,12 @@ export default {
                 if (valid) {
                     try {
                         const formData = { ...this.notification };
+
+                        // 格式化日期时间为 ISO 字符串
                         if (formData.createdtime) {
                             formData.createdtime = new Date(formData.createdtime).toISOString();
                         }
+
                         await NotificationApi.addNotification(formData);
                         this.$message.success('通知添加成功');
                         this.$router.push('/Notification/index');
