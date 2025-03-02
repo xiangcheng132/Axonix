@@ -107,6 +107,48 @@ export const constantRoutes = [
   },
 
   {
+    //添加位置信息
+    path: '/add-location-share',
+    component: () => import('@/views/LocationShare/AddLocationShare.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //查看修改位置信息
+    path: '/edit-location-share',
+    component: () => import('@/views/LocationShare/EditLocationShare.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //添加好友关系信息
+    path: '/add-friend-relationship',
+    component: () => import('@/views/FriendRelationship/AddFriendRelationship.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //查看修改好友关系信息
+    path: '/edit-friend-relationship',
+    component: () => import('@/views/FriendRelationship/EditFriendRelationship.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //添加设施信息
+    path: '/add-facility',
+    component: () => import('@/views/Facility/AddFacility.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //查看修改设施信息
+    path: '/edit-facility',
+    component: () => import('@/views/Facility/EditFacility.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
