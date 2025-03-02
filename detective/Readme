@@ -71,3 +71,84 @@ curl -X POST http://localhost:5000/stop
 使用GPU加速推理（如果可用）
 
 注意：实际部署时需要根据摄像头参数调整FOCAL_LENGTH值，可以通过校准流程获得准确的焦距值。
+
+Windows版API功能如下：
+
+#API接口说明：
+POST /start：启动实时检测
+
+GET /results：获取最新检测结果
+
+POST /stop：停止检测
+
+#使用说明
+
+##启动API服务器
+###服务器启动成功后，默认监听5000端口：
+curl -X POST http://localhost:5000/start
+
+####返回数据：
+{
+  "status": "detection started"
+}
+
+##获取检测结果
+curl -X GET http://localhost:5000/results
+
+####返回数据：
+{
+    "results": [
+        {
+            "confidence": 0.87,
+            "distance": 30.649999618530273,
+            "object": "person",
+            "position": {
+                "x1": 160,
+                "x2": 618,
+                "y1": 168,
+                "y2": 479
+            }
+        }
+    ]
+}
+
+##停止实时检测
+curl -X POST http://localhost:5000/stop
+
+####返回数据：
+{
+  "status": "detection stopped"
+}
+
+#性能优化：
+
+通过 threading 实现多线程视频流处理
+
+使用锁机制确保线程安全的数据访问
+
+自动缩放输入图像尺寸
+
+滑动窗口平滑物体距离结果
+
+使用GPU加速推理（如果可用）
+
+#常见问题
+
+##500 INTERNAL SERVER ERROR
+
+###错误信息：
+{
+  "error": "Object of type float32 is not JSON serializable"
+}
+
+###解决方案： 
+
+####将浮点数类型转换为 Python 内置的 float 类型：
+
+float_value = float(numpy_value)
+
+
+
+
+
+   
