@@ -50,16 +50,16 @@ json
 
 使用方式：
 # 启动服务
-python api.py
+python api_Mac_GOU.py
 
 # 启动检测
-curl -X POST http://localhost:5000/start
+curl -X POST http://localhost:8080/start
 
 # 获取结果
-curl http://localhost:5000/results
+curl http://localhost:8080/results
 
 # 停止检测
-curl -X POST http://localhost:5000/stop
+curl -X POST http://localhost:8080/stop
 性能优化：
 
 检测频率可调（修改detection_loop中的sleep时间）
