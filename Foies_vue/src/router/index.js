@@ -175,6 +175,20 @@ export const constantRoutes = [
   },
 
   {
+    //添加论坛分类信息
+    path: '/add-forum-category',
+    component: () => import('@/views/ForumCategory/AddForumCategory.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //查看修改论坛分类信息
+    path: '/edit-forum-category',
+    component: () => import('@/views/ForumCategory/EditForumCategory.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',

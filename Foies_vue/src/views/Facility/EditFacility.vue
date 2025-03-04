@@ -65,6 +65,7 @@ export default {
         submitForm() {
             this.$refs.facilityForm.validate(async (valid) => {
                 if (valid) {
+                    this.facility.updatedtime = new Date().toISOString();  // 确保存储 UTC
                     try {
                         await FacilityApi.updateFacilitySelective(this.facility.id, this.facility);
                         this.$message.success('设施更新成功');

@@ -35,7 +35,9 @@ export default {
             friendRelationship: {
                 userId: '',
                 friendUserId: '',
-                status: ''
+                status: '',
+                createdtime: '',
+                updatedtime: ''
             },
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
@@ -49,6 +51,10 @@ export default {
             this.$refs.friendRelationshipForm.validate(async (valid) => {
                 if (valid) {
                     try {
+                        const now = new Date().toISOString(); // 获取当前时间
+                        this.friendRelationship.createdtime = now;
+                        this.friendRelationship.updatedtime = now;
+
                         await FriendRelationshipApi.addFriendRelationshipSelective(this.friendRelationship);
                         this.$message.success('好友关系添加成功');
                         this.$router.push('/FriendRelationship/index');
@@ -68,6 +74,7 @@ export default {
     }
 };
 </script>
+
 
 <style scoped>
 .add-friend-relationship-container {
