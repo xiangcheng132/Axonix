@@ -68,7 +68,7 @@ export default {
             this.fetchForumCategory();
         },
         goBack() {
-            this.$router.push('/ForumCategory/index');
+            this.$router.push('/Forum/ForumCategory');
         }
     }
 };

@@ -182,15 +182,14 @@ export const constantRoutes = [
   },
 
   {
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
+
     //查看修改帖子和评论
     path: '/edit-forum-post/:id',
     name:'ForumPostDetail',
     component: () => import('@/views/ForumPost/EditForumPost.vue'),
-=======
->>>>>>> Stashed changes
+  },
+
+  {
     //添加论坛分类信息
     path: '/add-forum-category',
     component: () => import('@/views/ForumCategory/AddForumCategory.vue'),
@@ -201,10 +200,6 @@ export const constantRoutes = [
     //查看修改论坛分类信息
     path: '/edit-forum-category',
     component: () => import('@/views/ForumCategory/EditForumCategory.vue'),
-<<<<<<< Updated upstream
-=======
->>>>>>> 45b62b24d81aa698056348e1c54b41b13934d2a3
->>>>>>> Stashed changes
     props: route => ({ id: route.query.id }) 
   },
 

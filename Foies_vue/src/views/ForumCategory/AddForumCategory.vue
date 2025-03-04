@@ -59,7 +59,7 @@ export default {
             this.$refs.forumCategoryForm.resetFields();
         },
         goBack() {
-            this.$router.push('/ForumCategory/index');
+            this.$router.push('/Forum/ForumCategory');
         }
     }
 };
