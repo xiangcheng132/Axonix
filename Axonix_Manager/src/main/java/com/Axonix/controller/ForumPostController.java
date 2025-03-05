@@ -49,7 +49,7 @@ public class ForumPostController {
     @PutMapping("/{id}")
     public int updateById(@PathVariable Integer id, @RequestBody ForumPost record) {
         record.setId(id);
-        return forumPostService.updateById(record);
+        return forumPostService.updateByIdWithBLOBs(record);
     }
 
     @PatchMapping("/{id}/selective")

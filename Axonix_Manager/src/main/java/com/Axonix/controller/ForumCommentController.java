@@ -38,7 +38,7 @@ public class ForumCommentController {
 
     @GetMapping("/list")
     public List<ForumComment> getList(ForumCommentExample example) {
-        return forumCommentService.selectByExample(example);
+        return forumCommentService.selectByExampleWithBLOBs(example);
     }
 
     @GetMapping("/{id}")

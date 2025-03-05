@@ -25,9 +25,10 @@ public class MyBatisDebugUtil implements CommandLineRunner {
         if (statements.isEmpty()) {
             System.out.println("❌ 没有加载任何 SQL 语句！请检查 Mapper.xml 是否正确！");
         } else {
-            for (String statement : statements) {
-                System.out.println("✅ 已加载: " + statement);
-            }
+            System.out.println("✅ 已成功加载Mapper.xml文件");
+//            for (String statement : statements) {
+//                System.out.println("✅ 已加载: " + statement);
+//            }
         }
     }
 }

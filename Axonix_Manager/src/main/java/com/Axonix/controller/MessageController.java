@@ -38,7 +38,7 @@ public class MessageController {
 
     @GetMapping("/list")
     public List<Message> getList(MessageExample example) {
-        return messageService.selectByExample(example);
+        return messageService.selectByExampleWithBLOBs(example);
     }
 
     @GetMapping("/{id}")
