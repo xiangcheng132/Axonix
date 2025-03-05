@@ -11,9 +11,9 @@
 
             <el-form-item label="状态" prop="status">
                 <el-select v-model="friendRelationship.status" placeholder="friendRelationship.status">
-                    <el-option label="accepted" value="accepted" />
-                    <el-option label="pending" value="pending" />
-                    <el-option label="blocked" value="blocked" />
+                    <el-option label="已接受" value="accepted" />
+                    <el-option label="待处理" value="pending" />
+                    <el-option label="已拒绝" value="blocked" />
                 </el-select>
             </el-form-item>
 

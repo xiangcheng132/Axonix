@@ -52,6 +52,9 @@ export default {
         submitForm() {
             this.$refs.facilityForm.validate(async (valid) => {
                 if (valid) {
+                    const nowUtc = new Date().toISOString();
+                    this.facility.createdtime = nowUtc;
+                    this.facility.updatedtime = nowUtc;
                     try {
                         await FacilityApi.addFacilitySelective(this.facility);
                         this.$message.success('设施添加成功');

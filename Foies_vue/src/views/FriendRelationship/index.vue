@@ -5,7 +5,13 @@
             <el-table-column prop="id" label="ID" width="80" />
             <el-table-column prop="userId" label="用户ID" />
             <el-table-column prop="friendUserId" label="好友用户ID" />
-            <el-table-column prop="status" label="状态" />
+            <el-table-column prop="status" label="状态">
+                <template slot-scope="scope">
+                    <el-tag :type="getStatusTag(scope.row.status)">
+                        {{ formatStatus(scope.row.status) }}
+                    </el-tag>
+                </template>
+            </el-table-column>
             <el-table-column prop="createdtime" label="创建时间">
                 <template slot-scope="scope">
                     {{ formatDate(scope.row.createdtime) }}
@@ -52,6 +58,23 @@ export default {
         },
         handleView(friendRelationship) {
             this.$router.push({ path: '/edit-friend-relationship', query: { id: friendRelationship.id } });
+        },
+        formatStatus(status) {
+            const statusMap = {
+                pending: '待处理',
+                accepted: '已接受',
+                blocked: '已拒绝'
+            };
+            return statusMap[status] || '未知';
+        },
+
+        getStatusTag(status) {
+            const tagMap = {
+                pending: 'warning',
+                accepted: 'success',
+                blocked: 'danger'
+            };
+            return tagMap[status] || 'info';
         },
         async handleDelete(id) {
             try {

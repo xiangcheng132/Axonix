@@ -17,7 +17,11 @@ public class ForumCommentController {
     private ForumCommentService forumCommentService;
 
     @GetMapping("/count")
-    public long count(ForumCommentExample example) {
+    public long count(@RequestParam(required = false) Integer postId) {
+        ForumCommentExample example = new ForumCommentExample();
+        if (postId != null) {
+            example.createCriteria().andPostIdEqualTo(postId);
+        }
         return forumCommentService.countByExample(example);
     }
 
@@ -37,7 +41,11 @@ public class ForumCommentController {
     }
 
     @GetMapping("/list")
-    public List<ForumComment> getList(ForumCommentExample example) {
+    public List<ForumComment> getList(@RequestParam(required = false) Integer postId) {
+        ForumCommentExample example = new ForumCommentExample();
+        if (postId != null) {
+            example.createCriteria().andPostIdEqualTo(postId);
+        }
         return forumCommentService.selectByExampleWithBLOBs(example);
     }
 

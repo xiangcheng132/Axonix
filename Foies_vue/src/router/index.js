@@ -154,6 +154,13 @@ export const constantRoutes = [
   },
 
   {
+    //添加帖子
+    path: '/add-forum-post',
+    component: () => import('@/views/ForumPost/AddForumPost.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+  
+  {
     //查看修改好友关系信息
     path: '/edit-friend-relationship',
     component: () => import('@/views/FriendRelationship/EditFriendRelationship.vue'),
@@ -171,6 +178,28 @@ export const constantRoutes = [
     //查看修改设施信息
     path: '/edit-facility',
     component: () => import('@/views/Facility/EditFacility.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+
+    //查看修改帖子和评论
+    path: '/edit-forum-post/:id',
+    name:'ForumPostDetail',
+    component: () => import('@/views/ForumPost/EditForumPost.vue'),
+  },
+
+  {
+    //添加论坛分类信息
+    path: '/add-forum-category',
+    component: () => import('@/views/ForumCategory/AddForumCategory.vue'),
+    props: route => ({ id: route.query.id }) 
+  },
+
+  {
+    //查看修改论坛分类信息
+    path: '/edit-forum-category',
+    component: () => import('@/views/ForumCategory/EditForumCategory.vue'),
     props: route => ({ id: route.query.id }) 
   },
 
@@ -210,13 +239,7 @@ export const constantRoutes = [
         path: 'ForumPost',
         name: 'ForumPost',
         component: () => import('@/views/ForumPost/index'),
-        meta: { title: '论坛帖子管理', icon: 'table' }
-      },
-      {
-        path: 'ForumComment',
-        name: 'ForumComment',
-        component: () => import('@/views/ForumComment/index'),
-        meta: { title: '论坛评论管理', icon: 'table' }
+        meta: { title: '论坛帖子与评论管理', icon: 'table' }
       },
       {
         path: 'ForumCategory',
