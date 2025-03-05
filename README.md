@@ -36,5 +36,10 @@
 
 ### Spring OpenAPI文档：
 
-​	本项目已配置自带的API文档，可暂做参考。使用方法：启动项目后，在浏览器中打开http://localhost:8080/swagger-ui/index.html。若需要JSON格式：http://localhost:8080/v3/api-docs。若需要YAML格式：http://localhost:8080/v3/api-docs.yaml
+本项目已配置自带的API文档，可暂做参考。使用方法：启动项目后，在浏览器中打开
+http://localhost:8080/swagger-ui/index.html。
+若需要JSON格式：
+http://localhost:8080/v3/api-docs。
+若需要YAML格式：
+http://localhost:8080/v3/api-docs.yaml
 
