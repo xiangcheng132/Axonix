@@ -1,7 +1,10 @@
 <template>
     <div class="app-container">
         <el-button type="primary" @click="handleAdd">添加帖子</el-button>
-        <el-table :data="forumPosts" border>
+        <el-button type="danger" @click="handleBatchDelete" :disabled="selectedPosts.length === 0">批量删除</el-button>
+
+        <el-table :data="forumPosts" border @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55" />
             <el-table-column prop="id" label="ID" width="80" />
             <el-table-column prop="userId" label="用户ID" />
             <el-table-column prop="title" label="标题" />
@@ -33,7 +36,8 @@ import ForumCommentApi from '@/api/ForumComment_api';
 export default {
     data() {
         return {
-            forumPosts: []
+            forumPosts: [],
+            selectedPosts: [] // 选中的帖子ID数组
         };
     },
     created() {
@@ -60,6 +64,7 @@ export default {
         handleView(post) {
             this.$router.push({ name: 'ForumPostDetail', params: { id: post.id } });
         },
+
         async handleDelete(id) {
             try {
                 await ForumPostApi.deletePost(id);
@@ -69,6 +74,26 @@ export default {
                 console.error('删除帖子失败', error);
             }
         },
+
+        // 监听表格多选
+        handleSelectionChange(selection) {
+            this.selectedPosts = selection.map(item => item.id);
+        },
+
+        // 批量删除
+        async handleBatchDelete() {
+            if (this.selectedPosts.length === 0) return;
+
+            try {
+                await Promise.all(this.selectedPosts.map(id => ForumPostApi.deletePost(id)));
+                this.fetchForumPosts();
+                this.selectedPosts = [];
+                this.$message.success('批量删除成功');
+            } catch (error) {
+                console.error('批量删除失败', error);
+            }
+        },
+
         formatDate(date) {
             return date ? new Date(date).toLocaleString() : '无';
         }
