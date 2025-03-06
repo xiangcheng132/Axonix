@@ -14,6 +14,8 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.Axonix.demo.model
+  configuration:
+    jdbcTypeForNull: NULL
 
 #logging:
 #  level:
