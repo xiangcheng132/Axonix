@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:8080/users';
 
 export default {
   getUsers() {
-    return axios.post(`${API_URL}/getByExample`, {});
+    return axios.post(`${API_URL}/getByExampleWithBLOBs`, {});
   },
   getUserById(id) {
     return axios.get(`${API_URL}/${id}`);
@@ -13,7 +13,7 @@ export default {
     return axios.post(`${API_URL}/add`, user);
   },
   updateUser(user) {
-    return axios.put(`${API_URL}/updateById`, user);
+    return axios.put(`${API_URL}/updateByIdWithBLOBs`, user);
   },
   deleteUser(id) {
     return axios.delete(`${API_URL}/delete/${id}`);

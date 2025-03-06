@@ -1,4 +1,0 @@
-1./users/getByExample preferences值为null
-2./messages/list content值为null
-3./forum-posts/{id} put无法更新content内容
-4./forum-comments/list content为null

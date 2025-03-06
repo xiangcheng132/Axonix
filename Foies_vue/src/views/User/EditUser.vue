@@ -36,8 +36,9 @@
           <el-form-item label="语言偏好" prop="preferences">
             <el-select v-model="user.preferences.language">
               <el-option label="无" value="" />
-              <el-option label="英语" value="English" />
-              <el-option label="西班牙语" value="Spanish" />
+              <el-option label="中文" value="中文" />
+              <el-option label="英语" value="英语" />
+              <el-option label="西班牙语" value="西班牙语" />
             </el-select>
           </el-form-item>
   
