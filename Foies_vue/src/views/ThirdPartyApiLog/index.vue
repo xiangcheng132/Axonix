@@ -1,7 +1,12 @@
 <template>
   <div class="app-container">
+    <!-- 操作按钮 -->
     <el-button type="primary" @click="handleAdd">添加日志</el-button>
-    <el-table :data="logs" border>
+    <el-button type="danger" @click="handleBatchDelete" :disabled="selectedLogs.length === 0">批量删除</el-button>
+
+    <!-- 日志表格 -->
+    <el-table :data="logs" border @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="serviceName" label="服务名称"></el-table-column>
       <el-table-column prop="createdtime" label="请求时间">
@@ -33,9 +38,10 @@ export default {
   data() {
     return {
       logs: [],
+      selectedLogs: [], // 存储选中的日志
       filters: {
         service_name: '',
-        status: '', // 可以根据需要添加过滤条件
+        status: '', // 过滤条件
       }
     };
   },
@@ -46,8 +52,8 @@ export default {
     async fetchLogs() {
       try {
         const response = await ThirdPartyApiLogApi.getLogs(this.filters);
-        console.log("Fetched logs data:", JSON.stringify(response.data, null, 2));  // 使用JSON.stringify来更好地查看对象结构
-        this.logs = response.data;  // 将返回的日志数据赋值给logs
+        console.log("Fetched logs data:", JSON.stringify(response.data, null, 2));
+        this.logs = response.data;
       } catch (error) {
         console.error('获取日志列表失败', error);
       }
@@ -70,11 +76,29 @@ export default {
       }
     },
 
+    // 监听表格选择变化
+    handleSelectionChange(selection) {
+      this.selectedLogs = selection.map(log => log.id);
+    },
+
+    // 批量删除日志
+    async handleBatchDelete() {
+      if (this.selectedLogs.length === 0) {
+        return;
+      }
+      try {
+        await Promise.all(this.selectedLogs.map(id => ThirdPartyApiLogApi.deleteLog(id)));
+        this.fetchLogs();
+        this.selectedLogs = [];
+      } catch (error) {
+        console.error('批量删除失败', error);
+      }
+    },
+
     formatDate(date) {
       return date ? new Date(date).toLocaleString() : '无';
     },
 
-    // 状态映射表
     formatStatus(status) {
       const statusMap = {
         success: '成功',
@@ -83,7 +107,6 @@ export default {
       return statusMap[status] || '未知';
     },
 
-    // 颜色映射表
     getStatusTag(status) {
       const tagMap = {
         success: 'success',

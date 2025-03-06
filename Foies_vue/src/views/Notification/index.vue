@@ -1,7 +1,12 @@
 <template>
     <div class="app-container">
+        <!-- 操作按钮 -->
         <el-button type="primary" @click="handleAdd">添加通知</el-button>
-        <el-table :data="notifications" border>
+        <el-button type="danger" @click="handleBatchDelete" :disabled="selectedNotifications.length === 0">批量删除</el-button>
+
+        <!-- 通知列表 -->
+        <el-table :data="notifications" border @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55" />
             <el-table-column prop="id" label="ID" width="80" />
             <el-table-column prop="userId" label="用户ID" />
             <el-table-column prop="title" label="标题" />
@@ -34,7 +39,8 @@ import NotificationApi from '@/api/Notification_api';
 export default {
     data() {
         return {
-            notifications: []
+            notifications: [],
+            selectedNotifications: [] // 选中的通知 ID 列表
         };
     },
     created() {
@@ -49,12 +55,15 @@ export default {
                 console.error('获取通知失败', error);
             }
         },
+
         handleAdd() {
             this.$router.push('/add-notification');
         },
+
         handleView(notification) {
             this.$router.push({ path: '/edit-notification', query: { id: notification.id } });
         },
+
         async handleDelete(id) {
             try {
                 await NotificationApi.deleteNotification(id);
@@ -64,6 +73,25 @@ export default {
                 console.error('删除通知失败', error);
             }
         },
+
+        // 监听表格选中变化
+        handleSelectionChange(selection) {
+            this.selectedNotifications = selection.map(notification => notification.id);
+        },
+
+        // 批量删除
+        async handleBatchDelete() {
+            if (this.selectedNotifications.length === 0) return;
+            try {
+                await Promise.all(this.selectedNotifications.map(id => NotificationApi.deleteNotification(id)));
+                this.fetchNotifications();
+                this.selectedNotifications = [];
+                this.$message.success('批量删除成功');
+            } catch (error) {
+                console.error('批量删除失败', error);
+            }
+        },
+
         formatDate(date) {
             return date ? new Date(date).toLocaleString() : '无';
         },
