@@ -33,4 +33,6 @@ public interface UserService {
     int updateUserByIdWithBLOBs(User user);
 
     int updateUserById(User user);
+
+    User getUserByUsername(String username);
 }

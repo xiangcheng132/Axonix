@@ -101,4 +101,15 @@ public class UserServiceImpl implements UserService {
     public int updateUserById(User user) {
         return userMapper.updateByPrimaryKey(user);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        UserExample example = new UserExample();
+        example.createCriteria().andUsernameEqualTo(username);  // 设置查询条件
+        List<User> users = userMapper.selectByExample(example);  // 根据用户名查询用户
+        if (!users.isEmpty()) {
+            return users.get(0);  // 返回查询到的第一个用户
+        }
+        return null;  // 如果没有找到用户，返回 null
+    }
 }
