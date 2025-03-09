@@ -18,7 +18,8 @@
             </el-form-item>
 
             <el-form-item label="最后位置" prop="lastLocation">
-                <el-input v-model="locationShare.lastLocation" />
+                <div id="map" class="map-container"></div>
+                <p>经度: {{ parsedLocation.longitude }}, 纬度: {{ parsedLocation.latitude }}</p>
             </el-form-item>
 
             <el-form-item>
@@ -41,19 +42,73 @@ export default {
                 sharedWith: '',
                 startTime: '',
                 endTime: '',
-                lastLocation: ''
+                lastLocation: '' // 存储位置的 JSON 字符串
             },
+            map: null,
+            marker: null,
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
                 sharedWith: [{ required: true, message: '请输入共享给的用户ID', trigger: 'blur' }],
                 startTime: [{ required: true, message: '请选择开始时间', trigger: 'change' }],
                 endTime: [{ required: true, message: '请选择结束时间', trigger: 'change' }],
-                lastLocation: [{ required: true, message: '请输入最后位置', trigger: 'blur' }]
+                lastLocation: [{ required: true, message: '请选择最后位置', trigger: 'blur' }]
             }
         };
     },
+    computed: {
+        parsedLocation() {
+            try {
+                // 解析最后位置的 JSON 字符串并返回经纬度对象
+                return this.locationShare.lastLocation
+                    ? JSON.parse(this.locationShare.lastLocation)
+                    : { latitude: '', longitude: '' };
+            } catch (e) {
+                return { latitude: '', longitude: '' };
+            }
+        }
+    },
+    mounted() {
+        this.initMap();  // 加载地图
+    },
     methods: {
-        submitForm() {
+        initMap() {
+            this.map = new AMap.Map('map', {
+                center: this.parsedLocation.longitude
+                    ? [this.parsedLocation.longitude, this.parsedLocation.latitude]
+                    : [116.397428, 39.90923], // 默认北京位置
+                zoom: 13
+            });
+
+            // 如果已有位置，则添加 marker
+            if (this.parsedLocation.longitude && this.parsedLocation.latitude) {
+                this.marker = new AMap.Marker({
+                    position: [this.parsedLocation.longitude, this.parsedLocation.latitude],
+                    map: this.map
+                });
+            }
+
+            // 地图点击事件，更新最后位置
+            this.map.on('click', (e) => {
+                const newLocation = {
+                    latitude: e.lnglat.getLat().toFixed(6),
+                    longitude: e.lnglat.getLng().toFixed(6)
+                };
+
+                // 使用 $set 确保 Vue 响应式更新
+                this.$set(this.locationShare, 'lastLocation', JSON.stringify(newLocation));
+
+                // 更新 marker
+                if (this.marker) {
+                    this.marker.setPosition([newLocation.longitude, newLocation.latitude]);
+                } else {
+                    this.marker = new AMap.Marker({
+                        position: [newLocation.longitude, newLocation.latitude],
+                        map: this.map
+                    });
+                }
+            });
+        },
+        async submitForm() {
             this.$refs.locationShareForm.validate(async (valid) => {
                 if (valid) {
                     try {
@@ -92,5 +147,11 @@ export default {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-container {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 10px;
 }
 </style>
