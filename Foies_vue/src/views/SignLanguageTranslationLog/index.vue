@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 操作按钮 -->
     <el-button type="primary" @click="handleAdd">添加日志</el-button>
-    <el-button type="danger" @click="handleBatchDelete" :disabled="selectedLogs.length === 0">批量删除</el-button>
+    <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedLogs.length === 0">批量删除</el-button>
 
     <!-- 日志列表表格 -->
     <el-table :data="logs" border @selection-change="handleSelectionChange">
@@ -54,17 +54,14 @@ export default {
       }
     },
 
-    // 处理添加日志
     handleAdd() {
       this.$router.push('/add-SignLanguageTranslationlog');
     },
 
-    // 处理编辑日志
     handleEdit(log) {
       this.$router.push({ path: '/edit-SignLanguageTranslationLog', query: { id: log.id } });
     },
 
-    // 处理单个删除
     async handleDelete(id) {
       try {
         await SignLanguageTranslationLogApi.deleteLog(id);
@@ -79,13 +76,24 @@ export default {
       this.selectedLogs = selection.map(log => log.id);
     },
 
+    // 批量删除前的确认操作
+    confirmBatchDelete() {
+      if (this.selectedLogs.length === 0) return;
+
+      this.$confirm('确定要删除选中的日志吗？', '警告', {
+        type: 'warning'
+      }).then(() => {
+        this.handleBatchDelete();
+      }).catch(() => {});
+    },
+
     // 处理批量删除
     async handleBatchDelete() {
-      if (this.selectedLogs.length === 0) return;
       try {
         await Promise.all(this.selectedLogs.map(id => SignLanguageTranslationLogApi.deleteLog(id)));
         this.fetchLogs();
         this.selectedLogs = [];
+        this.$message.success('批量删除成功');
       } catch (error) {
         console.error('批量删除失败', error);
       }
@@ -98,7 +106,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .app-container {
   padding: 20px;

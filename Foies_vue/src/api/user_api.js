@@ -3,9 +3,9 @@ import axios from 'axios';
 const API_URL = 'http://localhost:8080/users';
 
 export default {
-  getUsers() {
-    return axios.post(`${API_URL}/getByExampleWithBLOBs`, {});
-  },
+  getUsers(queryParams = {}) {
+    return axios.post(`${API_URL}/getByExampleWithBLOBs`, queryParams);
+  },  
   getUserById(id) {
     return axios.get(`${API_URL}/${id}`);
   },

@@ -1,8 +1,24 @@
 <template>
   <div class="app-container">
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="服务名称">
+        <el-input v-model="searchForm.serviceName" placeholder="输入服务名称"></el-input>
+      </el-form-item>
+      <el-form-item label="状态">
+        <el-select v-model="searchForm.status" placeholder="选择状态">
+          <el-option label="成功" value="success"></el-option>
+          <el-option label="失败" value="failure"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="fetchLogs">查询</el-button>
+        <el-button @click="resetSearch">重置</el-button>
+      </el-form-item>
+    </el-form>
+
     <!-- 操作按钮 -->
     <el-button type="primary" @click="handleAdd">添加日志</el-button>
-    <el-button type="danger" @click="handleBatchDelete" :disabled="selectedLogs.length === 0">批量删除</el-button>
+    <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedLogs.length === 0">批量删除</el-button>
 
     <!-- 日志表格 -->
     <el-table :data="logs" border @selection-change="handleSelectionChange">
@@ -38,10 +54,10 @@ export default {
   data() {
     return {
       logs: [],
-      selectedLogs: [], // 存储选中的日志
-      filters: {
-        service_name: '',
-        status: '', // 过滤条件
+      selectedLogs: [],
+      searchForm: {
+        serviceName: '',
+        status: ''
       }
     };
   },
@@ -50,30 +66,42 @@ export default {
   },
   methods: {
     async fetchLogs() {
+      const filters = {
+        oredCriteria: [
+          {
+            criteria: []
+          }
+        ]
+      };
+
+      if (this.searchForm.serviceName) {
+        filters.oredCriteria[0].criteria.push({
+          condition: "service_name LIKE",
+          value: `%${this.searchForm.serviceName}%`,
+          singleValue: true
+        });
+      }
+
+      if (this.searchForm.status) {
+        filters.oredCriteria[0].criteria.push({
+          condition: "status =",
+          value: this.searchForm.status,
+          singleValue: true
+        });
+      }
+
       try {
-        const response = await ThirdPartyApiLogApi.getLogs(this.filters);
-        console.log("Fetched logs data:", JSON.stringify(response.data, null, 2));
+        const response = await ThirdPartyApiLogApi.getLogs(filters);
         this.logs = response.data;
       } catch (error) {
         console.error('获取日志列表失败', error);
       }
     },
 
-    handleAdd() {
-      this.$router.push('/add-log');
-    },
-
-    handleView(log) {
-      this.$router.push({ path: '/log-detail', query: { id: log.id } });
-    },
-
-    async handleDelete(id) {
-      try {
-        await ThirdPartyApiLogApi.deleteLog(id);
-        this.fetchLogs();
-      } catch (error) {
-        console.error('删除日志失败', error);
-      }
+    resetSearch() {
+      this.searchForm.serviceName = '';
+      this.searchForm.status = '';
+      this.fetchLogs();
     },
 
     // 监听表格选择变化
@@ -81,15 +109,24 @@ export default {
       this.selectedLogs = selection.map(log => log.id);
     },
 
+    // 批量删除前的确认操作
+    confirmBatchDelete() {
+      if (this.selectedLogs.length === 0) return;
+
+      this.$confirm('确定要删除选中的日志吗？', '警告', {
+        type: 'warning'
+      }).then(() => {
+        this.handleBatchDelete();
+      }).catch(() => {});
+    },
+
     // 批量删除日志
     async handleBatchDelete() {
-      if (this.selectedLogs.length === 0) {
-        return;
-      }
       try {
         await Promise.all(this.selectedLogs.map(id => ThirdPartyApiLogApi.deleteLog(id)));
         this.fetchLogs();
         this.selectedLogs = [];
+        this.$message.success('批量删除成功');
       } catch (error) {
         console.error('批量删除失败', error);
       }
@@ -113,6 +150,27 @@ export default {
         failure: 'danger'
       };
       return tagMap[status] || 'info';
+    },
+
+    // 跳转到添加日志页面
+    handleAdd() {
+      this.$router.push('/add-log');
+    },
+
+    // 跳转到日志详情页面
+    handleView(row) {
+      this.$router.push({ path: '/log-detail', query: { id: row.id } });
+    },
+
+    // 删除日志
+    async handleDelete(id) {
+      try {
+        await ThirdPartyApiLogApi.deleteLog(id);
+        this.fetchLogs();
+        this.$message.success('删除成功');
+      } catch (error) {
+        console.error('删除失败', error);
+      }
     }
   }
 };

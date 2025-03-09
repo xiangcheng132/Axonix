@@ -37,8 +37,8 @@ public class ThirdPartyApiLogController {
         return thirdPartyApiLogService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<ThirdPartyApiLog> getList(ThirdPartyApiLogExample example) {
+    @PostMapping("/list")
+    public List<ThirdPartyApiLog> getList(@RequestBody ThirdPartyApiLogExample example) {
         return thirdPartyApiLogService.selectByExample(example);
     }
 

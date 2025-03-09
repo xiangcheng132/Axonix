@@ -18,8 +18,9 @@ export default {
   },
 
   // 获取日志列表
-  getLogs(example) {
-    return axios.get(`${API_URL}/list`, { params: example })
+  // 获取日志列表（支持模糊查询）
+  getLogs(filters) {
+    return axios.post(`${API_URL}/list`, filters) // 修改为 POST 请求
   },
 
   // 根据 ID 获取日志详情
