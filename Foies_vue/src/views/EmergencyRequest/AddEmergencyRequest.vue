@@ -17,12 +17,9 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="emergencyRequest.location.latitude" />
-            </el-form-item>
-
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="emergencyRequest.location.longitude" />
+            <el-form-item label="位置" prop="location">
+                <div id="map" class="map-container"></div>
+                <p>经度: {{ parsedLocation.longitude }}, 纬度: {{ parsedLocation.latitude }}</p>
             </el-form-item>
 
             <el-form-item label="创建时间" prop="createdtime">
@@ -48,12 +45,11 @@ export default {
                 userId: '',
                 contactId: '',
                 status: 'pending',
-                location: {
-                    latitude: '',
-                    longitude: ''
-                },
-                createdtime: new Date() // 自动填充为当前时间
+                location: '', // 存储 JSON 格式的经纬度
+                createdtime: new Date() // 默认当前时间
             },
+            map: null,
+            marker: null,
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
                 contactId: [{ required: true, message: '请输入联系人ID', trigger: 'blur' }],
@@ -62,24 +58,55 @@ export default {
             }
         };
     },
+    computed: {
+        parsedLocation() {
+            try {
+                return this.emergencyRequest.location ? JSON.parse(this.emergencyRequest.location) : { latitude: '', longitude: '' };
+            } catch (e) {
+                return { latitude: '', longitude: '' };
+            }
+        }
+    },
+    mounted() {
+        this.initMap();
+    },
     methods: {
+        initMap() {
+            this.map = new AMap.Map('map', {
+                center: [116.397428, 39.90923], // 默认中心点（北京）
+                zoom: 13
+            });
+
+            this.map.on('click', (e) => {
+                const newLocation = {
+                    latitude: e.lnglat.getLat().toFixed(6),
+                    longitude: e.lnglat.getLng().toFixed(6)
+                };
+                this.emergencyRequest.location = JSON.stringify(newLocation);
+
+                // 更新 marker
+                if (this.marker) {
+                    this.marker.setPosition([newLocation.longitude, newLocation.latitude]);
+                } else {
+                    this.marker = new AMap.Marker({
+                        position: [newLocation.longitude, newLocation.latitude],
+                        map: this.map
+                    });
+                }
+            });
+        },
         submitForm() {
             this.$refs.emergencyRequestForm.validate(async (valid) => {
                 if (valid) {
                     try {
                         const formData = { ...this.emergencyRequest };
-                        // 处理 location 为 JSON 字符串，确保 latitude 和 longitude 使用正确的值
-                        formData.location = JSON.stringify({
-                            latitude: formData.location.latitude, // 使用 location 对象中的纬度
-                            longitude: formData.location.longitude // 使用 location 对象中的经度
-                        });
 
-                        // 确保 createdtime 是一个正确的 ISO 格式日期
-                        if (formData.createdtime) {
-                            formData.createdtime = new Date(formData.createdtime).toISOString();
-                        }
+                        // 确保 location 存储为 JSON 格式
+                        formData.location = JSON.stringify(this.parsedLocation);
 
-                        // 提交数据
+                        // 确保 createdtime 格式正确
+                        formData.createdtime = new Date(formData.createdtime).toISOString();
+
                         await EmergencyRequestApi.addEmergencyRequest(formData);
                         this.$message.success("紧急求助添加成功");
                         this.$router.push("/EmergencyRequest/index");
@@ -90,9 +117,13 @@ export default {
                 }
             });
         },
-
         resetForm() {
             this.$refs.emergencyRequestForm.resetFields();
+            this.emergencyRequest.location = ''; // 清空选点
+            if (this.marker) {
+                this.marker.setMap(null);
+                this.marker = null;
+            }
         },
         goBack() {
             this.$router.push('/EmergencyRequest/index');
@@ -109,5 +140,10 @@ export default {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.map-container {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 10px;
 }
 </style>
