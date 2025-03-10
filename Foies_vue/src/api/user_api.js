@@ -17,5 +17,8 @@ export default {
   },
   deleteUser(id) {
     return axios.delete(`${API_URL}/delete/${id}`);
-  }
+  },
+  countUsers(example = {}) {
+    return axios.get(`${API_URL}/count`, { params: example });
+  }  
 };
