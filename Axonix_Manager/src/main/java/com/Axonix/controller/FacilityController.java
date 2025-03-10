@@ -37,8 +37,8 @@ public class FacilityController {
         return facilityService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<Facility> getList(FacilityExample example) {
+    @PostMapping("/list")
+    public List<Facility> getList(@RequestBody FacilityExample example) {
         return facilityService.selectByExample(example);
     }
 

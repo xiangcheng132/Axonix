@@ -10,8 +10,13 @@ export default {
 
   // 获取支付日志列表
   getPayments(example) {
-    return axios.get(`${API_URL}/list`, { params: example });
-  },
+    return axios.post(`${API_URL}/list`, example)
+      .then(response => response.data)
+      .catch(error => {
+        console.error('获取支付日志失败', error);
+        throw error;
+      });
+  },  
 
   // 根据 ID 获取支付日志详情
   getPaymentById(id) {

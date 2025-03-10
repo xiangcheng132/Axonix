@@ -36,8 +36,8 @@ public class FriendRelationshipController {
         return friendRelationshipService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<FriendRelationship> getList(FriendRelationshipExample example) {
+    @PostMapping("/list")
+    public List<FriendRelationship> getList(@RequestBody FriendRelationshipExample example) {
         return friendRelationshipService.selectByExample(example);
     }
 

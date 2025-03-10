@@ -36,8 +36,8 @@ public class LocationShareController {
         return locationShareService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<LocationShare> getList(LocationShareExample example) {
+    @PostMapping("/list")
+    public List<LocationShare> getList(@RequestBody LocationShareExample example) {
         return locationShareService.selectByExample(example);
     }
 

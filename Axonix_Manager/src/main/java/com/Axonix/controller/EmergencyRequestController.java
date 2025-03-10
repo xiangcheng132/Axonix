@@ -36,8 +36,8 @@ public class EmergencyRequestController {
         return emergencyRequestService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<EmergencyRequest> getList(EmergencyRequestExample example) {
+    @PostMapping("/list")
+    public List<EmergencyRequest> getList(@RequestBody EmergencyRequestExample example) {
         return emergencyRequestService.selectByExample(example);
     }
 

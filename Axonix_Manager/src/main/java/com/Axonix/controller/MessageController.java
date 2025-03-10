@@ -36,8 +36,8 @@ public class MessageController {
         return messageService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<Message> getList(MessageExample example) {
+    @PostMapping("/list")
+    public List<Message> getList(@RequestBody  MessageExample example) {
         return messageService.selectByExampleWithBLOBs(example);
     }
 

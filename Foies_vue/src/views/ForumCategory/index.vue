@@ -1,8 +1,21 @@
 <template>
     <div class="app-container">
+        <!-- 搜索表单 -->
+        <el-form :inline="true" class="demo-form-inline">
+            <el-form-item label="分类名称">
+                <el-input v-model="filters.name" placeholder="输入分类名称"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="fetchForumCategories">查询</el-button>
+                <el-button @click="resetSearch">重置</el-button>
+            </el-form-item>
+        </el-form>
+
+        <!-- 操作按钮 -->
         <el-button type="primary" @click="handleAdd">添加分类</el-button>
         <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedCategories.length === 0">批量删除</el-button>
 
+        <!-- 分类表格 -->
         <el-table :data="forumCategories" border @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="id" label="ID" width="80" />
@@ -34,7 +47,10 @@ export default {
     data() {
         return {
             forumCategories: [],
-            selectedCategories: [] // 选中的分类ID数组
+            selectedCategories: [], // 选中的分类ID数组
+            filters: {
+                name: '' // 搜索的分类名称
+            }
         };
     },
     created() {
@@ -42,8 +58,20 @@ export default {
     },
     methods: {
         async fetchForumCategories() {
+            const example = {
+                oredCriteria: [{ criteria: [] }]
+            };
+
+            if (this.filters.name) {
+                example.oredCriteria[0].criteria.push({
+                    condition: "name LIKE",
+                    value: `%${this.filters.name}%`,
+                    singleValue: true
+                });
+            }
+
             try {
-                const response = await ForumCategoryApi.getForumCategories();
+                const response = await ForumCategoryApi.getForumCategories(example);
                 this.forumCategories = response.data;
             } catch (error) {
                 console.error('获取分类失败', error);
@@ -53,6 +81,7 @@ export default {
         handleAdd() {
             this.$router.push('/add-forum-category');
         },
+
         handleView(forumCategory) {
             this.$router.push({ path: '/edit-forum-category', query: { id: forumCategory.id } });
         },
@@ -99,6 +128,12 @@ export default {
         // 监听表格多选
         handleSelectionChange(selection) {
             this.selectedCategories = selection.map(item => item.id);
+        },
+
+        // 重置搜索条件
+        resetSearch() {
+            this.filters.name = '';
+            this.fetchForumCategories();
         },
 
         formatDate(date) {

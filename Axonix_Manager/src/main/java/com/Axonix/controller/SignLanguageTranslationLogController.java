@@ -36,8 +36,8 @@ public class SignLanguageTranslationLogController {
         return signLanguageTranslationLogService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<SignLanguageTranslationLog> getList(SignLanguageTranslationLogExample example) {
+    @PostMapping("/list")
+    public List<SignLanguageTranslationLog> getList(@RequestBody SignLanguageTranslationLogExample example) {
         return signLanguageTranslationLogService.selectByExample(example);
     }
 
