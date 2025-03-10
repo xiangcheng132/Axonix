@@ -8,7 +8,7 @@ export default {
   },
 
   getPosts(example) {
-    return axios.get(`${API_URL}/list`, { params: example });
+    return axios.post(`${API_URL}/list`, example);
   },
 
   getPostById(id) {

@@ -7,7 +7,7 @@ export default {
     return axios.get(`${API_URL}/count`, { params: example });
   },
   getOperationLogs(example) {
-    return axios.get(`${API_URL}/list`, { params: example });
+    return axios.post(`${API_URL}/list`, example);
   },
   getOperationLogById(id) {
     return axios.get(`${API_URL}/${id}`);

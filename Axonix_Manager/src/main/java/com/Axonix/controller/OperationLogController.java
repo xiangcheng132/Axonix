@@ -36,10 +36,11 @@ public class OperationLogController {
         return operationLogService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<OperationLog> getList(OperationLogExample example) {
+    @PostMapping("/list")
+    public List<OperationLog> getList(@RequestBody OperationLogExample example) {
         return operationLogService.selectByExample(example);
     }
+
 
     @GetMapping("/{id}")
     public OperationLog getById(@PathVariable Integer id) {

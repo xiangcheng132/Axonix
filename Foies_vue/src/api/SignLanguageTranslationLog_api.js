@@ -24,7 +24,7 @@ export default {
    * @returns {Promise} - 返回包含日志列表的 Promise 对象
    */
   getLogs(example) {
-    return axios.get(`${API_URL}/list`, example)
+    return axios.post(`${API_URL}/list`, example)
       .then(response => response.data)
       .catch(error => {
         console.error('Error getting logs:', error);

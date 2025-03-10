@@ -1,8 +1,31 @@
 <template>
     <div class="app-container">
+        <!-- 搜索表单 -->
+        <el-form :inline="true" class="demo-form-inline">
+            <el-form-item label="用户ID">
+                <el-input v-model="filters.userId" placeholder="输入用户ID"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人ID">
+                <el-input v-model="filters.contactId" placeholder="输入联系人ID"></el-input>
+            </el-form-item>
+            <el-form-item label="状态">
+                <el-select v-model="filters.status" placeholder="选择状态">
+                    <el-option label="待处理" value="pending"></el-option>
+                    <el-option label="处理中" value="processing"></el-option>
+                    <el-option label="已完成" value="completed"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="fetchEmergencyRequests">查询</el-button>
+                <el-button @click="resetSearch">重置</el-button>
+            </el-form-item>
+        </el-form>
+
+        <!-- 操作按钮 -->
         <el-button type="primary" @click="handleAdd">添加紧急求助</el-button>
         <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedRequests.length === 0">批量删除</el-button>
 
+        <!-- 紧急求助表格 -->
         <el-table :data="emergencyRequests" border @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="id" label="ID" width="80" />
@@ -10,20 +33,14 @@
             <el-table-column prop="contactId" label="联系人ID" />
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
-                    <el-tag :type="getStatusTag(scope.row.status)">
-                        {{ formatStatus(scope.row.status) }}
-                    </el-tag>
+                    <el-tag :type="getStatusTag(scope.row.status)">{{ formatStatus(scope.row.status) }}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column prop="createdtime" label="创建时间">
-                <template slot-scope="scope">
-                    {{ formatDate(scope.row.createdtime) }}
-                </template>
+                <template slot-scope="scope">{{ formatDate(scope.row.createdtime) }}</template>
             </el-table-column>
             <el-table-column prop="updatedtime" label="最后更新时间">
-                <template slot-scope="scope">
-                    {{ formatDate(scope.row.updatedtime) }}
-                </template>
+                <template slot-scope="scope">{{ formatDate(scope.row.updatedtime) }}</template>
             </el-table-column>
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
@@ -42,7 +59,12 @@ export default {
     data() {
         return {
             emergencyRequests: [],
-            selectedRequests: [] // 选中的紧急求助ID数组
+            selectedRequests: [],
+            filters: {
+                userId: '',
+                contactId: '',
+                status: ''
+            }
         };
     },
     created() {
@@ -50,22 +72,67 @@ export default {
     },
     methods: {
         async fetchEmergencyRequests() {
+            const example = {
+                oredCriteria: [{ criteria: [] }]
+            };
+
+            if (this.filters.userId) {
+                example.oredCriteria[0].criteria.push({
+                    condition: "user_id LIKE",
+                    value: `%${this.filters.userId}%`,
+                    singleValue: true
+                });
+            }
+
+            if (this.filters.contactId) {
+                example.oredCriteria[0].criteria.push({
+                    condition: "contact_id LIKE",
+                    value: `%${this.filters.contactId}%`,
+                    singleValue: true
+                });
+            }
+
+            if (this.filters.status) {
+                example.oredCriteria[0].criteria.push({
+                    condition: "status =",
+                    value: this.filters.status,
+                    singleValue: true
+                });
+            }
+
             try {
-                const response = await EmergencyRequestApi.getEmergencyRequests();
-                console.log("获取到的紧急求助数据:", response.data);
-                this.emergencyRequests = response.data.map(req => ({
-                    ...req,
-                }));
+                const response = await EmergencyRequestApi.getEmergencyRequests(example);
+                this.emergencyRequests = response.data;
             } catch (error) {
                 console.error('获取紧急求助失败', error);
             }
         },
+
+        resetSearch() {
+            this.filters.userId = '';
+            this.filters.contactId = '';
+            this.filters.status = '';
+            this.fetchEmergencyRequests();
+        },
+
+        handleSelectionChange(selection) {
+            this.selectedRequests = selection.map(item => item.id);
+        },
+
         handleAdd() {
             this.$router.push('/add-emergency-request');
         },
+
         handleView(request) {
             this.$router.push({ path: '/edit-emergency-request', query: { id: request.id } });
         },
+
+        confirmDelete(id) {
+            this.$confirm('确定要删除此紧急求助吗？', '警告', { type: 'warning' })
+                .then(() => this.handleDelete(id))
+                .catch(() => {});
+        },
+
         async handleDelete(id) {
             try {
                 await EmergencyRequestApi.deleteEmergencyRequest(id);
@@ -75,40 +142,11 @@ export default {
                 console.error('删除紧急求助失败', error);
             }
         },
-        // 单个删除前的确认操作
-        confirmDelete(id) {
-            this.$confirm('确定要删除此紧急求助吗？', '警告', {
-                type: 'warning'
-            }).then(() => {
-                this.handleDelete(id);
-            }).catch(() => {});
-        },
-        // 批量删除前的确认操作
-        async confirmBatchDelete() {
-            if (this.selectedRequests.length === 0) return;
 
-            this.$confirm('确定要删除选中的紧急求助吗？', '警告', {
-                type: 'warning'
-            }).then(async () => {
-                try {
-                    // 执行批量删除
-                    await Promise.all(this.selectedRequests.map(id => EmergencyRequestApi.deleteEmergencyRequest(id)));
-                    this.fetchEmergencyRequests();
-                    this.selectedRequests = [];
-                    this.$message.success('批量删除成功');
-                } catch (error) {
-                    console.error('批量删除失败', error);
-                }
-            }).catch(() => {});
-        },
-        // 监听表格多选
-        handleSelectionChange(selection) {
-            this.selectedRequests = selection.map(item => item.id);
-        },
         formatDate(date) {
             return date ? new Date(date).toLocaleString() : '无';
         },
-        // 状态映射表
+
         formatStatus(status) {
             const statusMap = {
                 pending: '待处理',
@@ -117,7 +155,7 @@ export default {
             };
             return statusMap[status] || '未知';
         },
-        // 颜色映射表
+
         getStatusTag(status) {
             const tagMap = {
                 pending: 'warning',

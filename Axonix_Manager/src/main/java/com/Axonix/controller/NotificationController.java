@@ -36,8 +36,8 @@ public class NotificationController {
         return notificationService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<Notification> getList(NotificationExample example) {
+    @PostMapping("/list")
+    public List<Notification> getList(@RequestBody NotificationExample example) {
         return notificationService.selectByExample(example);
     }
 

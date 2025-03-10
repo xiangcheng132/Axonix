@@ -36,8 +36,8 @@ public class ForumCategoryController {
         return forumCategoryService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<ForumCategory> getList(ForumCategoryExample example) {
+    @PostMapping("/list")
+    public List<ForumCategory> getList(@RequestBody ForumCategoryExample example) {
         return forumCategoryService.selectByExample(example);
     }
 

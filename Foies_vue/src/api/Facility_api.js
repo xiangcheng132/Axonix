@@ -7,7 +7,7 @@ export default {
     return axios.get(`${API_URL}/count`, { params: example });
   },
   getFacilities(example) {
-    return axios.get(`${API_URL}/list`, { params: example });
+    return axios.post(`${API_URL}/list`, example);
   },
   getFacilityById(id) {
     return axios.get(`${API_URL}/${id}`);

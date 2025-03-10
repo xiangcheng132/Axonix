@@ -36,8 +36,8 @@ public class PaymentController {
         return paymentService.insertSelective(record);
     }
 
-    @GetMapping("/list")
-    public List<Payment> getList(PaymentExample example) {
+    @PostMapping("/list")
+    public List<Payment> getList(@RequestBody PaymentExample example) {
         return paymentService.selectByExample(example);
     }
 
