@@ -18,6 +18,11 @@
                 <el-input type="textarea" :rows="4" v-model="facility.description" />
             </el-form-item>
 
+            <!-- 创建时间，不允许修改，只显示 -->
+            <el-form-item label="创建时间">
+                <el-input v-model="facility.createdtime" disabled :value="formatBeijingTime(facility.createdtime)" />
+            </el-form-item>
+
             <el-form-item>
                 <el-button type="primary" @click="submitForm">提交</el-button>
                 <el-button @click="resetForm">重置</el-button>
@@ -38,7 +43,9 @@ export default {
                 name: '',
                 facilityType: '',
                 location: '', // 存储 JSON 格式的经纬度
-                description: ''
+                description: '',
+                createdtime: '', // 存储从后端获取的创建时间
+                updatedtime: '' // 用于更新时记录更新时间
             },
             map: null,
             marker: null,
@@ -67,6 +74,10 @@ export default {
             try {
                 const response = await FacilityApi.getFacilityById(id);
                 this.facility = response.data;
+
+                // 确保获取到的创建时间是 ISO 格式
+                this.facility.createdtime = new Date(this.facility.createdtime).toISOString();
+
                 this.$nextTick(() => {
                     this.initMap();
                 });
@@ -112,7 +123,7 @@ export default {
         submitForm() {
             this.$refs.facilityForm.validate(async (valid) => {
                 if (valid) {
-                    this.facility.updatedtime = new Date().toISOString();
+                    this.facility.updatedtime = new Date().toISOString(); // 更新时赋值
                     try {
                         await FacilityApi.updateFacilitySelective(this.facility.id, this.facility);
                         this.$message.success('设施更新成功');
@@ -125,10 +136,24 @@ export default {
             });
         },
         resetForm() {
-            this.fetchFacility();
+            this.$refs.facilityForm.resetFields();
         },
         goBack() {
             this.$router.push('/Facility/index');
+        },
+        formatBeijingTime(utcTime) {
+            if (!utcTime) return '无';
+            const date = new Date(utcTime);
+            const options = {
+                timeZone: 'Asia/Shanghai',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            };
+            return new Intl.DateTimeFormat('zh-CN', options).format(date);
         }
     }
 };
@@ -137,11 +162,11 @@ export default {
 <style scoped>
 .edit-facility-container {
     max-width: 600px;
-    margin: 40px auto;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
+    background: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .map-container {
     width: 100%;

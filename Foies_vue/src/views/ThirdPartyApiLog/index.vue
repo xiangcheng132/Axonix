@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleView(scope.row)">查看</el-button>
+          <el-button size="mini" @click="handleView(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -117,7 +117,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.handleBatchDelete();
-      }).catch(() => {});
+      }).catch(() => { });
     },
 
     // 批量删除日志
@@ -133,8 +133,11 @@ export default {
     },
 
     formatDate(date) {
-      return date ? new Date(date).toLocaleString() : '无';
+      if (!date) return '无';
+      const localDate = new Date(date);
+      return localDate.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
     },
+
 
     formatStatus(status) {
       const statusMap = {

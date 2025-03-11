@@ -47,7 +47,7 @@
 
       <el-table-column label="操作" width="200">
         <template #default="scope">
-          <el-button size="mini" @click="handleView(scope.row)">查看</el-button>
+          <el-button size="mini" @click="handleView(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -59,80 +59,81 @@
 import PaymentApi from '@/api/Payment_api';
 
 export default {
-data() {
-  return {
-    payments: [],
-    selectedPayments: [],
-    filters: {
-      userId: '',
-      transactionId: '',
-      status: ''
-    }
-  };
-},
-created() {
-  this.fetchPayments();
-},
-methods: {
-  async fetchPayments() {
-    const example = {
-      oredCriteria: [
-        {
-          criteria: []
-        }
-      ]
+  data() {
+    return {
+      payments: [],
+      selectedPayments: [],
+      filters: {
+        userId: '',
+        transactionId: '',
+        status: ''
+      }
     };
-
-    if (this.filters.userId) {
-      example.oredCriteria[0].criteria.push({
-        condition: "user_id LIKE",
-        value: `%${this.filters.userId}%`,
-        singleValue: true
-      });
-    }
-
-    if (this.filters.transactionId) {
-      example.oredCriteria[0].criteria.push({
-        condition: "transaction_id LIKE",
-        value: `%${this.filters.transactionId}%`,
-        singleValue: true
-      });
-    }
-
-    if (this.filters.status) {
-      example.oredCriteria[0].criteria.push({
-        condition: "status =",
-        value: this.filters.status,
-        singleValue: true
-      });
-    }
-
-    try {
-      const response = await PaymentApi.getPayments(example);
-      this.payments = response;
-    } catch (error) {
-      console.error('获取支付日志失败', error);
-    }
   },
-
-  resetSearch() {
-    this.filters.userId = '';
-    this.filters.transactionId = '';
-    this.filters.status = '';
+  created() {
     this.fetchPayments();
   },
+  methods: {
+    async fetchPayments() {
+      const example = {
+        oredCriteria: [
+          {
+            criteria: []
+          }
+        ]
+      };
 
-  handleSelectionChange(selection) {
-    this.selectedPayments = selection.map(payment => payment.id);
-  },
+      if (this.filters.userId) {
+        example.oredCriteria[0].criteria.push({
+          condition: "user_id LIKE",
+          value: `%${this.filters.userId}%`,
+          singleValue: true
+        });
+      }
 
-  handleAdd() {
-    this.$router.push('/add-payment-log');
-  },
+      if (this.filters.transactionId) {
+        example.oredCriteria[0].criteria.push({
+          condition: "transaction_id LIKE",
+          value: `%${this.filters.transactionId}%`,
+          singleValue: true
+        });
+      }
 
-  handleView(log) {
-      this.$router.push({ path: '/payment-log-detail/:id', query: { id: log.id } });
+      if (this.filters.status) {
+        example.oredCriteria[0].criteria.push({
+          condition: "status =",
+          value: this.filters.status,
+          singleValue: true
+        });
+      }
+
+      try {
+        const response = await PaymentApi.getPayments(example);
+        this.payments = response;
+      } catch (error) {
+        console.error('获取支付日志失败', error);
+      }
     },
+
+    resetSearch() {
+      this.filters.userId = '';
+      this.filters.transactionId = '';
+      this.filters.status = '';
+      this.fetchPayments();
+    },
+
+    handleSelectionChange(selection) {
+      this.selectedPayments = selection.map(payment => payment.id);
+    },
+
+    handleAdd() {
+      this.$router.push('/add-payment-log');
+    },
+
+    handleView(log) {
+      this.$router.push({ name: 'PaymentLogDetail', params: { id: log.id } });
+    },
+
 
     async handleDelete(id) {
       try {
@@ -144,69 +145,69 @@ methods: {
       }
     },
 
-  confirmBatchDelete() {
-    if (this.selectedPayments.length === 0) return;
-    this.$confirm('确定要删除选中的支付日志吗？', '警告', {
-      type: 'warning'
-    }).then(() => {
-      this.handleBatchDelete();
-    }).catch(() => {});
-  },
+    confirmBatchDelete() {
+      if (this.selectedPayments.length === 0) return;
+      this.$confirm('确定要删除选中的支付日志吗？', '警告', {
+        type: 'warning'
+      }).then(() => {
+        this.handleBatchDelete();
+      }).catch(() => { });
+    },
 
-  async handleBatchDelete() {
-    try {
-      await Promise.all(this.selectedPayments.map(id => PaymentApi.deletePayment(id)));
-      this.fetchPayments();
-      this.selectedPayments = [];
-      this.$message.success('批量删除成功');
-    } catch (error) {
-      console.error('批量删除失败', error);
+    async handleBatchDelete() {
+      try {
+        await Promise.all(this.selectedPayments.map(id => PaymentApi.deletePayment(id)));
+        this.fetchPayments();
+        this.selectedPayments = [];
+        this.$message.success('批量删除成功');
+      } catch (error) {
+        console.error('批量删除失败', error);
+      }
+    },
+
+    formatStatus(status) {
+      const statusMap = {
+        pending: '待处理',
+        completed: '已完成',
+        failed: '失败'
+      };
+      return statusMap[status] || '未知';
+    },
+
+    getStatusTag(status) {
+      const tagMap = {
+        pending: 'warning',
+        completed: 'success',
+        failed: 'danger'
+      };
+      return tagMap[status] || 'info';
+    },
+
+    formatDate(date) {
+      if (!date) return '无';
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const seconds = String(d.getSeconds()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
-  },
-
-  formatStatus(status) {
-    const statusMap = {
-      pending: '待处理',
-      completed: '已完成',
-      failed: '失败'
-    };
-    return statusMap[status] || '未知';
-  },
-
-  getStatusTag(status) {
-    const tagMap = {
-      pending: 'warning',
-      completed: 'success',
-      failed: 'danger'
-    };
-    return tagMap[status] || 'info';
-  },
-
-  formatDate(date) {
-    if (!date) return '无';
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const seconds = String(d.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
-}
 };
 </script>
 
 <style scoped>
 .app-container {
-padding: 20px;
+  padding: 20px;
 }
 
 .el-table {
-margin-top: 20px;
+  margin-top: 20px;
 }
 
 .el-button {
-margin-right: 10px;
+  margin-right: 10px;
 }
 </style>

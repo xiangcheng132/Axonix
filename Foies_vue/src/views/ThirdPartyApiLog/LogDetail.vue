@@ -1,7 +1,7 @@
 <template>
   <div class="log-detail-container">
     <h2>日志详情</h2>
-    <el-form ref="logForm" :model="log" label-width="120px" :disabled="!isEditMode">
+    <el-form ref="logForm" :model="log" label-width="120px">
       <!-- 服务名称 -->
       <el-form-item label="服务名称" prop="serviceName">
         <el-input v-model="log.serviceName" />
@@ -13,7 +13,7 @@
           v-model="log.createdtime"
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="yyyy-MM-ddTHH:mm:ss.SSSZ"
           placeholder="选择日期时间"
         />
       </el-form-item>
@@ -36,14 +36,13 @@
         <el-input v-model="log.responseData" type="textarea" :rows="4" />
       </el-form-item>
 
+      <!-- 按钮组 -->
+      <el-form-item>
+        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button @click="resetForm">重置</el-button>
+        <el-button @click="goBack">取消</el-button>
+      </el-form-item>
     </el-form>
-    <!-- 按钮组，不绑定到表单的禁用状态 -->
-    <div class="button-group">
-      <el-button v-if="!isEditMode" type="primary" @click="toggleEditMode">编辑</el-button>
-      <el-button v-else type="success" @click="saveChanges">保存</el-button>
-      <el-button v-if="isEditMode" @click="cancelEditMode">取消</el-button>
-      <el-button @click="goBack">返回</el-button>
-    </div>
   </div>
 </template>
 
@@ -51,47 +50,64 @@
 import ThirdPartyApiLogApi from '@/api/ThirdPartyApiLog_api';
 
 export default {
-  props: ['id'],
   data() {
     return {
-      log: {},
-      isEditMode: false,
-      originalLog: null // 用于存储原始数据以便取消编辑时恢复
+      log: {
+        serviceName: '',
+        createdtime: '',
+        status: '',
+        requestData: '',
+        responseData: ''
+      },
+      originalLog: null
     };
   },
   created() {
-    this.fetchLogDetail(this.id);
+    this.fetchLogDetail();
   },
   methods: {
-    async fetchLogDetail(id) {
+    async fetchLogDetail() {
+      const id = this.$route.query.id;
+      if (!id) {
+        this.$message.error('未提供日志 ID');
+        this.$router.push('/ThirdPartyApiLog/index');
+        return;
+      }
       try {
         const response = await ThirdPartyApiLogApi.getLogById(id);
-        this.log = { ...response.data }; // 使用浅拷贝避免直接修改原始数据
-        this.originalLog = { ...response.data }; // 存储原始数据
+        this.log = { ...response.data };
+        if (this.log.createdtime) {
+          this.log.createdtime = new Date(this.log.createdtime).toISOString().slice(0, 19).replace('T', ' ');
+        }
+        this.originalLog = { ...response.data };
       } catch (error) {
-        console.error('Error fetching log detail:', error);
+        this.$message.error('获取日志详情失败');
+        console.error(error);
       }
     },
-    toggleEditMode() {
-      this.isEditMode = true;
-    },
-    cancelEditMode() {
-      this.log = { ...this.originalLog }; // 恢复原始数据
-      this.isEditMode = false;
-    },
-    goBack() {
-      this.$router.push('/ThirdPartyApiLog/index'); 
-    },
-    async saveChanges() {
+    async submitForm() {
       try {
-        await ThirdPartyApiLogApi.updateLogWithBlobs(this.id, this.log);
+        let updatedLog = { ...this.log };
+        if (updatedLog.createdtime) {
+          updatedLog.createdtime = new Date(updatedLog.createdtime).toISOString();
+        }
+        await ThirdPartyApiLogApi.updateLogWithBlobs(this.$route.query.id, updatedLog);
         this.$message.success('日志更新成功');
-        this.isEditMode = false; // 切换回查看模式
-        this.originalLog = { ...this.log }; // 更新原始数据
+        this.originalLog = { ...this.log };
+        this.$router.push('/ThirdPartyApiLog/index');
       } catch (error) {
         this.$message.error('更新日志失败');
-        console.error('Error updating log:', error);
+        console.error(error);
       }
+    },
+    resetForm() {
+      this.log = { ...this.originalLog };
+      if (this.log.createdtime) {
+        this.log.createdtime = new Date(this.log.createdtime).toISOString().slice(0, 19).replace('T', ' ');
+      }
+    },
+    goBack() {
+      this.$router.push('/ThirdPartyApiLog/index');
     }
   }
 };
@@ -105,10 +121,5 @@ export default {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.button-group {
-  text-align: right;
-  margin-top: 20px;
 }
 </style>

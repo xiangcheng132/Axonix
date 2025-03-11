@@ -1,7 +1,7 @@
 <template>
   <div class="log-detail-container">
       <h2>支付日志详情</h2>
-      <el-form ref="logForm" :model="log" label-width="120px" :disabled="!isEditMode">
+      <el-form ref="logForm" :model="log" label-width="120px">
           <el-form-item label="交易ID" prop="transactionId">
               <el-input v-model="log.transactionId" />
           </el-form-item>
@@ -21,17 +21,12 @@
                   <el-option label="失败" value="failed" />
               </el-select>
           </el-form-item>
-
-          <el-form-item label="创建时间" prop="createdTime">
-              <el-date-picker v-model="log.createdTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-ddTHH:mm:ss" />
-          </el-form-item>
       </el-form>
 
       <div class="button-group">
-          <el-button v-if="!isEditMode" type="primary" @click="toggleEditMode">编辑</el-button>
-          <el-button v-else type="success" @click="saveChanges">保存</el-button>
-          <el-button v-if="isEditMode" @click="cancelEditMode">取消</el-button>
-          <el-button @click="goBack">返回</el-button>
+          <el-button type="primary" @click="saveChanges">提交</el-button>
+          <el-button @click="resetForm">重置</el-button>
+          <el-button @click="goBack">取消</el-button>
       </div>
   </div>
 </template>
@@ -43,57 +38,41 @@ export default {
   data() {
     return {
       log: {},
-      isEditMode: false,
       originalLog: null
     };
   },
   created() {
-    const id = this.$route.params.id; // 直接从$route.params获取ID
-    if (!id) {
-      console.error('支付日志ID未定义');
-      return;
-    }
-    this.fetchPaymentDetail(id);
+    this.fetchPaymentDetail();
   },
   methods: {
-    async fetchPaymentDetail(id) {
+    async fetchPaymentDetail() {
+      const id = this.$route.params.id;
+      if (!id) {
+        this.$message.error('未提供支付日志 ID');
+        this.$router.push('/Payment/index');
+        return;
+      }
       try {
         const response = await PaymentApi.getPaymentById(id);
         this.log = { ...response.data };
-        // 确保createdTime是ISO字符串形式
-        if (this.log.createdTime) {
-          this.log.createdTime = new Date(this.log.createdTime).toISOString().slice(0, 19).replace('T', ' ');
-        }
         this.originalLog = { ...response.data };
       } catch (error) {
-        console.error('获取支付日志详情失败', error);
+        this.$message.error('获取支付日志详情失败');
+        console.error(error);
       }
-    },
-    toggleEditMode() {
-      this.isEditMode = true;
-    },
-    cancelEditMode() {
-      this.log = { ...this.originalLog };
-      // 还原createdTime的格式
-      if (this.log.createdTime) {
-        this.log.createdTime = new Date(this.log.createdTime).toISOString().slice(0, 19).replace('T', ' ');
-      }
-      this.isEditMode = false;
     },
     async saveChanges() {
       try {
-        let updatedLog = { ...this.log };
-        if (updatedLog.createdTime) {
-          updatedLog.createdTime = new Date(updatedLog.createdTime).toISOString();
-        }
-
-        await PaymentApi.updatePayment(this.$route.params.id, updatedLog); // 使用正确的ID
+        await PaymentApi.updatePayment(this.$route.params.id, this.log);
         this.$message.success('支付日志更新成功');
-        this.isEditMode = false;
+        this.$router.push('/Payment/index');
       } catch (error) {
-        this.$message.error('更新支付日志失败，输入的用户ID不存在！');
+        this.$message.error('更新支付日志失败');
         console.error(error);
       }
+    },
+    resetForm() {
+      this.log = { ...this.originalLog };
     },
     goBack() {
       this.$router.push('/Payment/index');
