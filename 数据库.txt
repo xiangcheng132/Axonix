@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `forum_comments` (
   CONSTRAINT fk_comment_user FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.7 操作日志表 (operation_logs)
+-- 2.7 操作日志表 (operation_logs)**
 CREATE TABLE IF NOT EXISTS `operation_logs` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   admin_id INT NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `operation_logs` (
   CONSTRAINT fk_log_admin FOREIGN KEY (admin_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.8 无障碍设施表 (facilities)
+-- 2.8 无障碍设施表 (facilities)**
 CREATE TABLE IF NOT EXISTS `facilities` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `location_shares` (
   CONSTRAINT fk_locshare_shared FOREIGN KEY (shared_with) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.12 好友关系表 (friend_relationships)
+-- 2.12 好友关系表 (friend_relationships)**
 CREATE TABLE IF NOT EXISTS `friend_relationships` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `friend_relationships` (
   CONSTRAINT fk_friend_friend FOREIGN KEY (friend_user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.13 论坛分类表 (forum_categories)
+-- 2.13 论坛分类表 (forum_categories)**
 CREATE TABLE IF NOT EXISTS `forum_categories` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `forum_categories` (
   updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.14 第三方 API 日志表 (third_party_api_logs)
+-- 2.14 第三方 API 日志表 (third_party_api_logs)**
 CREATE TABLE IF NOT EXISTS `third_party_api_logs` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   service_name VARCHAR(255) NOT NULL,
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `third_party_api_logs` (
   createdTime DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.15 手语翻译日志表 (sign_language_translation_logs)
+-- 2.15 手语翻译日志表 (sign_language_translation_logs)**
 CREATE TABLE IF NOT EXISTS `sign_language_translation_logs` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
