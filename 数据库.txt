@@ -8,7 +8,7 @@ USE Axonix;
 -- 2. 按依赖关系顺序创建数据表
 -- ================================
 
--- 2.1 用户表 (users)
+-- 2.1 用户表 (users) ***分开用户管理员***
 CREATE TABLE IF NOT EXISTS `users` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.2 紧急联系人表 (emergency_contacts)
+-- 2.2 紧急联系人表 (emergency_contacts)***缺少家庭住址***
 CREATE TABLE IF NOT EXISTS `emergency_contacts` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `location_shares` (
   CONSTRAINT fk_locshare_shared FOREIGN KEY (shared_with) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.12 好友关系表 (friend_relationships)**
+-- 2.12 好友关系表 (friend_relationships)***删除***
 CREATE TABLE IF NOT EXISTS `friend_relationships` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `friend_relationships` (
   CONSTRAINT fk_friend_friend FOREIGN KEY (friend_user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.13 论坛分类表 (forum_categories)**
+-- 2.13 论坛分类表 (forum_categories)***删除***
 CREATE TABLE IF NOT EXISTS `forum_categories` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `third_party_api_logs` (
   createdTime DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2.15 手语翻译日志表 (sign_language_translation_logs)**
+-- 2.15 手语翻译日志表 (sign_language_translation_logs)***不一定，暂定实时处理***
 CREATE TABLE IF NOT EXISTS `sign_language_translation_logs` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
