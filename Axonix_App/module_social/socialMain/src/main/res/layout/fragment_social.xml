@@ -7,13 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".SocialFragment">
 
+    <!-- 标题 -->
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="欢迎来到Social"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="欢迎来到社区"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"/>
 
+    <!-- 按钮：即时通讯 -->
+    <Button
+        android:id="@+id/btn_chat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="即时通讯"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_sign_language"
+        android:layout_margin="8dp"/>
+
+    <!-- 按钮：手语转换 -->
+    <Button
+        android:id="@+id/btn_sign_language"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="手语转换"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toEndOf="@id/btn_chat"
+        app:layout_constraintEnd_toStartOf="@id/btn_community"
+        android:layout_margin="8dp"/>
+
+    <!-- 按钮：社区论坛 -->
+    <Button
+        android:id="@+id/btn_community"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="社区论坛"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toEndOf="@id/btn_sign_language"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"/>
+
+    <!-- 社区帖子列表 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_posts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_chat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_post"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
