@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Axonix.demo.mapper.EmergencyContactMapper">
-  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.EmergencyContact">
+<mapper namespace="com.Axonix.demo.mapper.TrafficLogMapper">
+  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.TrafficLog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="contact_user_id" jdbcType="INTEGER" property="contactUserId" />
-    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="relationship" jdbcType="VARCHAR" property="relationship" />
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="last_lng" jdbcType="DECIMAL" property="lastLng" />
+    <result column="last_lat" jdbcType="DECIMAL" property="lastLat" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, contact_user_id, contact_phone, relationship, created_at, updated_at
+    id, user_id, last_lng, last_lat, start_time, end_time
   </sql>
-  <select id="selectByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.Axonix.demo.model.TrafficLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from emergency_contact
+    from traffic_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,29 +87,29 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from emergency_contact
+    from traffic_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from emergency_contact
+    delete from traffic_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample">
-    delete from emergency_contact
+  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.TrafficLogExample">
+    delete from traffic_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact (id, user_id, contact_user_id, 
-      contact_phone, relationship, created_at, 
-      updated_at)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{contactUserId,jdbcType=INTEGER}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{updatedAt,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.Axonix.demo.model.TrafficLog">
+    insert into traffic_log (id, user_id, last_lng, 
+      last_lat, start_time, end_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{lastLng,jdbcType=DECIMAL}, 
+      #{lastLat,jdbcType=DECIMAL}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact
+  <insert id="insertSelective" parameterType="com.Axonix.demo.model.TrafficLog">
+    insert into traffic_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -118,20 +117,17 @@
       <if test="userId != null">
         user_id,
       </if>
-      <if test="contactUserId != null">
-        contact_user_id,
+      <if test="lastLng != null">
+        last_lng,
       </if>
-      <if test="contactPhone != null">
-        contact_phone,
+      <if test="lastLat != null">
+        last_lat,
       </if>
-      <if test="relationship != null">
-        relationship,
+      <if test="startTime != null">
+        start_time,
       </if>
-      <if test="createdAt != null">
-        created_at,
-      </if>
-      <if test="updatedAt != null">
-        updated_at,
+      <if test="endTime != null">
+        end_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -141,31 +137,28 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        #{contactUserId,jdbcType=INTEGER},
+      <if test="lastLng != null">
+        #{lastLng,jdbcType=DECIMAL},
       </if>
-      <if test="contactPhone != null">
-        #{contactPhone,jdbcType=VARCHAR},
+      <if test="lastLat != null">
+        #{lastLat,jdbcType=DECIMAL},
       </if>
-      <if test="relationship != null">
-        #{relationship,jdbcType=VARCHAR},
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultType="java.lang.Long">
-    select count(*) from emergency_contact
+  <select id="countByExample" parameterType="com.Axonix.demo.model.TrafficLogExample" resultType="java.lang.Long">
+    select count(*) from traffic_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update emergency_contact
+    update traffic_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -173,20 +166,17 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
-      <if test="record.contactUserId != null">
-        contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
+      <if test="record.lastLng != null">
+        last_lng = #{record.lastLng,jdbcType=DECIMAL},
       </if>
-      <if test="record.contactPhone != null">
-        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      <if test="record.lastLat != null">
+        last_lat = #{record.lastLat,jdbcType=DECIMAL},
       </if>
-      <if test="record.relationship != null">
-        relationship = #{record.relationship,jdbcType=VARCHAR},
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -194,50 +184,45 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update emergency_contact
+    update traffic_log
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
-      contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      relationship = #{record.relationship,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+      last_lng = #{record.lastLng,jdbcType=DECIMAL},
+      last_lat = #{record.lastLat,jdbcType=DECIMAL},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.TrafficLog">
+    update traffic_log
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        contact_user_id = #{contactUserId,jdbcType=INTEGER},
+      <if test="lastLng != null">
+        last_lng = #{lastLng,jdbcType=DECIMAL},
       </if>
-      <if test="contactPhone != null">
-        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      <if test="lastLat != null">
+        last_lat = #{lastLat,jdbcType=DECIMAL},
       </if>
-      <if test="relationship != null">
-        relationship = #{relationship,jdbcType=VARCHAR},
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.TrafficLog">
+    update traffic_log
     set user_id = #{userId,jdbcType=INTEGER},
-      contact_user_id = #{contactUserId,jdbcType=INTEGER},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      relationship = #{relationship,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      last_lng = #{lastLng,jdbcType=DECIMAL},
+      last_lat = #{lastLat,jdbcType=DECIMAL},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

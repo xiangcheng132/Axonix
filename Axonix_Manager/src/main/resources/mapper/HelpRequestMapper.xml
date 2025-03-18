@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Axonix.demo.mapper.EmergencyContactMapper">
-  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.EmergencyContact">
+<mapper namespace="com.Axonix.demo.mapper.HelpRequestMapper">
+  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.HelpRequest">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="contact_user_id" jdbcType="INTEGER" property="contactUserId" />
-    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="relationship" jdbcType="VARCHAR" property="relationship" />
+    <result column="requester_id" jdbcType="INTEGER" property="requesterId" />
+    <result column="helper_id" jdbcType="INTEGER" property="helperId" />
+    <result column="requester_lng" jdbcType="DECIMAL" property="requesterLng" />
+    <result column="requester_lat" jdbcType="DECIMAL" property="requesterLat" />
+    <result column="helper_lng" jdbcType="DECIMAL" property="helperLng" />
+    <result column="helper_lat" jdbcType="DECIMAL" property="helperLat" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
@@ -69,15 +72,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, contact_user_id, contact_phone, relationship, created_at, updated_at
+    id, requester_id, helper_id, requester_lng, requester_lat, helper_lng, helper_lat, 
+    status, created_at, updated_at
   </sql>
-  <select id="selectByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.Axonix.demo.model.HelpRequestExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from emergency_contact
+    from help_request
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,44 +92,55 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from emergency_contact
+    from help_request
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from emergency_contact
+    delete from help_request
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample">
-    delete from emergency_contact
+  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.HelpRequestExample">
+    delete from help_request
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact (id, user_id, contact_user_id, 
-      contact_phone, relationship, created_at, 
+  <insert id="insert" parameterType="com.Axonix.demo.model.HelpRequest">
+    insert into help_request (id, requester_id, helper_id, 
+      requester_lng, requester_lat, helper_lng, 
+      helper_lat, status, created_at, 
       updated_at)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{contactUserId,jdbcType=INTEGER}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{requesterId,jdbcType=INTEGER}, #{helperId,jdbcType=INTEGER}, 
+      #{requesterLng,jdbcType=DECIMAL}, #{requesterLat,jdbcType=DECIMAL}, #{helperLng,jdbcType=DECIMAL}, 
+      #{helperLat,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, 
       #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact
+  <insert id="insertSelective" parameterType="com.Axonix.demo.model.HelpRequest">
+    insert into help_request
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="userId != null">
-        user_id,
+      <if test="requesterId != null">
+        requester_id,
       </if>
-      <if test="contactUserId != null">
-        contact_user_id,
+      <if test="helperId != null">
+        helper_id,
       </if>
-      <if test="contactPhone != null">
-        contact_phone,
+      <if test="requesterLng != null">
+        requester_lng,
       </if>
-      <if test="relationship != null">
-        relationship,
+      <if test="requesterLat != null">
+        requester_lat,
+      </if>
+      <if test="helperLng != null">
+        helper_lng,
+      </if>
+      <if test="helperLat != null">
+        helper_lat,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -138,17 +153,26 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+      <if test="requesterId != null">
+        #{requesterId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        #{contactUserId,jdbcType=INTEGER},
+      <if test="helperId != null">
+        #{helperId,jdbcType=INTEGER},
       </if>
-      <if test="contactPhone != null">
-        #{contactPhone,jdbcType=VARCHAR},
+      <if test="requesterLng != null">
+        #{requesterLng,jdbcType=DECIMAL},
       </if>
-      <if test="relationship != null">
-        #{relationship,jdbcType=VARCHAR},
+      <if test="requesterLat != null">
+        #{requesterLat,jdbcType=DECIMAL},
+      </if>
+      <if test="helperLng != null">
+        #{helperLng,jdbcType=DECIMAL},
+      </if>
+      <if test="helperLat != null">
+        #{helperLat,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -158,29 +182,38 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultType="java.lang.Long">
-    select count(*) from emergency_contact
+  <select id="countByExample" parameterType="com.Axonix.demo.model.HelpRequestExample" resultType="java.lang.Long">
+    select count(*) from help_request
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update emergency_contact
+    update help_request
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=INTEGER},
+      <if test="record.requesterId != null">
+        requester_id = #{record.requesterId,jdbcType=INTEGER},
       </if>
-      <if test="record.contactUserId != null">
-        contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
+      <if test="record.helperId != null">
+        helper_id = #{record.helperId,jdbcType=INTEGER},
       </if>
-      <if test="record.contactPhone != null">
-        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      <if test="record.requesterLng != null">
+        requester_lng = #{record.requesterLng,jdbcType=DECIMAL},
       </if>
-      <if test="record.relationship != null">
-        relationship = #{record.relationship,jdbcType=VARCHAR},
+      <if test="record.requesterLat != null">
+        requester_lat = #{record.requesterLat,jdbcType=DECIMAL},
+      </if>
+      <if test="record.helperLng != null">
+        helper_lng = #{record.helperLng,jdbcType=DECIMAL},
+      </if>
+      <if test="record.helperLat != null">
+        helper_lat = #{record.helperLat,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -194,32 +227,44 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update emergency_contact
+    update help_request
     set id = #{record.id,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
-      contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      relationship = #{record.relationship,jdbcType=VARCHAR},
+      requester_id = #{record.requesterId,jdbcType=INTEGER},
+      helper_id = #{record.helperId,jdbcType=INTEGER},
+      requester_lng = #{record.requesterLng,jdbcType=DECIMAL},
+      requester_lat = #{record.requesterLat,jdbcType=DECIMAL},
+      helper_lng = #{record.helperLng,jdbcType=DECIMAL},
+      helper_lat = #{record.helperLat,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.HelpRequest">
+    update help_request
     <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+      <if test="requesterId != null">
+        requester_id = #{requesterId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        contact_user_id = #{contactUserId,jdbcType=INTEGER},
+      <if test="helperId != null">
+        helper_id = #{helperId,jdbcType=INTEGER},
       </if>
-      <if test="contactPhone != null">
-        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      <if test="requesterLng != null">
+        requester_lng = #{requesterLng,jdbcType=DECIMAL},
       </if>
-      <if test="relationship != null">
-        relationship = #{relationship,jdbcType=VARCHAR},
+      <if test="requesterLat != null">
+        requester_lat = #{requesterLat,jdbcType=DECIMAL},
+      </if>
+      <if test="helperLng != null">
+        helper_lng = #{helperLng,jdbcType=DECIMAL},
+      </if>
+      <if test="helperLat != null">
+        helper_lat = #{helperLat,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -230,12 +275,15 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
-    set user_id = #{userId,jdbcType=INTEGER},
-      contact_user_id = #{contactUserId,jdbcType=INTEGER},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      relationship = #{relationship,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.HelpRequest">
+    update help_request
+    set requester_id = #{requesterId,jdbcType=INTEGER},
+      helper_id = #{helperId,jdbcType=INTEGER},
+      requester_lng = #{requesterLng,jdbcType=DECIMAL},
+      requester_lat = #{requesterLat,jdbcType=DECIMAL},
+      helper_lng = #{helperLng,jdbcType=DECIMAL},
+      helper_lat = #{helperLat,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

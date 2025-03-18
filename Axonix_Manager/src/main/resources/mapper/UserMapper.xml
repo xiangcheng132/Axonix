@@ -5,15 +5,20 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="role" jdbcType="CHAR" property="role" />
-    <result column="disability_type" jdbcType="VARCHAR" property="disabilityType" />
-    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
-    <result column="updatedTime" jdbcType="TIMESTAMP" property="updatedtime" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.Axonix.demo.model.User">
-    <result column="preferences" jdbcType="LONGVARCHAR" property="preferences" />
+    <result column="disability_type" jdbcType="INTEGER" property="disabilityType" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="is_vip" jdbcType="INTEGER" property="isVip" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,34 +79,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, email, phone, role, disability_type, createdTime, updatedTime
+    id, username, password, avatar, gender, age, province, city, county, address, email, 
+    phone, disability_type, last_login_time, is_vip, created_at, updated_at
   </sql>
-  <sql id="Blob_Column_List">
-    preferences
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.Axonix.demo.model.UserExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from users
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.Axonix.demo.model.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from users
+    from user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -109,36 +96,38 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from users
+    from user
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from users
+    delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.Axonix.demo.model.UserExample">
-    delete from users
+    delete from user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.Axonix.demo.model.User">
-    insert into users (id, username, password, 
-      email, phone, role, disability_type, 
-      createdTime, updatedTime, preferences
-      )
+    insert into user (id, username, password, 
+      avatar, gender, age, 
+      province, city, county, 
+      address, email, phone, 
+      disability_type, last_login_time, is_vip, 
+      created_at, updated_at)
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=CHAR}, #{disabilityType,jdbcType=VARCHAR}, 
-      #{createdtime,jdbcType=TIMESTAMP}, #{updatedtime,jdbcType=TIMESTAMP}, #{preferences,jdbcType=LONGVARCHAR}
-      )
+      #{avatar,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{age,jdbcType=INTEGER}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{disabilityType,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{isVip,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.Axonix.demo.model.User">
-    insert into users
+    insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -149,26 +138,47 @@
       <if test="password != null">
         password,
       </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
       <if test="email != null">
         email,
       </if>
       <if test="phone != null">
         phone,
       </if>
-      <if test="role != null">
-        role,
-      </if>
       <if test="disabilityType != null">
         disability_type,
       </if>
-      <if test="createdtime != null">
-        createdTime,
+      <if test="lastLoginTime != null">
+        last_login_time,
       </if>
-      <if test="updatedtime != null">
-        updatedTime,
+      <if test="isVip != null">
+        is_vip,
       </if>
-      <if test="preferences != null">
-        preferences,
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -181,37 +191,58 @@
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="role != null">
-        #{role,jdbcType=CHAR},
-      </if>
       <if test="disabilityType != null">
-        #{disabilityType,jdbcType=VARCHAR},
+        #{disabilityType,jdbcType=INTEGER},
       </if>
-      <if test="createdtime != null">
-        #{createdtime,jdbcType=TIMESTAMP},
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedtime != null">
-        #{updatedtime,jdbcType=TIMESTAMP},
+      <if test="isVip != null">
+        #{isVip,jdbcType=INTEGER},
       </if>
-      <if test="preferences != null">
-        #{preferences,jdbcType=LONGVARCHAR},
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.Axonix.demo.model.UserExample" resultType="java.lang.Long">
-    select count(*) from users
+    select count(*) from user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update users
+    update user
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -222,65 +253,78 @@
       <if test="record.password != null">
         password = #{record.password,jdbcType=VARCHAR},
       </if>
+      <if test="record.avatar != null">
+        avatar = #{record.avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null">
+        gender = #{record.gender,jdbcType=INTEGER},
+      </if>
+      <if test="record.age != null">
+        age = #{record.age,jdbcType=INTEGER},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.county != null">
+        county = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
       <if test="record.email != null">
         email = #{record.email,jdbcType=VARCHAR},
       </if>
       <if test="record.phone != null">
         phone = #{record.phone,jdbcType=VARCHAR},
       </if>
-      <if test="record.role != null">
-        role = #{record.role,jdbcType=CHAR},
-      </if>
       <if test="record.disabilityType != null">
-        disability_type = #{record.disabilityType,jdbcType=VARCHAR},
+        disability_type = #{record.disabilityType,jdbcType=INTEGER},
       </if>
-      <if test="record.createdtime != null">
-        createdTime = #{record.createdtime,jdbcType=TIMESTAMP},
+      <if test="record.lastLoginTime != null">
+        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedtime != null">
-        updatedTime = #{record.updatedtime,jdbcType=TIMESTAMP},
+      <if test="record.isVip != null">
+        is_vip = #{record.isVip,jdbcType=INTEGER},
       </if>
-      <if test="record.preferences != null">
-        preferences = #{record.preferences,jdbcType=LONGVARCHAR},
+      <if test="record.createdAt != null">
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedAt != null">
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update users
-    set id = #{record.id,jdbcType=INTEGER},
-      username = #{record.username,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR},
-      phone = #{record.phone,jdbcType=VARCHAR},
-      role = #{record.role,jdbcType=CHAR},
-      disability_type = #{record.disabilityType,jdbcType=VARCHAR},
-      createdTime = #{record.createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{record.updatedtime,jdbcType=TIMESTAMP},
-      preferences = #{record.preferences,jdbcType=LONGVARCHAR}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
   <update id="updateByExample" parameterType="map">
-    update users
+    update user
     set id = #{record.id,jdbcType=INTEGER},
       username = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
+      avatar = #{record.avatar,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=INTEGER},
+      age = #{record.age,jdbcType=INTEGER},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      county = #{record.county,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
-      role = #{record.role,jdbcType=CHAR},
-      disability_type = #{record.disabilityType,jdbcType=VARCHAR},
-      createdTime = #{record.createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{record.updatedtime,jdbcType=TIMESTAMP}
+      disability_type = #{record.disabilityType,jdbcType=INTEGER},
+      last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      is_vip = #{record.isVip,jdbcType=INTEGER},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.User">
-    update users
+    update user
     <set>
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
@@ -288,53 +332,69 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="role != null">
-        role = #{role,jdbcType=CHAR},
-      </if>
       <if test="disabilityType != null">
-        disability_type = #{disabilityType,jdbcType=VARCHAR},
+        disability_type = #{disabilityType,jdbcType=INTEGER},
       </if>
-      <if test="createdtime != null">
-        createdTime = #{createdtime,jdbcType=TIMESTAMP},
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedtime != null">
-        updatedTime = #{updatedtime,jdbcType=TIMESTAMP},
+      <if test="isVip != null">
+        is_vip = #{isVip,jdbcType=INTEGER},
       </if>
-      <if test="preferences != null">
-        preferences = #{preferences,jdbcType=LONGVARCHAR},
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.Axonix.demo.model.User">
-    update users
-    set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      role = #{role,jdbcType=CHAR},
-      disability_type = #{disabilityType,jdbcType=VARCHAR},
-      createdTime = #{createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{updatedtime,jdbcType=TIMESTAMP},
-      preferences = #{preferences,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
   <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.User">
-    update users
+    update user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      role = #{role,jdbcType=CHAR},
-      disability_type = #{disabilityType,jdbcType=VARCHAR},
-      createdTime = #{createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{updatedtime,jdbcType=TIMESTAMP}
+      disability_type = #{disabilityType,jdbcType=INTEGER},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      is_vip = #{isVip,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

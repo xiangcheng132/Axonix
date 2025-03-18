@@ -7,13 +7,15 @@ public class EmergencyContact {
 
     private Integer userId;
 
-    private String name;
+    private Integer contactUserId;
 
-    private String phone;
+    private String contactPhone;
 
     private String relationship;
 
-    private Date createdtime;
+    private Date createdAt;
+
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -31,20 +33,20 @@ public class EmergencyContact {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public Integer getContactUserId() {
+        return contactUserId;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setContactUserId(Integer contactUserId) {
+        this.contactUserId = contactUserId;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getContactPhone() {
+        return contactPhone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone == null ? null : contactPhone.trim();
     }
 
     public String getRelationship() {
@@ -55,11 +57,19 @@ public class EmergencyContact {
         this.relationship = relationship == null ? null : relationship.trim();
     }
 
-    public Date getCreatedtime() {
-        return createdtime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedtime(Date createdtime) {
-        this.createdtime = createdtime;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

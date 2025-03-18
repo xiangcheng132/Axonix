@@ -40,21 +40,19 @@
         </javaClientGenerator>
 
         <!-- 配置需要生成代码的数据库表，指定 schema 以防止匹配多个数据库 -->
-        <table schema="axonix" tableName="users" domainObjectName="User" />
-        <table schema="axonix" tableName="emergency_contacts" domainObjectName="EmergencyContact" />
-        <table schema="axonix" tableName="emergency_requests" domainObjectName="EmergencyRequest" />
-        <table schema="axonix" tableName="messages" domainObjectName="Message" />
-        <table schema="axonix" tableName="forum_posts" domainObjectName="ForumPost" />
-        <table schema="axonix" tableName="forum_comments" domainObjectName="ForumComment" />
-        <table schema="axonix" tableName="operation_logs" domainObjectName="OperationLog" />
-        <table schema="axonix" tableName="facilities" domainObjectName="Facility" />
-        <table schema="axonix" tableName="payments" domainObjectName="Payment" />
-        <table schema="axonix" tableName="notifications" domainObjectName="Notification" />
-        <table schema="axonix" tableName="location_shares" domainObjectName="LocationShare" />
-        <table schema="axonix" tableName="friend_relationships" domainObjectName="FriendRelationship" />
-        <table schema="axonix" tableName="forum_categories" domainObjectName="ForumCategory" />
-        <table schema="axonix" tableName="third_party_api_logs" domainObjectName="ThirdPartyApiLog" />
-        <table schema="axonix" tableName="sign_language_translation_logs" domainObjectName="SignLanguageTranslationLog" />
+        <table schema="axonix" tableName="user" domainObjectName="User" />
+        <table schema="axonix" tableName="vip" domainObjectName="Vip" />
+        <table schema="axonix" tableName="admin" domainObjectName="Admin" />
+        <table schema="axonix" tableName="emergency_contact" domainObjectName="EmergencyContact" />
+        <table schema="axonix" tableName="help_request" domainObjectName="HelpRequest" />
+        <table schema="axonix" tableName="notification" domainObjectName="Notification" />
+        <table schema="axonix" tableName="sos_notification" domainObjectName="SosNotification" />
+        <table schema="axonix" tableName="traffic_log" domainObjectName="TrafficLog" />
+        <table schema="axonix" tableName="ai_log" domainObjectName="AiLog" />
+        <table schema="axonix" tableName="forum_post" domainObjectName="ForumPost" />
+        <table schema="axonix" tableName="forum_comment" domainObjectName="ForumComment" />
+        <table schema="axonix" tableName="function_stat" domainObjectName="FunctionStat" />
+        <table schema="axonix" tableName="feedback" domainObjectName="Feedback" />
 
     </context>
 </generatorConfiguration>

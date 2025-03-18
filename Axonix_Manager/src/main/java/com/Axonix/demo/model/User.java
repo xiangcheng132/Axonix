@@ -9,19 +9,33 @@ public class User {
 
     private String password;
 
+    private String avatar;
+
+    private Integer gender;
+
+    private Integer age;
+
+    private String province;
+
+    private String city;
+
+    private String county;
+
+    private String address;
+
     private String email;
 
     private String phone;
 
-    private String role;
+    private Integer disabilityType;
 
-    private String disabilityType;
+    private Date lastLoginTime;
 
-    private Date createdtime;
+    private Integer isVip;
 
-    private Date updatedtime;
+    private Date createdAt;
 
-    private String preferences;
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -47,6 +61,62 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar == null ? null : avatar.trim();
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county == null ? null : county.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
     public String getEmail() {
         return email;
     }
@@ -63,43 +133,43 @@ public class User {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role == null ? null : role.trim();
-    }
-
-    public String getDisabilityType() {
+    public Integer getDisabilityType() {
         return disabilityType;
     }
 
-    public void setDisabilityType(String disabilityType) {
-        this.disabilityType = disabilityType == null ? null : disabilityType.trim();
+    public void setDisabilityType(Integer disabilityType) {
+        this.disabilityType = disabilityType;
     }
 
-    public Date getCreatedtime() {
-        return createdtime;
+    public Date getLastLoginTime() {
+        return lastLoginTime;
     }
 
-    public void setCreatedtime(Date createdtime) {
-        this.createdtime = createdtime;
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
-    public Date getUpdatedtime() {
-        return updatedtime;
+    public Integer getIsVip() {
+        return isVip;
     }
 
-    public void setUpdatedtime(Date updatedtime) {
-        this.updatedtime = updatedtime;
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
     }
 
-    public String getPreferences() {
-        return preferences;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPreferences(String preferences) {
-        this.preferences = preferences == null ? null : preferences.trim();
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

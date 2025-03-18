@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Axonix.demo.mapper.NotificationMapper">
-  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.Notification">
+<mapper namespace="com.Axonix.demo.mapper.SosNotificationMapper">
+  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.SosNotification">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="target_type" jdbcType="INTEGER" property="targetType" />
-    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="contact_id" jdbcType="INTEGER" property="contactId" />
+    <result column="lng" jdbcType="DECIMAL" property="lng" />
+    <result column="lat" jdbcType="DECIMAL" property="lat" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.Axonix.demo.model.Notification">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.Axonix.demo.model.SosNotification">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -71,12 +72,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, admin_id, title, target_type, send_time, created_at
+    id, user_id, title, contact_id, lng, lat, created_at
   </sql>
   <sql id="Blob_Column_List">
     content
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.Axonix.demo.model.NotificationExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.Axonix.demo.model.SosNotificationExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -84,7 +85,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from notification
+    from sos_notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,13 +93,13 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.Axonix.demo.model.NotificationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.Axonix.demo.model.SosNotificationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from notification
+    from sos_notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -111,44 +112,47 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from notification
+    from sos_notification
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from notification
+    delete from sos_notification
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.NotificationExample">
-    delete from notification
+  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.SosNotificationExample">
+    delete from sos_notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.Axonix.demo.model.Notification">
-    insert into notification (id, admin_id, title, 
-      target_type, send_time, created_at, 
-      content)
-    values (#{id,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{targetType,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+  <insert id="insert" parameterType="com.Axonix.demo.model.SosNotification">
+    insert into sos_notification (id, user_id, title, 
+      contact_id, lng, lat, 
+      created_at, content)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{contactId,jdbcType=INTEGER}, #{lng,jdbcType=DECIMAL}, #{lat,jdbcType=DECIMAL}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.Axonix.demo.model.Notification">
-    insert into notification
+  <insert id="insertSelective" parameterType="com.Axonix.demo.model.SosNotification">
+    insert into sos_notification
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="adminId != null">
-        admin_id,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="title != null">
         title,
       </if>
-      <if test="targetType != null">
-        target_type,
+      <if test="contactId != null">
+        contact_id,
       </if>
-      <if test="sendTime != null">
-        send_time,
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -161,17 +165,20 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="adminId != null">
-        #{adminId,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="targetType != null">
-        #{targetType,jdbcType=INTEGER},
+      <if test="contactId != null">
+        #{contactId,jdbcType=INTEGER},
       </if>
-      <if test="sendTime != null">
-        #{sendTime,jdbcType=TIMESTAMP},
+      <if test="lng != null">
+        #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=DECIMAL},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -181,29 +188,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.Axonix.demo.model.NotificationExample" resultType="java.lang.Long">
-    select count(*) from notification
+  <select id="countByExample" parameterType="com.Axonix.demo.model.SosNotificationExample" resultType="java.lang.Long">
+    select count(*) from sos_notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update notification
+    update sos_notification
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.adminId != null">
-        admin_id = #{record.adminId,jdbcType=INTEGER},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.targetType != null">
-        target_type = #{record.targetType,jdbcType=INTEGER},
+      <if test="record.contactId != null">
+        contact_id = #{record.contactId,jdbcType=INTEGER},
       </if>
-      <if test="record.sendTime != null">
-        send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      <if test="record.lng != null">
+        lng = #{record.lng,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lat != null">
+        lat = #{record.lat,jdbcType=DECIMAL},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -217,12 +227,13 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
-    update notification
+    update sos_notification
     set id = #{record.id,jdbcType=INTEGER},
-      admin_id = #{record.adminId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      target_type = #{record.targetType,jdbcType=INTEGER},
-      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      contact_id = #{record.contactId,jdbcType=INTEGER},
+      lng = #{record.lng,jdbcType=DECIMAL},
+      lat = #{record.lat,jdbcType=DECIMAL},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
@@ -230,31 +241,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update notification
+    update sos_notification
     set id = #{record.id,jdbcType=INTEGER},
-      admin_id = #{record.adminId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      target_type = #{record.targetType,jdbcType=INTEGER},
-      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      contact_id = #{record.contactId,jdbcType=INTEGER},
+      lng = #{record.lng,jdbcType=DECIMAL},
+      lat = #{record.lat,jdbcType=DECIMAL},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.Notification">
-    update notification
+  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.SosNotification">
+    update sos_notification
     <set>
-      <if test="adminId != null">
-        admin_id = #{adminId,jdbcType=INTEGER},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="targetType != null">
-        target_type = #{targetType,jdbcType=INTEGER},
+      <if test="contactId != null">
+        contact_id = #{contactId,jdbcType=INTEGER},
       </if>
-      <if test="sendTime != null">
-        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      <if test="lng != null">
+        lng = #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=DECIMAL},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -265,22 +280,24 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.Axonix.demo.model.Notification">
-    update notification
-    set admin_id = #{adminId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.Axonix.demo.model.SosNotification">
+    update sos_notification
+    set user_id = #{userId,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
-      target_type = #{targetType,jdbcType=INTEGER},
-      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      contact_id = #{contactId,jdbcType=INTEGER},
+      lng = #{lng,jdbcType=DECIMAL},
+      lat = #{lat,jdbcType=DECIMAL},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.Notification">
-    update notification
-    set admin_id = #{adminId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.SosNotification">
+    update sos_notification
+    set user_id = #{userId,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
-      target_type = #{targetType,jdbcType=INTEGER},
-      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      contact_id = #{contactId,jdbcType=INTEGER},
+      lng = #{lng,jdbcType=DECIMAL},
+      lat = #{lat,jdbcType=DECIMAL},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

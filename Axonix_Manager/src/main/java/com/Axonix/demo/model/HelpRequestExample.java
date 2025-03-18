@@ -1,17 +1,18 @@
 package com.Axonix.demo.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EmergencyContactExample {
+public class HelpRequestExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public EmergencyContactExample() {
+    public HelpRequestExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -165,263 +166,423 @@ public class EmergencyContactExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNull() {
-            addCriterion("user_id is null");
+        public Criteria andRequesterIdIsNull() {
+            addCriterion("requester_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNotNull() {
-            addCriterion("user_id is not null");
+        public Criteria andRequesterIdIsNotNull() {
+            addCriterion("requester_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(Integer value) {
-            addCriterion("user_id =", value, "userId");
+        public Criteria andRequesterIdEqualTo(Integer value) {
+            addCriterion("requester_id =", value, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(Integer value) {
-            addCriterion("user_id <>", value, "userId");
+        public Criteria andRequesterIdNotEqualTo(Integer value) {
+            addCriterion("requester_id <>", value, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(Integer value) {
-            addCriterion("user_id >", value, "userId");
+        public Criteria andRequesterIdGreaterThan(Integer value) {
+            addCriterion("requester_id >", value, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("user_id >=", value, "userId");
+        public Criteria andRequesterIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("requester_id >=", value, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(Integer value) {
-            addCriterion("user_id <", value, "userId");
+        public Criteria andRequesterIdLessThan(Integer value) {
+            addCriterion("requester_id <", value, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("user_id <=", value, "userId");
+        public Criteria andRequesterIdLessThanOrEqualTo(Integer value) {
+            addCriterion("requester_id <=", value, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIn(List<Integer> values) {
-            addCriterion("user_id in", values, "userId");
+        public Criteria andRequesterIdIn(List<Integer> values) {
+            addCriterion("requester_id in", values, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<Integer> values) {
-            addCriterion("user_id not in", values, "userId");
+        public Criteria andRequesterIdNotIn(List<Integer> values) {
+            addCriterion("requester_id not in", values, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("user_id between", value1, value2, "userId");
+        public Criteria andRequesterIdBetween(Integer value1, Integer value2) {
+            addCriterion("requester_id between", value1, value2, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("user_id not between", value1, value2, "userId");
+        public Criteria andRequesterIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("requester_id not between", value1, value2, "requesterId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdIsNull() {
-            addCriterion("contact_user_id is null");
+        public Criteria andHelperIdIsNull() {
+            addCriterion("helper_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdIsNotNull() {
-            addCriterion("contact_user_id is not null");
+        public Criteria andHelperIdIsNotNull() {
+            addCriterion("helper_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdEqualTo(Integer value) {
-            addCriterion("contact_user_id =", value, "contactUserId");
+        public Criteria andHelperIdEqualTo(Integer value) {
+            addCriterion("helper_id =", value, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdNotEqualTo(Integer value) {
-            addCriterion("contact_user_id <>", value, "contactUserId");
+        public Criteria andHelperIdNotEqualTo(Integer value) {
+            addCriterion("helper_id <>", value, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdGreaterThan(Integer value) {
-            addCriterion("contact_user_id >", value, "contactUserId");
+        public Criteria andHelperIdGreaterThan(Integer value) {
+            addCriterion("helper_id >", value, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("contact_user_id >=", value, "contactUserId");
+        public Criteria andHelperIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("helper_id >=", value, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdLessThan(Integer value) {
-            addCriterion("contact_user_id <", value, "contactUserId");
+        public Criteria andHelperIdLessThan(Integer value) {
+            addCriterion("helper_id <", value, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("contact_user_id <=", value, "contactUserId");
+        public Criteria andHelperIdLessThanOrEqualTo(Integer value) {
+            addCriterion("helper_id <=", value, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdIn(List<Integer> values) {
-            addCriterion("contact_user_id in", values, "contactUserId");
+        public Criteria andHelperIdIn(List<Integer> values) {
+            addCriterion("helper_id in", values, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdNotIn(List<Integer> values) {
-            addCriterion("contact_user_id not in", values, "contactUserId");
+        public Criteria andHelperIdNotIn(List<Integer> values) {
+            addCriterion("helper_id not in", values, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("contact_user_id between", value1, value2, "contactUserId");
+        public Criteria andHelperIdBetween(Integer value1, Integer value2) {
+            addCriterion("helper_id between", value1, value2, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("contact_user_id not between", value1, value2, "contactUserId");
+        public Criteria andHelperIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("helper_id not between", value1, value2, "helperId");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneIsNull() {
-            addCriterion("contact_phone is null");
+        public Criteria andRequesterLngIsNull() {
+            addCriterion("requester_lng is null");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneIsNotNull() {
-            addCriterion("contact_phone is not null");
+        public Criteria andRequesterLngIsNotNull() {
+            addCriterion("requester_lng is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneEqualTo(String value) {
-            addCriterion("contact_phone =", value, "contactPhone");
+        public Criteria andRequesterLngEqualTo(BigDecimal value) {
+            addCriterion("requester_lng =", value, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotEqualTo(String value) {
-            addCriterion("contact_phone <>", value, "contactPhone");
+        public Criteria andRequesterLngNotEqualTo(BigDecimal value) {
+            addCriterion("requester_lng <>", value, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneGreaterThan(String value) {
-            addCriterion("contact_phone >", value, "contactPhone");
+        public Criteria andRequesterLngGreaterThan(BigDecimal value) {
+            addCriterion("requester_lng >", value, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneGreaterThanOrEqualTo(String value) {
-            addCriterion("contact_phone >=", value, "contactPhone");
+        public Criteria andRequesterLngGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("requester_lng >=", value, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneLessThan(String value) {
-            addCriterion("contact_phone <", value, "contactPhone");
+        public Criteria andRequesterLngLessThan(BigDecimal value) {
+            addCriterion("requester_lng <", value, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneLessThanOrEqualTo(String value) {
-            addCriterion("contact_phone <=", value, "contactPhone");
+        public Criteria andRequesterLngLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("requester_lng <=", value, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneLike(String value) {
-            addCriterion("contact_phone like", value, "contactPhone");
+        public Criteria andRequesterLngIn(List<BigDecimal> values) {
+            addCriterion("requester_lng in", values, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotLike(String value) {
-            addCriterion("contact_phone not like", value, "contactPhone");
+        public Criteria andRequesterLngNotIn(List<BigDecimal> values) {
+            addCriterion("requester_lng not in", values, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneIn(List<String> values) {
-            addCriterion("contact_phone in", values, "contactPhone");
+        public Criteria andRequesterLngBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("requester_lng between", value1, value2, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotIn(List<String> values) {
-            addCriterion("contact_phone not in", values, "contactPhone");
+        public Criteria andRequesterLngNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("requester_lng not between", value1, value2, "requesterLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneBetween(String value1, String value2) {
-            addCriterion("contact_phone between", value1, value2, "contactPhone");
+        public Criteria andRequesterLatIsNull() {
+            addCriterion("requester_lat is null");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotBetween(String value1, String value2) {
-            addCriterion("contact_phone not between", value1, value2, "contactPhone");
+        public Criteria andRequesterLatIsNotNull() {
+            addCriterion("requester_lat is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipIsNull() {
-            addCriterion("relationship is null");
+        public Criteria andRequesterLatEqualTo(BigDecimal value) {
+            addCriterion("requester_lat =", value, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipIsNotNull() {
-            addCriterion("relationship is not null");
+        public Criteria andRequesterLatNotEqualTo(BigDecimal value) {
+            addCriterion("requester_lat <>", value, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipEqualTo(String value) {
-            addCriterion("relationship =", value, "relationship");
+        public Criteria andRequesterLatGreaterThan(BigDecimal value) {
+            addCriterion("requester_lat >", value, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotEqualTo(String value) {
-            addCriterion("relationship <>", value, "relationship");
+        public Criteria andRequesterLatGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("requester_lat >=", value, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipGreaterThan(String value) {
-            addCriterion("relationship >", value, "relationship");
+        public Criteria andRequesterLatLessThan(BigDecimal value) {
+            addCriterion("requester_lat <", value, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipGreaterThanOrEqualTo(String value) {
-            addCriterion("relationship >=", value, "relationship");
+        public Criteria andRequesterLatLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("requester_lat <=", value, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipLessThan(String value) {
-            addCriterion("relationship <", value, "relationship");
+        public Criteria andRequesterLatIn(List<BigDecimal> values) {
+            addCriterion("requester_lat in", values, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipLessThanOrEqualTo(String value) {
-            addCriterion("relationship <=", value, "relationship");
+        public Criteria andRequesterLatNotIn(List<BigDecimal> values) {
+            addCriterion("requester_lat not in", values, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipLike(String value) {
-            addCriterion("relationship like", value, "relationship");
+        public Criteria andRequesterLatBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("requester_lat between", value1, value2, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotLike(String value) {
-            addCriterion("relationship not like", value, "relationship");
+        public Criteria andRequesterLatNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("requester_lat not between", value1, value2, "requesterLat");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipIn(List<String> values) {
-            addCriterion("relationship in", values, "relationship");
+        public Criteria andHelperLngIsNull() {
+            addCriterion("helper_lng is null");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotIn(List<String> values) {
-            addCriterion("relationship not in", values, "relationship");
+        public Criteria andHelperLngIsNotNull() {
+            addCriterion("helper_lng is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipBetween(String value1, String value2) {
-            addCriterion("relationship between", value1, value2, "relationship");
+        public Criteria andHelperLngEqualTo(BigDecimal value) {
+            addCriterion("helper_lng =", value, "helperLng");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotBetween(String value1, String value2) {
-            addCriterion("relationship not between", value1, value2, "relationship");
+        public Criteria andHelperLngNotEqualTo(BigDecimal value) {
+            addCriterion("helper_lng <>", value, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngGreaterThan(BigDecimal value) {
+            addCriterion("helper_lng >", value, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("helper_lng >=", value, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngLessThan(BigDecimal value) {
+            addCriterion("helper_lng <", value, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("helper_lng <=", value, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngIn(List<BigDecimal> values) {
+            addCriterion("helper_lng in", values, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngNotIn(List<BigDecimal> values) {
+            addCriterion("helper_lng not in", values, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("helper_lng between", value1, value2, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLngNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("helper_lng not between", value1, value2, "helperLng");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatIsNull() {
+            addCriterion("helper_lat is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatIsNotNull() {
+            addCriterion("helper_lat is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatEqualTo(BigDecimal value) {
+            addCriterion("helper_lat =", value, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatNotEqualTo(BigDecimal value) {
+            addCriterion("helper_lat <>", value, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatGreaterThan(BigDecimal value) {
+            addCriterion("helper_lat >", value, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("helper_lat >=", value, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatLessThan(BigDecimal value) {
+            addCriterion("helper_lat <", value, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("helper_lat <=", value, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatIn(List<BigDecimal> values) {
+            addCriterion("helper_lat in", values, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatNotIn(List<BigDecimal> values) {
+            addCriterion("helper_lat not in", values, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("helper_lat between", value1, value2, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelperLatNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("helper_lat not between", value1, value2, "helperLat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 

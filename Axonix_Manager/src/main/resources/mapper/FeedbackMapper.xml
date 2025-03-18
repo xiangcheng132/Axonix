@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Axonix.demo.mapper.EmergencyContactMapper">
-  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.EmergencyContact">
+<mapper namespace="com.Axonix.demo.mapper.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.Feedback">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="contact_user_id" jdbcType="INTEGER" property="contactUserId" />
-    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="relationship" jdbcType="VARCHAR" property="relationship" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.Axonix.demo.model.Feedback">
+    <result column="issue" jdbcType="LONGVARCHAR" property="issue" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,15 +69,20 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, contact_user_id, contact_phone, relationship, created_at, updated_at
+    id, user_id, status, created_at
   </sql>
-  <select id="selectByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    issue
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.Axonix.demo.model.FeedbackExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from emergency_contact
+    ,
+    <include refid="Blob_Column_List" />
+    from feedback
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,32 +90,46 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.Axonix.demo.model.FeedbackExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from feedback
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
-    from emergency_contact
+    ,
+    <include refid="Blob_Column_List" />
+    from feedback
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from emergency_contact
+    delete from feedback
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample">
-    delete from emergency_contact
+  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.FeedbackExample">
+    delete from feedback
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact (id, user_id, contact_user_id, 
-      contact_phone, relationship, created_at, 
-      updated_at)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{contactUserId,jdbcType=INTEGER}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{updatedAt,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.Axonix.demo.model.Feedback">
+    insert into feedback (id, user_id, status, 
+      created_at, issue)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{issue,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact
+  <insert id="insertSelective" parameterType="com.Axonix.demo.model.Feedback">
+    insert into feedback
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -118,20 +137,14 @@
       <if test="userId != null">
         user_id,
       </if>
-      <if test="contactUserId != null">
-        contact_user_id,
-      </if>
-      <if test="contactPhone != null">
-        contact_phone,
-      </if>
-      <if test="relationship != null">
-        relationship,
+      <if test="status != null">
+        status,
       </if>
       <if test="createdAt != null">
         created_at,
       </if>
-      <if test="updatedAt != null">
-        updated_at,
+      <if test="issue != null">
+        issue,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -141,31 +154,25 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        #{contactUserId,jdbcType=INTEGER},
-      </if>
-      <if test="contactPhone != null">
-        #{contactPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="relationship != null">
-        #{relationship,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="issue != null">
+        #{issue,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultType="java.lang.Long">
-    select count(*) from emergency_contact
+  <select id="countByExample" parameterType="com.Axonix.demo.model.FeedbackExample" resultType="java.lang.Long">
+    select count(*) from feedback
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update emergency_contact
+    update feedback
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -173,71 +180,72 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
-      <if test="record.contactUserId != null">
-        contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
-      </if>
-      <if test="record.contactPhone != null">
-        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="record.relationship != null">
-        relationship = #{record.relationship,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="record.issue != null">
+        issue = #{record.issue,jdbcType=LONGVARCHAR},
       </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update feedback
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      issue = #{record.issue,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update emergency_contact
+    update feedback
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
-      contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      relationship = #{record.relationship,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+      status = #{record.status,jdbcType=INTEGER},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.Feedback">
+    update feedback
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        contact_user_id = #{contactUserId,jdbcType=INTEGER},
-      </if>
-      <if test="contactPhone != null">
-        contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="relationship != null">
-        relationship = #{relationship,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="issue != null">
+        issue = #{issue,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.Axonix.demo.model.Feedback">
+    update feedback
     set user_id = #{userId,jdbcType=INTEGER},
-      contact_user_id = #{contactUserId,jdbcType=INTEGER},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      relationship = #{relationship,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      issue = #{issue,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.Feedback">
+    update feedback
+    set user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

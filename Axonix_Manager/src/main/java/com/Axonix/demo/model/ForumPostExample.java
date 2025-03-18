@@ -295,123 +295,303 @@ public class ForumPostExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeIsNull() {
-            addCriterion("createdTime is null");
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeIsNotNull() {
-            addCriterion("createdTime is not null");
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeEqualTo(Date value) {
-            addCriterion("createdTime =", value, "createdtime");
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeNotEqualTo(Date value) {
-            addCriterion("createdTime <>", value, "createdtime");
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeGreaterThan(Date value) {
-            addCriterion("createdTime >", value, "createdtime");
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("createdTime >=", value, "createdtime");
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeLessThan(Date value) {
-            addCriterion("createdTime <", value, "createdtime");
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeLessThanOrEqualTo(Date value) {
-            addCriterion("createdTime <=", value, "createdtime");
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeIn(List<Date> values) {
-            addCriterion("createdTime in", values, "createdtime");
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeNotIn(List<Date> values) {
-            addCriterion("createdTime not in", values, "createdtime");
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeBetween(Date value1, Date value2) {
-            addCriterion("createdTime between", value1, value2, "createdtime");
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedtimeNotBetween(Date value1, Date value2) {
-            addCriterion("createdTime not between", value1, value2, "createdtime");
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeIsNull() {
-            addCriterion("updatedTime is null");
+        public Criteria andLikesIsNull() {
+            addCriterion("likes is null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeIsNotNull() {
-            addCriterion("updatedTime is not null");
+        public Criteria andLikesIsNotNull() {
+            addCriterion("likes is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeEqualTo(Date value) {
-            addCriterion("updatedTime =", value, "updatedtime");
+        public Criteria andLikesEqualTo(Integer value) {
+            addCriterion("likes =", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeNotEqualTo(Date value) {
-            addCriterion("updatedTime <>", value, "updatedtime");
+        public Criteria andLikesNotEqualTo(Integer value) {
+            addCriterion("likes <>", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeGreaterThan(Date value) {
-            addCriterion("updatedTime >", value, "updatedtime");
+        public Criteria andLikesGreaterThan(Integer value) {
+            addCriterion("likes >", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("updatedTime >=", value, "updatedtime");
+        public Criteria andLikesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("likes >=", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeLessThan(Date value) {
-            addCriterion("updatedTime <", value, "updatedtime");
+        public Criteria andLikesLessThan(Integer value) {
+            addCriterion("likes <", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeLessThanOrEqualTo(Date value) {
-            addCriterion("updatedTime <=", value, "updatedtime");
+        public Criteria andLikesLessThanOrEqualTo(Integer value) {
+            addCriterion("likes <=", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeIn(List<Date> values) {
-            addCriterion("updatedTime in", values, "updatedtime");
+        public Criteria andLikesIn(List<Integer> values) {
+            addCriterion("likes in", values, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeNotIn(List<Date> values) {
-            addCriterion("updatedTime not in", values, "updatedtime");
+        public Criteria andLikesNotIn(List<Integer> values) {
+            addCriterion("likes not in", values, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeBetween(Date value1, Date value2) {
-            addCriterion("updatedTime between", value1, value2, "updatedtime");
+        public Criteria andLikesBetween(Integer value1, Integer value2) {
+            addCriterion("likes between", value1, value2, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedtimeNotBetween(Date value1, Date value2) {
-            addCriterion("updatedTime not between", value1, value2, "updatedtime");
+        public Criteria andLikesNotBetween(Integer value1, Integer value2) {
+            addCriterion("likes not between", value1, value2, "likes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesIsNull() {
+            addCriterion("dislikes is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesIsNotNull() {
+            addCriterion("dislikes is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesEqualTo(Integer value) {
+            addCriterion("dislikes =", value, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesNotEqualTo(Integer value) {
+            addCriterion("dislikes <>", value, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesGreaterThan(Integer value) {
+            addCriterion("dislikes >", value, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dislikes >=", value, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesLessThan(Integer value) {
+            addCriterion("dislikes <", value, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesLessThanOrEqualTo(Integer value) {
+            addCriterion("dislikes <=", value, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesIn(List<Integer> values) {
+            addCriterion("dislikes in", values, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesNotIn(List<Integer> values) {
+            addCriterion("dislikes not in", values, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesBetween(Integer value1, Integer value2) {
+            addCriterion("dislikes between", value1, value2, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikesNotBetween(Integer value1, Integer value2) {
+            addCriterion("dislikes not between", value1, value2, "dislikes");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIsNull() {
+            addCriterion("created_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIsNotNull() {
+            addCriterion("created_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtEqualTo(Date value) {
+            addCriterion("created_at =", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotEqualTo(Date value) {
+            addCriterion("created_at <>", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtGreaterThan(Date value) {
+            addCriterion("created_at >", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("created_at >=", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtLessThan(Date value) {
+            addCriterion("created_at <", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
+            addCriterion("created_at <=", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIn(List<Date> values) {
+            addCriterion("created_at in", values, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotIn(List<Date> values) {
+            addCriterion("created_at not in", values, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtBetween(Date value1, Date value2) {
+            addCriterion("created_at between", value1, value2, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
+            addCriterion("created_at not between", value1, value2, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtIsNull() {
+            addCriterion("updated_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtIsNotNull() {
+            addCriterion("updated_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtEqualTo(Date value) {
+            addCriterion("updated_at =", value, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtNotEqualTo(Date value) {
+            addCriterion("updated_at <>", value, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtGreaterThan(Date value) {
+            addCriterion("updated_at >", value, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("updated_at >=", value, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtLessThan(Date value) {
+            addCriterion("updated_at <", value, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtLessThanOrEqualTo(Date value) {
+            addCriterion("updated_at <=", value, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtIn(List<Date> values) {
+            addCriterion("updated_at in", values, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtNotIn(List<Date> values) {
+            addCriterion("updated_at not in", values, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtBetween(Date value1, Date value2) {
+            addCriterion("updated_at between", value1, value2, "updatedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedAtNotBetween(Date value1, Date value2) {
+            addCriterion("updated_at not between", value1, value2, "updatedAt");
             return (Criteria) this;
         }
     }
@@ -422,4 +602,89 @@ public class ForumPostExample {
         }
     }
 
+    public static class Criterion {
+        private String condition;
+
+        private Object value;
+
+        private Object secondValue;
+
+        private boolean noValue;
+
+        private boolean singleValue;
+
+        private boolean betweenValue;
+
+        private boolean listValue;
+
+        private String typeHandler;
+
+        public String getCondition() {
+            return condition;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public Object getSecondValue() {
+            return secondValue;
+        }
+
+        public boolean isNoValue() {
+            return noValue;
+        }
+
+        public boolean isSingleValue() {
+            return singleValue;
+        }
+
+        public boolean isBetweenValue() {
+            return betweenValue;
+        }
+
+        public boolean isListValue() {
+            return listValue;
+        }
+
+        public String getTypeHandler() {
+            return typeHandler;
+        }
+
+        protected Criterion(String condition) {
+            super();
+            this.condition = condition;
+            this.typeHandler = null;
+            this.noValue = true;
+        }
+
+        protected Criterion(String condition, Object value, String typeHandler) {
+            super();
+            this.condition = condition;
+            this.value = value;
+            this.typeHandler = typeHandler;
+            if (value instanceof List<?>) {
+                this.listValue = true;
+            } else {
+                this.singleValue = true;
+            }
+        }
+
+        protected Criterion(String condition, Object value) {
+            this(condition, value, null);
+        }
+
+        protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
+            super();
+            this.condition = condition;
+            this.value = value;
+            this.secondValue = secondValue;
+            this.typeHandler = typeHandler;
+            this.betweenValue = true;
+        }
+
+        protected Criterion(String condition, Object value, Object secondValue) {
+            this(condition, value, secondValue, null);
+        }
+    }
 }

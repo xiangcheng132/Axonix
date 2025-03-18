@@ -5,8 +5,11 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
-    <result column="updatedTime" jdbcType="TIMESTAMP" property="updatedtime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="likes" jdbcType="INTEGER" property="likes" />
+    <result column="dislikes" jdbcType="INTEGER" property="dislikes" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.Axonix.demo.model.ForumPost">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -70,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, title, createdTime, updatedTime
+    id, user_id, title, status, likes, dislikes, created_at, updated_at
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -83,7 +86,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from forum_posts
+    from forum_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,7 +100,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from forum_posts
+    from forum_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -110,29 +113,31 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from forum_posts
+    from forum_post
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from forum_posts
+    delete from forum_post
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.Axonix.demo.model.ForumPostExample">
-    delete from forum_posts
+    delete from forum_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.Axonix.demo.model.ForumPost">
-    insert into forum_posts (id, user_id, title, 
-      createdTime, updatedTime, content
+    insert into forum_post (id, user_id, title, 
+      status, likes, dislikes, 
+      created_at, updated_at, content
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{createdtime,jdbcType=TIMESTAMP}, #{updatedtime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      #{status,jdbcType=INTEGER}, #{likes,jdbcType=INTEGER}, #{dislikes,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.Axonix.demo.model.ForumPost">
-    insert into forum_posts
+    insert into forum_post
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -143,11 +148,20 @@
       <if test="title != null">
         title,
       </if>
-      <if test="createdtime != null">
-        createdTime,
+      <if test="status != null">
+        status,
       </if>
-      <if test="updatedtime != null">
-        updatedTime,
+      <if test="likes != null">
+        likes,
+      </if>
+      <if test="dislikes != null">
+        dislikes,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
       </if>
       <if test="content != null">
         content,
@@ -163,11 +177,20 @@
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="createdtime != null">
-        #{createdtime,jdbcType=TIMESTAMP},
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
-      <if test="updatedtime != null">
-        #{updatedtime,jdbcType=TIMESTAMP},
+      <if test="likes != null">
+        #{likes,jdbcType=INTEGER},
+      </if>
+      <if test="dislikes != null">
+        #{dislikes,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -175,13 +198,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.Axonix.demo.model.ForumPostExample" resultType="java.lang.Long">
-    select count(*) from forum_posts
+    select count(*) from forum_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update forum_posts
+    update forum_post
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -192,11 +215,20 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdtime != null">
-        createdTime = #{record.createdtime,jdbcType=TIMESTAMP},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.updatedtime != null">
-        updatedTime = #{record.updatedtime,jdbcType=TIMESTAMP},
+      <if test="record.likes != null">
+        likes = #{record.likes,jdbcType=INTEGER},
+      </if>
+      <if test="record.dislikes != null">
+        dislikes = #{record.dislikes,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdAt != null">
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedAt != null">
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -207,30 +239,36 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
-    update forum_posts
+    update forum_post
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      createdTime = #{record.createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{record.updatedtime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
+      likes = #{record.likes,jdbcType=INTEGER},
+      dislikes = #{record.dislikes,jdbcType=INTEGER},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update forum_posts
+    update forum_post
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      createdTime = #{record.createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{record.updatedtime,jdbcType=TIMESTAMP}
+      status = #{record.status,jdbcType=INTEGER},
+      likes = #{record.likes,jdbcType=INTEGER},
+      dislikes = #{record.dislikes,jdbcType=INTEGER},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.ForumPost">
-    update forum_posts
+    update forum_post
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
@@ -238,11 +276,20 @@
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="createdtime != null">
-        createdTime = #{createdtime,jdbcType=TIMESTAMP},
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="updatedtime != null">
-        updatedTime = #{updatedtime,jdbcType=TIMESTAMP},
+      <if test="likes != null">
+        likes = #{likes,jdbcType=INTEGER},
+      </if>
+      <if test="dislikes != null">
+        dislikes = #{dislikes,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
@@ -251,20 +298,26 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.Axonix.demo.model.ForumPost">
-    update forum_posts
+    update forum_post
     set user_id = #{userId,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
-      createdTime = #{createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{updatedtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      likes = #{likes,jdbcType=INTEGER},
+      dislikes = #{dislikes,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.ForumPost">
-    update forum_posts
+    update forum_post
     set user_id = #{userId,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
-      createdTime = #{createdtime,jdbcType=TIMESTAMP},
-      updatedTime = #{updatedtime,jdbcType=TIMESTAMP}
+      status = #{status,jdbcType=INTEGER},
+      likes = #{likes,jdbcType=INTEGER},
+      dislikes = #{dislikes,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

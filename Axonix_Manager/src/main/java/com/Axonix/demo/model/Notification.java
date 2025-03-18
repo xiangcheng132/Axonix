@@ -5,19 +5,17 @@ import java.util.Date;
 public class Notification {
     private Integer id;
 
-    private Integer userId;
+    private Integer adminId;
 
     private String title;
 
-    private String type;
+    private Integer targetType;
 
-    private Boolean readStatus;
+    private Date sendTime;
 
-    private Date createdtime;
+    private Date createdAt;
 
-    private Date updatedtime;
-
-    private String message;
+    private String content;
 
     public Integer getId() {
         return id;
@@ -27,12 +25,12 @@ public class Notification {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getAdminId() {
+        return adminId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
     }
 
     public String getTitle() {
@@ -43,43 +41,35 @@ public class Notification {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getType() {
-        return type;
+    public Integer getTargetType() {
+        return targetType;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setTargetType(Integer targetType) {
+        this.targetType = targetType;
     }
 
-    public Boolean getReadStatus() {
-        return readStatus;
+    public Date getSendTime() {
+        return sendTime;
     }
 
-    public void setReadStatus(Boolean readStatus) {
-        this.readStatus = readStatus;
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 
-    public Date getCreatedtime() {
-        return createdtime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedtime(Date createdtime) {
-        this.createdtime = createdtime;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Date getUpdatedtime() {
-        return updatedtime;
+    public String getContent() {
+        return content;
     }
 
-    public void setUpdatedtime(Date updatedtime) {
-        this.updatedtime = updatedtime;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message == null ? null : message.trim();
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }

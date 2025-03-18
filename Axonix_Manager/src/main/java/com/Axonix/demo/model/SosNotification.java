@@ -1,19 +1,20 @@
 package com.Axonix.demo.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class ForumComment {
+public class SosNotification {
     private Integer id;
 
     private Integer userId;
 
-    private Integer postId;
+    private String title;
 
-    private Integer status;
+    private Integer contactId;
 
-    private Integer likes;
+    private BigDecimal lng;
 
-    private Integer dislikes;
+    private BigDecimal lat;
 
     private Date createdAt;
 
@@ -35,36 +36,36 @@ public class ForumComment {
         this.userId = userId;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setPostId(Integer postId) {
-        this.postId = postId;
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getContactId() {
+        return contactId;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setContactId(Integer contactId) {
+        this.contactId = contactId;
     }
 
-    public Integer getLikes() {
-        return likes;
+    public BigDecimal getLng() {
+        return lng;
     }
 
-    public void setLikes(Integer likes) {
-        this.likes = likes;
+    public void setLng(BigDecimal lng) {
+        this.lng = lng;
     }
 
-    public Integer getDislikes() {
-        return dislikes;
+    public BigDecimal getLat() {
+        return lat;
     }
 
-    public void setDislikes(Integer dislikes) {
-        this.dislikes = dislikes;
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
     }
 
     public Date getCreatedAt() {

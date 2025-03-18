@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Axonix.demo.mapper.FunctionStatMapper">
+  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.FunctionStat">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="help_request" jdbcType="INTEGER" property="helpRequest" />
+    <result column="help_match" jdbcType="INTEGER" property="helpMatch" />
+    <result column="help_request_success" jdbcType="INTEGER" property="helpRequestSuccess" />
+    <result column="help_match_success" jdbcType="INTEGER" property="helpMatchSuccess" />
+    <result column="navigation" jdbcType="INTEGER" property="navigation" />
+    <result column="traffic_recognition" jdbcType="INTEGER" property="trafficRecognition" />
+    <result column="ai_assistant" jdbcType="INTEGER" property="aiAssistant" />
+    <result column="emergency_contact" jdbcType="INTEGER" property="emergencyContact" />
+    <result column="post_publish" jdbcType="INTEGER" property="postPublish" />
+    <result column="comment" jdbcType="INTEGER" property="comment" />
+    <result column="feedback" jdbcType="INTEGER" property="feedback" />
+    <result column="sos" jdbcType="INTEGER" property="sos" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_id, help_request, help_match, help_request_success, help_match_success, 
+    navigation, traffic_recognition, ai_assistant, emergency_contact, post_publish, comment, 
+    feedback, sos
+  </sql>
+  <select id="selectByExample" parameterType="com.Axonix.demo.model.FunctionStatExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from function_stat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from function_stat
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from function_stat
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.FunctionStatExample">
+    delete from function_stat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.Axonix.demo.model.FunctionStat">
+    insert into function_stat (id, user_id, help_request, 
+      help_match, help_request_success, help_match_success, 
+      navigation, traffic_recognition, ai_assistant, 
+      emergency_contact, post_publish, comment, 
+      feedback, sos)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{helpRequest,jdbcType=INTEGER}, 
+      #{helpMatch,jdbcType=INTEGER}, #{helpRequestSuccess,jdbcType=INTEGER}, #{helpMatchSuccess,jdbcType=INTEGER}, 
+      #{navigation,jdbcType=INTEGER}, #{trafficRecognition,jdbcType=INTEGER}, #{aiAssistant,jdbcType=INTEGER}, 
+      #{emergencyContact,jdbcType=INTEGER}, #{postPublish,jdbcType=INTEGER}, #{comment,jdbcType=INTEGER}, 
+      #{feedback,jdbcType=INTEGER}, #{sos,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.Axonix.demo.model.FunctionStat">
+    insert into function_stat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="helpRequest != null">
+        help_request,
+      </if>
+      <if test="helpMatch != null">
+        help_match,
+      </if>
+      <if test="helpRequestSuccess != null">
+        help_request_success,
+      </if>
+      <if test="helpMatchSuccess != null">
+        help_match_success,
+      </if>
+      <if test="navigation != null">
+        navigation,
+      </if>
+      <if test="trafficRecognition != null">
+        traffic_recognition,
+      </if>
+      <if test="aiAssistant != null">
+        ai_assistant,
+      </if>
+      <if test="emergencyContact != null">
+        emergency_contact,
+      </if>
+      <if test="postPublish != null">
+        post_publish,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="feedback != null">
+        feedback,
+      </if>
+      <if test="sos != null">
+        sos,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="helpRequest != null">
+        #{helpRequest,jdbcType=INTEGER},
+      </if>
+      <if test="helpMatch != null">
+        #{helpMatch,jdbcType=INTEGER},
+      </if>
+      <if test="helpRequestSuccess != null">
+        #{helpRequestSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="helpMatchSuccess != null">
+        #{helpMatchSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="navigation != null">
+        #{navigation,jdbcType=INTEGER},
+      </if>
+      <if test="trafficRecognition != null">
+        #{trafficRecognition,jdbcType=INTEGER},
+      </if>
+      <if test="aiAssistant != null">
+        #{aiAssistant,jdbcType=INTEGER},
+      </if>
+      <if test="emergencyContact != null">
+        #{emergencyContact,jdbcType=INTEGER},
+      </if>
+      <if test="postPublish != null">
+        #{postPublish,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=INTEGER},
+      </if>
+      <if test="feedback != null">
+        #{feedback,jdbcType=INTEGER},
+      </if>
+      <if test="sos != null">
+        #{sos,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.Axonix.demo.model.FunctionStatExample" resultType="java.lang.Long">
+    select count(*) from function_stat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update function_stat
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.helpRequest != null">
+        help_request = #{record.helpRequest,jdbcType=INTEGER},
+      </if>
+      <if test="record.helpMatch != null">
+        help_match = #{record.helpMatch,jdbcType=INTEGER},
+      </if>
+      <if test="record.helpRequestSuccess != null">
+        help_request_success = #{record.helpRequestSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="record.helpMatchSuccess != null">
+        help_match_success = #{record.helpMatchSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="record.navigation != null">
+        navigation = #{record.navigation,jdbcType=INTEGER},
+      </if>
+      <if test="record.trafficRecognition != null">
+        traffic_recognition = #{record.trafficRecognition,jdbcType=INTEGER},
+      </if>
+      <if test="record.aiAssistant != null">
+        ai_assistant = #{record.aiAssistant,jdbcType=INTEGER},
+      </if>
+      <if test="record.emergencyContact != null">
+        emergency_contact = #{record.emergencyContact,jdbcType=INTEGER},
+      </if>
+      <if test="record.postPublish != null">
+        post_publish = #{record.postPublish,jdbcType=INTEGER},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=INTEGER},
+      </if>
+      <if test="record.feedback != null">
+        feedback = #{record.feedback,jdbcType=INTEGER},
+      </if>
+      <if test="record.sos != null">
+        sos = #{record.sos,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update function_stat
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      help_request = #{record.helpRequest,jdbcType=INTEGER},
+      help_match = #{record.helpMatch,jdbcType=INTEGER},
+      help_request_success = #{record.helpRequestSuccess,jdbcType=INTEGER},
+      help_match_success = #{record.helpMatchSuccess,jdbcType=INTEGER},
+      navigation = #{record.navigation,jdbcType=INTEGER},
+      traffic_recognition = #{record.trafficRecognition,jdbcType=INTEGER},
+      ai_assistant = #{record.aiAssistant,jdbcType=INTEGER},
+      emergency_contact = #{record.emergencyContact,jdbcType=INTEGER},
+      post_publish = #{record.postPublish,jdbcType=INTEGER},
+      comment = #{record.comment,jdbcType=INTEGER},
+      feedback = #{record.feedback,jdbcType=INTEGER},
+      sos = #{record.sos,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.FunctionStat">
+    update function_stat
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="helpRequest != null">
+        help_request = #{helpRequest,jdbcType=INTEGER},
+      </if>
+      <if test="helpMatch != null">
+        help_match = #{helpMatch,jdbcType=INTEGER},
+      </if>
+      <if test="helpRequestSuccess != null">
+        help_request_success = #{helpRequestSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="helpMatchSuccess != null">
+        help_match_success = #{helpMatchSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="navigation != null">
+        navigation = #{navigation,jdbcType=INTEGER},
+      </if>
+      <if test="trafficRecognition != null">
+        traffic_recognition = #{trafficRecognition,jdbcType=INTEGER},
+      </if>
+      <if test="aiAssistant != null">
+        ai_assistant = #{aiAssistant,jdbcType=INTEGER},
+      </if>
+      <if test="emergencyContact != null">
+        emergency_contact = #{emergencyContact,jdbcType=INTEGER},
+      </if>
+      <if test="postPublish != null">
+        post_publish = #{postPublish,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=INTEGER},
+      </if>
+      <if test="feedback != null">
+        feedback = #{feedback,jdbcType=INTEGER},
+      </if>
+      <if test="sos != null">
+        sos = #{sos,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.FunctionStat">
+    update function_stat
+    set user_id = #{userId,jdbcType=INTEGER},
+      help_request = #{helpRequest,jdbcType=INTEGER},
+      help_match = #{helpMatch,jdbcType=INTEGER},
+      help_request_success = #{helpRequestSuccess,jdbcType=INTEGER},
+      help_match_success = #{helpMatchSuccess,jdbcType=INTEGER},
+      navigation = #{navigation,jdbcType=INTEGER},
+      traffic_recognition = #{trafficRecognition,jdbcType=INTEGER},
+      ai_assistant = #{aiAssistant,jdbcType=INTEGER},
+      emergency_contact = #{emergencyContact,jdbcType=INTEGER},
+      post_publish = #{postPublish,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=INTEGER},
+      feedback = #{feedback,jdbcType=INTEGER},
+      sos = #{sos,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -9,9 +9,15 @@ public class ForumPost {
 
     private String title;
 
-    private Date createdtime;
+    private Integer status;
 
-    private Date updatedtime;
+    private Integer likes;
+
+    private Integer dislikes;
+
+    private Date createdAt;
+
+    private Date updatedAt;
 
     private String content;
 
@@ -39,20 +45,44 @@ public class ForumPost {
         this.title = title == null ? null : title.trim();
     }
 
-    public Date getCreatedtime() {
-        return createdtime;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setCreatedtime(Date createdtime) {
-        this.createdtime = createdtime;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public Date getUpdatedtime() {
-        return updatedtime;
+    public Integer getLikes() {
+        return likes;
     }
 
-    public void setUpdatedtime(Date updatedtime) {
-        this.updatedtime = updatedtime;
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Integer getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(Integer dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getContent() {

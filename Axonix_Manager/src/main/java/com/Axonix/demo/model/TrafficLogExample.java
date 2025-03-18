@@ -1,17 +1,18 @@
 package com.Axonix.demo.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EmergencyContactExample {
+public class TrafficLogExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public EmergencyContactExample() {
+    public TrafficLogExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -225,323 +226,243 @@ public class EmergencyContactExample {
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdIsNull() {
-            addCriterion("contact_user_id is null");
+        public Criteria andLastLngIsNull() {
+            addCriterion("last_lng is null");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdIsNotNull() {
-            addCriterion("contact_user_id is not null");
+        public Criteria andLastLngIsNotNull() {
+            addCriterion("last_lng is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdEqualTo(Integer value) {
-            addCriterion("contact_user_id =", value, "contactUserId");
+        public Criteria andLastLngEqualTo(BigDecimal value) {
+            addCriterion("last_lng =", value, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdNotEqualTo(Integer value) {
-            addCriterion("contact_user_id <>", value, "contactUserId");
+        public Criteria andLastLngNotEqualTo(BigDecimal value) {
+            addCriterion("last_lng <>", value, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdGreaterThan(Integer value) {
-            addCriterion("contact_user_id >", value, "contactUserId");
+        public Criteria andLastLngGreaterThan(BigDecimal value) {
+            addCriterion("last_lng >", value, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("contact_user_id >=", value, "contactUserId");
+        public Criteria andLastLngGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("last_lng >=", value, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdLessThan(Integer value) {
-            addCriterion("contact_user_id <", value, "contactUserId");
+        public Criteria andLastLngLessThan(BigDecimal value) {
+            addCriterion("last_lng <", value, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("contact_user_id <=", value, "contactUserId");
+        public Criteria andLastLngLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("last_lng <=", value, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdIn(List<Integer> values) {
-            addCriterion("contact_user_id in", values, "contactUserId");
+        public Criteria andLastLngIn(List<BigDecimal> values) {
+            addCriterion("last_lng in", values, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdNotIn(List<Integer> values) {
-            addCriterion("contact_user_id not in", values, "contactUserId");
+        public Criteria andLastLngNotIn(List<BigDecimal> values) {
+            addCriterion("last_lng not in", values, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("contact_user_id between", value1, value2, "contactUserId");
+        public Criteria andLastLngBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("last_lng between", value1, value2, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("contact_user_id not between", value1, value2, "contactUserId");
+        public Criteria andLastLngNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("last_lng not between", value1, value2, "lastLng");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneIsNull() {
-            addCriterion("contact_phone is null");
+        public Criteria andLastLatIsNull() {
+            addCriterion("last_lat is null");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneIsNotNull() {
-            addCriterion("contact_phone is not null");
+        public Criteria andLastLatIsNotNull() {
+            addCriterion("last_lat is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneEqualTo(String value) {
-            addCriterion("contact_phone =", value, "contactPhone");
+        public Criteria andLastLatEqualTo(BigDecimal value) {
+            addCriterion("last_lat =", value, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotEqualTo(String value) {
-            addCriterion("contact_phone <>", value, "contactPhone");
+        public Criteria andLastLatNotEqualTo(BigDecimal value) {
+            addCriterion("last_lat <>", value, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneGreaterThan(String value) {
-            addCriterion("contact_phone >", value, "contactPhone");
+        public Criteria andLastLatGreaterThan(BigDecimal value) {
+            addCriterion("last_lat >", value, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneGreaterThanOrEqualTo(String value) {
-            addCriterion("contact_phone >=", value, "contactPhone");
+        public Criteria andLastLatGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("last_lat >=", value, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneLessThan(String value) {
-            addCriterion("contact_phone <", value, "contactPhone");
+        public Criteria andLastLatLessThan(BigDecimal value) {
+            addCriterion("last_lat <", value, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneLessThanOrEqualTo(String value) {
-            addCriterion("contact_phone <=", value, "contactPhone");
+        public Criteria andLastLatLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("last_lat <=", value, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneLike(String value) {
-            addCriterion("contact_phone like", value, "contactPhone");
+        public Criteria andLastLatIn(List<BigDecimal> values) {
+            addCriterion("last_lat in", values, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotLike(String value) {
-            addCriterion("contact_phone not like", value, "contactPhone");
+        public Criteria andLastLatNotIn(List<BigDecimal> values) {
+            addCriterion("last_lat not in", values, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneIn(List<String> values) {
-            addCriterion("contact_phone in", values, "contactPhone");
+        public Criteria andLastLatBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("last_lat between", value1, value2, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotIn(List<String> values) {
-            addCriterion("contact_phone not in", values, "contactPhone");
+        public Criteria andLastLatNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("last_lat not between", value1, value2, "lastLat");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneBetween(String value1, String value2) {
-            addCriterion("contact_phone between", value1, value2, "contactPhone");
+        public Criteria andStartTimeIsNull() {
+            addCriterion("start_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andContactPhoneNotBetween(String value1, String value2) {
-            addCriterion("contact_phone not between", value1, value2, "contactPhone");
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("start_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipIsNull() {
-            addCriterion("relationship is null");
+        public Criteria andStartTimeEqualTo(Date value) {
+            addCriterion("start_time =", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipIsNotNull() {
-            addCriterion("relationship is not null");
+        public Criteria andStartTimeNotEqualTo(Date value) {
+            addCriterion("start_time <>", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipEqualTo(String value) {
-            addCriterion("relationship =", value, "relationship");
+        public Criteria andStartTimeGreaterThan(Date value) {
+            addCriterion("start_time >", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotEqualTo(String value) {
-            addCriterion("relationship <>", value, "relationship");
+        public Criteria andStartTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("start_time >=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipGreaterThan(String value) {
-            addCriterion("relationship >", value, "relationship");
+        public Criteria andStartTimeLessThan(Date value) {
+            addCriterion("start_time <", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipGreaterThanOrEqualTo(String value) {
-            addCriterion("relationship >=", value, "relationship");
+        public Criteria andStartTimeLessThanOrEqualTo(Date value) {
+            addCriterion("start_time <=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipLessThan(String value) {
-            addCriterion("relationship <", value, "relationship");
+        public Criteria andStartTimeIn(List<Date> values) {
+            addCriterion("start_time in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipLessThanOrEqualTo(String value) {
-            addCriterion("relationship <=", value, "relationship");
+        public Criteria andStartTimeNotIn(List<Date> values) {
+            addCriterion("start_time not in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipLike(String value) {
-            addCriterion("relationship like", value, "relationship");
+        public Criteria andStartTimeBetween(Date value1, Date value2) {
+            addCriterion("start_time between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotLike(String value) {
-            addCriterion("relationship not like", value, "relationship");
+        public Criteria andStartTimeNotBetween(Date value1, Date value2) {
+            addCriterion("start_time not between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipIn(List<String> values) {
-            addCriterion("relationship in", values, "relationship");
+        public Criteria andEndTimeIsNull() {
+            addCriterion("end_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotIn(List<String> values) {
-            addCriterion("relationship not in", values, "relationship");
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("end_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipBetween(String value1, String value2) {
-            addCriterion("relationship between", value1, value2, "relationship");
+        public Criteria andEndTimeEqualTo(Date value) {
+            addCriterion("end_time =", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andRelationshipNotBetween(String value1, String value2) {
-            addCriterion("relationship not between", value1, value2, "relationship");
+        public Criteria andEndTimeNotEqualTo(Date value) {
+            addCriterion("end_time <>", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtIsNull() {
-            addCriterion("created_at is null");
+        public Criteria andEndTimeGreaterThan(Date value) {
+            addCriterion("end_time >", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtIsNotNull() {
-            addCriterion("created_at is not null");
+        public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("end_time >=", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtEqualTo(Date value) {
-            addCriterion("created_at =", value, "createdAt");
+        public Criteria andEndTimeLessThan(Date value) {
+            addCriterion("end_time <", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtNotEqualTo(Date value) {
-            addCriterion("created_at <>", value, "createdAt");
+        public Criteria andEndTimeLessThanOrEqualTo(Date value) {
+            addCriterion("end_time <=", value, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtGreaterThan(Date value) {
-            addCriterion("created_at >", value, "createdAt");
+        public Criteria andEndTimeIn(List<Date> values) {
+            addCriterion("end_time in", values, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("created_at >=", value, "createdAt");
+        public Criteria andEndTimeNotIn(List<Date> values) {
+            addCriterion("end_time not in", values, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtLessThan(Date value) {
-            addCriterion("created_at <", value, "createdAt");
+        public Criteria andEndTimeBetween(Date value1, Date value2) {
+            addCriterion("end_time between", value1, value2, "endTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("created_at <=", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIn(List<Date> values) {
-            addCriterion("created_at in", values, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotIn(List<Date> values) {
-            addCriterion("created_at not in", values, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtBetween(Date value1, Date value2) {
-            addCriterion("created_at between", value1, value2, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("created_at not between", value1, value2, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIsNull() {
-            addCriterion("updated_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIsNotNull() {
-            addCriterion("updated_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtEqualTo(Date value) {
-            addCriterion("updated_at =", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotEqualTo(Date value) {
-            addCriterion("updated_at <>", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtGreaterThan(Date value) {
-            addCriterion("updated_at >", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("updated_at >=", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtLessThan(Date value) {
-            addCriterion("updated_at <", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("updated_at <=", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIn(List<Date> values) {
-            addCriterion("updated_at in", values, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotIn(List<Date> values) {
-            addCriterion("updated_at not in", values, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtBetween(Date value1, Date value2) {
-            addCriterion("updated_at between", value1, value2, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("updated_at not between", value1, value2, "updatedAt");
+        public Criteria andEndTimeNotBetween(Date value1, Date value2) {
+            addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }
     }

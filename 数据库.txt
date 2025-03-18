@@ -1,183 +1,172 @@
--- 1. 创建数据库 Axonix
-CREATE DATABASE IF NOT EXISTS Axonix
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-USE Axonix;
+-- 用户表
+CREATE TABLE IF NOT EXISTS user (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
+    username VARCHAR(50) NOT NULL COMMENT '用户名',
+    password VARCHAR(255) NOT NULL COMMENT '密码',
+    avatar VARCHAR(255) COMMENT '头像',
+    gender INT COMMENT '性别（0: 未知, 1: 男, 2: 女）',
+    age INT COMMENT '年龄',
+    province VARCHAR(50) COMMENT '省',
+    city VARCHAR(50) COMMENT '市',
+    county VARCHAR(50) COMMENT '县',
+    address VARCHAR(255) COMMENT '详细地址',
+    email VARCHAR(100) COMMENT '邮箱',
+    phone VARCHAR(20) COMMENT '手机号',
+    disability_type INT COMMENT '残障类型（0: 无, 1: 视障, 2: 听障, 3: 其他障碍）',
+    last_login_time DATETIME COMMENT '最后登录时间',
+    is_vip INT DEFAULT 0 COMMENT '是否VIP（0: 否, 1: 是）',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+);
 
--- ================================
--- 2. 按依赖关系顺序创建数据表
--- ================================
+-- VIP表
+CREATE TABLE IF NOT EXISTS vip (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'VIP记录ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+	levels INT COMMENT 'Vip等级',
+    start_time DATETIME COMMENT '开通时间',
+    end_time DATETIME COMMENT '截止时间',
+    total_payment DECIMAL(10, 2) COMMENT '累计支付金额',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
 
--- 2.1 用户表 (users) ***分开用户管理员***
-CREATE TABLE IF NOT EXISTS `users` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  phone VARCHAR(20),
-  role ENUM('user','admin') DEFAULT 'user',
-  disability_type VARCHAR(100),
-  preferences JSON,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 管理员表
+CREATE TABLE IF NOT EXISTS admin (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '管理员ID',
+    username VARCHAR(50) NOT NULL COMMENT '用户名',
+    password VARCHAR(255) NOT NULL COMMENT '密码',
+    phone VARCHAR(20) COMMENT '手机号',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+);
 
--- 2.2 紧急联系人表 (emergency_contacts)***缺少家庭住址***
-CREATE TABLE IF NOT EXISTS `emergency_contacts` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  phone VARCHAR(20),
-  relationship VARCHAR(100),
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_contact_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 紧急联系人表
+CREATE TABLE IF NOT EXISTS emergency_contact (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '紧急联系人记录ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    contact_user_id INT NOT NULL COMMENT '紧急联系人ID',
+    contact_phone VARCHAR(20) COMMENT '紧急联系人手机号',
+    relationship VARCHAR(50) COMMENT '关系',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (contact_user_id) REFERENCES user(id)
+);
 
--- 2.3 求助记录表 (emergency_requests)
-CREATE TABLE IF NOT EXISTS `emergency_requests` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  location JSON,
-  contact_id INT,
-  status ENUM('pending', 'processing', 'completed') DEFAULT 'pending',
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_emergency_user FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT fk_emergency_contact FOREIGN KEY (contact_id) REFERENCES emergency_contacts(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 求助表
+CREATE TABLE IF NOT EXISTS help_request (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '求助记录ID',
+    requester_id INT NOT NULL COMMENT '求助者ID',
+    helper_id INT COMMENT '帮助者ID',
+    requester_lng DECIMAL(10, 6) COMMENT '求助者经度',
+    requester_lat DECIMAL(10, 6) COMMENT '求助者纬度',
+    helper_lng DECIMAL(10, 6) COMMENT '帮助者经度',
+    helper_lat DECIMAL(10, 6) COMMENT '帮助者纬度',
+    status INT COMMENT '状态（0: 正在发布, 1: 匹配中, 2: 处理中, 3: 完成, 4: 特殊情况）',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (requester_id) REFERENCES user(id),
+    FOREIGN KEY (helper_id) REFERENCES emergency_contact(id)
+);
 
--- 2.4 消息表 (messages)
-CREATE TABLE IF NOT EXISTS `messages` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  sender_id INT NOT NULL,
-  receiver_id INT NOT NULL,
-  content TEXT,
-  type ENUM('text','voice','video') DEFAULT 'text',
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_message_sender FOREIGN KEY (sender_id) REFERENCES users(id),
-  CONSTRAINT fk_message_receiver FOREIGN KEY (receiver_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 通知表
+CREATE TABLE IF NOT EXISTS notification (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '通知ID',
+    admin_id INT NOT NULL COMMENT '管理员ID',
+    title VARCHAR(100) COMMENT '标题',
+    content TEXT COMMENT '内容',
+    target_type INT COMMENT '发布对象（0: 全部, 1: 视障, 2: 听障, 3: 其他障碍）',
+    send_time DATETIME COMMENT '发送时间',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (admin_id) REFERENCES admin(id)
+);
 
--- 2.5 论坛帖子表 (forum_posts)
-CREATE TABLE IF NOT EXISTS `forum_posts` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  content TEXT,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_post_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 紧急SOS通知表
+CREATE TABLE IF NOT EXISTS sos_notification (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'SOS通知ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    title VARCHAR(100) COMMENT '标题',
+    content TEXT COMMENT '内容',
+    contact_id INT NOT NULL COMMENT '紧急联系人ID',
+    lng DECIMAL(10, 6) COMMENT '经度',
+    lat DECIMAL(10, 6) COMMENT '纬度',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (contact_id) REFERENCES emergency_contact(id)
+);
 
--- 2.6 论坛评论表 (forum_comments)
-CREATE TABLE IF NOT EXISTS `forum_comments` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  post_id INT NOT NULL,
-  user_id INT NOT NULL,
-  content TEXT,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES forum_posts(id),
-  CONSTRAINT fk_comment_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 路况识别日志表
+CREATE TABLE IF NOT EXISTS traffic_log (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '日志ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    last_lng DECIMAL(10, 6) COMMENT '最后经度',
+    last_lat DECIMAL(10, 6) COMMENT '最后纬度',
+    start_time DATETIME COMMENT '开始使用时间',
+    end_time DATETIME COMMENT '结束时间',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
 
--- 2.7 操作日志表 (operation_logs)**
-CREATE TABLE IF NOT EXISTS `operation_logs` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  admin_id INT NOT NULL,
-  action VARCHAR(255) NOT NULL,
-  target_id INT,
-  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_log_admin FOREIGN KEY (admin_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- AI助理日志表
+CREATE TABLE IF NOT EXISTS ai_log (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '日志ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    start_time DATETIME COMMENT '开始使用时间',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
 
--- 2.8 无障碍设施表 (facilities)**
-CREATE TABLE IF NOT EXISTS `facilities` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  facility_type VARCHAR(100),
-  location JSON,
-  description TEXT,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 论坛帖子表
+CREATE TABLE IF NOT EXISTS forum_post (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '帖子ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    title VARCHAR(100) COMMENT '标题',
+    content TEXT COMMENT '内容',
+    status INT COMMENT '状态（0: 审核中, 1: 驳回, 2: 异常, 3: 已发布, 4: 私密）',
+    likes INT DEFAULT 0 COMMENT '喜欢数',
+    dislikes INT DEFAULT 0 COMMENT '不喜欢数',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
 
--- 2.9 支付记录表 (payments)
-CREATE TABLE IF NOT EXISTS `payments` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  payment_method VARCHAR(50),
-  transaction_id VARCHAR(100),
-  status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_payment_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 论坛评论表
+CREATE TABLE IF NOT EXISTS forum_comment (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '评论ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    post_id INT NOT NULL COMMENT '帖子ID',
+    content TEXT COMMENT '内容',
+    status INT COMMENT '状态（0: 审核中, 1: 驳回, 2: 异常, 3: 已发布, 4: 私密）',
+    likes INT DEFAULT 0 COMMENT '喜欢数',
+    dislikes INT DEFAULT 0 COMMENT '不喜欢数',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (post_id) REFERENCES forum_post(id)
+);
 
--- 2.10 通知表 (notifications)
-CREATE TABLE IF NOT EXISTS `notifications` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  title VARCHAR(255),
-  message TEXT,
-  type VARCHAR(50),
-  read_status BOOLEAN DEFAULT FALSE,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 功能使用统计表
+CREATE TABLE IF NOT EXISTS function_stat (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '统计ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    help_request INT DEFAULT 0 COMMENT '求助匹配次数',
+    help_match INT DEFAULT 0 COMMENT '帮助匹配次数',
+    help_request_success INT DEFAULT 0 COMMENT '求助匹配成功次数',
+    help_match_success INT DEFAULT 0 COMMENT '帮助匹配成功次数',
+    navigation INT DEFAULT 0 COMMENT '导航使用次数',
+    traffic_recognition INT DEFAULT 0 COMMENT '路况识别次数',
+    ai_assistant INT DEFAULT 0 COMMENT 'AI助理使用次数',
+    emergency_contact INT DEFAULT 0 COMMENT '联系紧急联系人次数',
+    post_publish INT DEFAULT 0 COMMENT '论坛帖子发布次数',
+    comment INT DEFAULT 0 COMMENT '评论次数',
+    feedback INT DEFAULT 0 COMMENT '问题反馈次数',
+    sos INT DEFAULT 0 COMMENT '紧急SOS次数',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
 
--- 2.11 位置共享记录表 (location_shares)
-CREATE TABLE IF NOT EXISTS `location_shares` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,       -- 发起共享的用户
-  shared_with INT NOT NULL,   -- 共享给的目标用户
-  start_time DATETIME NOT NULL,
-  end_time DATETIME,          -- 结束时间，若为空表示仍在共享
-  last_location JSON,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_locshare_user FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT fk_locshare_shared FOREIGN KEY (shared_with) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 2.12 好友关系表 (friend_relationships)***删除***
-CREATE TABLE IF NOT EXISTS `friend_relationships` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  friend_user_id INT NOT NULL,
-  status ENUM('pending', 'accepted', 'blocked') DEFAULT 'pending',
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_friend_user FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT fk_friend_friend FOREIGN KEY (friend_user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 2.13 论坛分类表 (forum_categories)***删除***
-CREATE TABLE IF NOT EXISTS `forum_categories` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  description TEXT,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 2.14 第三方 API 日志表 (third_party_api_logs)**
-CREATE TABLE IF NOT EXISTS `third_party_api_logs` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  service_name VARCHAR(255) NOT NULL,
-  request_data TEXT,
-  response_data TEXT,
-  status VARCHAR(50),
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 2.15 手语翻译日志表 (sign_language_translation_logs)***不一定，暂定实时处理***
-CREATE TABLE IF NOT EXISTS `sign_language_translation_logs` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  original_video_url VARCHAR(255),
-  translated_text TEXT,
-  createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_sign_lang_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 反馈表
+CREATE TABLE IF NOT EXISTS feedback (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '反馈ID',
+    user_id INT NOT NULL COMMENT '用户ID',
+    issue TEXT COMMENT '反馈问题',
+    status INT COMMENT '状态（0: 用户提交, 1: 处理中, 2: 已完成, 3: 异常）',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);

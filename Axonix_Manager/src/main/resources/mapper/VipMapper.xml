@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Axonix.demo.mapper.EmergencyContactMapper">
-  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.EmergencyContact">
+<mapper namespace="com.Axonix.demo.mapper.VipMapper">
+  <resultMap id="BaseResultMap" type="com.Axonix.demo.model.Vip">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="contact_user_id" jdbcType="INTEGER" property="contactUserId" />
-    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="relationship" jdbcType="VARCHAR" property="relationship" />
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="levels" jdbcType="INTEGER" property="levels" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="total_payment" jdbcType="DECIMAL" property="totalPayment" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, contact_user_id, contact_phone, relationship, created_at, updated_at
+    id, user_id, levels, start_time, end_time, total_payment
   </sql>
-  <select id="selectByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.Axonix.demo.model.VipExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from emergency_contact
+    from vip
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,29 +87,29 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from emergency_contact
+    from vip
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from emergency_contact
+    delete from vip
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample">
-    delete from emergency_contact
+  <delete id="deleteByExample" parameterType="com.Axonix.demo.model.VipExample">
+    delete from vip
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact (id, user_id, contact_user_id, 
-      contact_phone, relationship, created_at, 
-      updated_at)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{contactUserId,jdbcType=INTEGER}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{updatedAt,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.Axonix.demo.model.Vip">
+    insert into vip (id, user_id, levels, 
+      start_time, end_time, total_payment
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{levels,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{totalPayment,jdbcType=DECIMAL}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    insert into emergency_contact
+  <insert id="insertSelective" parameterType="com.Axonix.demo.model.Vip">
+    insert into vip
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -118,20 +117,17 @@
       <if test="userId != null">
         user_id,
       </if>
-      <if test="contactUserId != null">
-        contact_user_id,
+      <if test="levels != null">
+        levels,
       </if>
-      <if test="contactPhone != null">
-        contact_phone,
+      <if test="startTime != null">
+        start_time,
       </if>
-      <if test="relationship != null">
-        relationship,
+      <if test="endTime != null">
+        end_time,
       </if>
-      <if test="createdAt != null">
-        created_at,
-      </if>
-      <if test="updatedAt != null">
-        updated_at,
+      <if test="totalPayment != null">
+        total_payment,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -141,31 +137,28 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        #{contactUserId,jdbcType=INTEGER},
+      <if test="levels != null">
+        #{levels,jdbcType=INTEGER},
       </if>
-      <if test="contactPhone != null">
-        #{contactPhone,jdbcType=VARCHAR},
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="relationship != null">
-        #{relationship,jdbcType=VARCHAR},
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="totalPayment != null">
+        #{totalPayment,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultType="java.lang.Long">
-    select count(*) from emergency_contact
+  <select id="countByExample" parameterType="com.Axonix.demo.model.VipExample" resultType="java.lang.Long">
+    select count(*) from vip
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update emergency_contact
+    update vip
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -173,20 +166,17 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
-      <if test="record.contactUserId != null">
-        contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
+      <if test="record.levels != null">
+        levels = #{record.levels,jdbcType=INTEGER},
       </if>
-      <if test="record.contactPhone != null">
-        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.relationship != null">
-        relationship = #{record.relationship,jdbcType=VARCHAR},
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="record.totalPayment != null">
+        total_payment = #{record.totalPayment,jdbcType=DECIMAL},
       </if>
     </set>
     <if test="_parameter != null">
@@ -194,50 +184,45 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update emergency_contact
+    update vip
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
-      contact_user_id = #{record.contactUserId,jdbcType=INTEGER},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      relationship = #{record.relationship,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+      levels = #{record.levels,jdbcType=INTEGER},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      total_payment = #{record.totalPayment,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKeySelective" parameterType="com.Axonix.demo.model.Vip">
+    update vip
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="contactUserId != null">
-        contact_user_id = #{contactUserId,jdbcType=INTEGER},
+      <if test="levels != null">
+        levels = #{levels,jdbcType=INTEGER},
       </if>
-      <if test="contactPhone != null">
-        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="relationship != null">
-        relationship = #{relationship,jdbcType=VARCHAR},
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="totalPayment != null">
+        total_payment = #{totalPayment,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.EmergencyContact">
-    update emergency_contact
+  <update id="updateByPrimaryKey" parameterType="com.Axonix.demo.model.Vip">
+    update vip
     set user_id = #{userId,jdbcType=INTEGER},
-      contact_user_id = #{contactUserId,jdbcType=INTEGER},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      relationship = #{relationship,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      levels = #{levels,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      total_payment = #{totalPayment,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
