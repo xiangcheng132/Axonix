@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS sos_notification (
     FOREIGN KEY (contact_id) REFERENCES emergency_contact(id)
 );
 
--- 路况识别日志表
+-- 导航日志表
 CREATE TABLE IF NOT EXISTS traffic_log (
     id INT PRIMARY KEY AUTO_INCREMENT COMMENT '日志ID',
     user_id INT NOT NULL COMMENT '用户ID',
@@ -153,7 +153,6 @@ CREATE TABLE IF NOT EXISTS function_stat (
     navigation INT DEFAULT 0 COMMENT '导航使用次数',
     traffic_recognition INT DEFAULT 0 COMMENT '路况识别次数',
     ai_assistant INT DEFAULT 0 COMMENT 'AI助理使用次数',
-    emergency_contact INT DEFAULT 0 COMMENT '联系紧急联系人次数',
     post_publish INT DEFAULT 0 COMMENT '论坛帖子发布次数',
     comment INT DEFAULT 0 COMMENT '评论次数',
     feedback INT DEFAULT 0 COMMENT '问题反馈次数',
