@@ -11,7 +11,6 @@
     <result column="navigation" jdbcType="INTEGER" property="navigation" />
     <result column="traffic_recognition" jdbcType="INTEGER" property="trafficRecognition" />
     <result column="ai_assistant" jdbcType="INTEGER" property="aiAssistant" />
-    <result column="emergency_contact" jdbcType="INTEGER" property="emergencyContact" />
     <result column="post_publish" jdbcType="INTEGER" property="postPublish" />
     <result column="comment" jdbcType="INTEGER" property="comment" />
     <result column="feedback" jdbcType="INTEGER" property="feedback" />
@@ -77,8 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, user_id, help_request, help_match, help_request_success, help_match_success, 
-    navigation, traffic_recognition, ai_assistant, emergency_contact, post_publish, comment, 
-    feedback, sos
+    navigation, traffic_recognition, ai_assistant, post_publish, comment, feedback, sos
   </sql>
   <select id="selectByExample" parameterType="com.Axonix.demo.model.FunctionStatExample" resultMap="BaseResultMap">
     select
@@ -114,13 +112,13 @@
     insert into function_stat (id, user_id, help_request, 
       help_match, help_request_success, help_match_success, 
       navigation, traffic_recognition, ai_assistant, 
-      emergency_contact, post_publish, comment, 
-      feedback, sos)
+      post_publish, comment, feedback, 
+      sos)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{helpRequest,jdbcType=INTEGER}, 
       #{helpMatch,jdbcType=INTEGER}, #{helpRequestSuccess,jdbcType=INTEGER}, #{helpMatchSuccess,jdbcType=INTEGER}, 
       #{navigation,jdbcType=INTEGER}, #{trafficRecognition,jdbcType=INTEGER}, #{aiAssistant,jdbcType=INTEGER}, 
-      #{emergencyContact,jdbcType=INTEGER}, #{postPublish,jdbcType=INTEGER}, #{comment,jdbcType=INTEGER}, 
-      #{feedback,jdbcType=INTEGER}, #{sos,jdbcType=INTEGER})
+      #{postPublish,jdbcType=INTEGER}, #{comment,jdbcType=INTEGER}, #{feedback,jdbcType=INTEGER}, 
+      #{sos,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.Axonix.demo.model.FunctionStat">
     insert into function_stat
@@ -151,9 +149,6 @@
       </if>
       <if test="aiAssistant != null">
         ai_assistant,
-      </if>
-      <if test="emergencyContact != null">
-        emergency_contact,
       </if>
       <if test="postPublish != null">
         post_publish,
@@ -195,9 +190,6 @@
       </if>
       <if test="aiAssistant != null">
         #{aiAssistant,jdbcType=INTEGER},
-      </if>
-      <if test="emergencyContact != null">
-        #{emergencyContact,jdbcType=INTEGER},
       </if>
       <if test="postPublish != null">
         #{postPublish,jdbcType=INTEGER},
@@ -249,9 +241,6 @@
       <if test="record.aiAssistant != null">
         ai_assistant = #{record.aiAssistant,jdbcType=INTEGER},
       </if>
-      <if test="record.emergencyContact != null">
-        emergency_contact = #{record.emergencyContact,jdbcType=INTEGER},
-      </if>
       <if test="record.postPublish != null">
         post_publish = #{record.postPublish,jdbcType=INTEGER},
       </if>
@@ -280,7 +269,6 @@
       navigation = #{record.navigation,jdbcType=INTEGER},
       traffic_recognition = #{record.trafficRecognition,jdbcType=INTEGER},
       ai_assistant = #{record.aiAssistant,jdbcType=INTEGER},
-      emergency_contact = #{record.emergencyContact,jdbcType=INTEGER},
       post_publish = #{record.postPublish,jdbcType=INTEGER},
       comment = #{record.comment,jdbcType=INTEGER},
       feedback = #{record.feedback,jdbcType=INTEGER},
@@ -316,9 +304,6 @@
       <if test="aiAssistant != null">
         ai_assistant = #{aiAssistant,jdbcType=INTEGER},
       </if>
-      <if test="emergencyContact != null">
-        emergency_contact = #{emergencyContact,jdbcType=INTEGER},
-      </if>
       <if test="postPublish != null">
         post_publish = #{postPublish,jdbcType=INTEGER},
       </if>
@@ -344,7 +329,6 @@
       navigation = #{navigation,jdbcType=INTEGER},
       traffic_recognition = #{trafficRecognition,jdbcType=INTEGER},
       ai_assistant = #{aiAssistant,jdbcType=INTEGER},
-      emergency_contact = #{emergencyContact,jdbcType=INTEGER},
       post_publish = #{postPublish,jdbcType=INTEGER},
       comment = #{comment,jdbcType=INTEGER},
       feedback = #{feedback,jdbcType=INTEGER},

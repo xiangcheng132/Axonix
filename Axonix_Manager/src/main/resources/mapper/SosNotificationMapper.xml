@@ -9,6 +9,7 @@
     <result column="lng" jdbcType="DECIMAL" property="lng" />
     <result column="lat" jdbcType="DECIMAL" property="lat" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.Axonix.demo.model.SosNotification">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, title, contact_id, lng, lat, created_at
+    id, user_id, title, contact_id, lng, lat, created_at, send_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -128,10 +129,12 @@
   <insert id="insert" parameterType="com.Axonix.demo.model.SosNotification">
     insert into sos_notification (id, user_id, title, 
       contact_id, lng, lat, 
-      created_at, content)
+      created_at, send_time, content
+      )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{contactId,jdbcType=INTEGER}, #{lng,jdbcType=DECIMAL}, #{lat,jdbcType=DECIMAL}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+      #{createdAt,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.Axonix.demo.model.SosNotification">
     insert into sos_notification
@@ -156,6 +159,9 @@
       </if>
       <if test="createdAt != null">
         created_at,
+      </if>
+      <if test="sendTime != null">
+        send_time,
       </if>
       <if test="content != null">
         content,
@@ -182,6 +188,9 @@
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -218,6 +227,9 @@
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.sendTime != null">
+        send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
@@ -235,6 +247,7 @@
       lng = #{record.lng,jdbcType=DECIMAL},
       lat = #{record.lat,jdbcType=DECIMAL},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +261,8 @@
       contact_id = #{record.contactId,jdbcType=INTEGER},
       lng = #{record.lng,jdbcType=DECIMAL},
       lat = #{record.lat,jdbcType=DECIMAL},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -274,6 +288,9 @@
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -288,6 +305,7 @@
       lng = #{lng,jdbcType=DECIMAL},
       lat = #{lat,jdbcType=DECIMAL},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -298,7 +316,8 @@
       contact_id = #{contactId,jdbcType=INTEGER},
       lng = #{lng,jdbcType=DECIMAL},
       lat = #{lat,jdbcType=DECIMAL},
-      created_at = #{createdAt,jdbcType=TIMESTAMP}
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

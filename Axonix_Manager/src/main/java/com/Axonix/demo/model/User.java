@@ -37,6 +37,8 @@ public class User {
 
     private Date updatedAt;
 
+    private String deviceToken;
+
     public Integer getId() {
         return id;
     }
@@ -171,5 +173,13 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken == null ? null : deviceToken.trim();
     }
 }

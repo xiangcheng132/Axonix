@@ -19,6 +19,7 @@
     <result column="is_vip" jdbcType="INTEGER" property="isVip" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="device_token" jdbcType="VARCHAR" property="deviceToken" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,7 +81,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, username, password, avatar, gender, age, province, city, county, address, email, 
-    phone, disability_type, last_login_time, is_vip, created_at, updated_at
+    phone, disability_type, last_login_time, is_vip, created_at, updated_at, device_token
   </sql>
   <select id="selectByExample" parameterType="com.Axonix.demo.model.UserExample" resultMap="BaseResultMap">
     select
@@ -118,13 +119,15 @@
       province, city, county, 
       address, email, phone, 
       disability_type, last_login_time, is_vip, 
-      created_at, updated_at)
+      created_at, updated_at, device_token
+      )
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{avatar,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{age,jdbcType=INTEGER}, 
       #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{disabilityType,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{isVip,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deviceToken,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.Axonix.demo.model.User">
     insert into user
@@ -180,6 +183,9 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+      <if test="deviceToken != null">
+        device_token,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -232,6 +238,9 @@
       </if>
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceToken != null">
+        #{deviceToken,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -295,6 +304,9 @@
       <if test="record.updatedAt != null">
         updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.deviceToken != null">
+        device_token = #{record.deviceToken,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -318,7 +330,8 @@
       last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       is_vip = #{record.isVip,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      device_token = #{record.deviceToken,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -374,6 +387,9 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="deviceToken != null">
+        device_token = #{deviceToken,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -394,7 +410,18 @@
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       is_vip = #{isVip,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      device_token = #{deviceToken,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="batchUpdateVipStatus">
+    UPDATE user
+    SET is_vip = #{status},
+    updated_at = NOW()
+    WHERE id IN
+    <foreach item="userId" collection="userIds" open="(" separator="," close=")">
+      #{userId}
+    </foreach>
   </update>
 </mapper>

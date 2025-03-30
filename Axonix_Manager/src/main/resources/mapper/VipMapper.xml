@@ -225,4 +225,9 @@
       total_payment = #{totalPayment,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectExpiredUserIds" resultType="java.lang.Integer">
+    SELECT DISTINCT user_id
+    FROM vip
+    WHERE end_time &lt;= #{currentTime}
+  </select>
 </mapper>

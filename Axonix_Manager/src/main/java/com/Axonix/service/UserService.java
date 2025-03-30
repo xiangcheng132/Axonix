@@ -1,11 +1,10 @@
-package com.Axonix.demo.mapper;
+package com.Axonix.service;
 
 import com.Axonix.demo.model.User;
 import com.Axonix.demo.model.UserExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
-public interface UserMapper {
+public interface UserService {
     long countByExample(UserExample example);
 
     int deleteByExample(UserExample example);
@@ -20,14 +19,11 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+    int updateByExampleSelective(User record, UserExample example);
 
-    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+    int updateByExample(User record, UserExample example);
 
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
-
-    int batchUpdateVipStatus(@Param("userIds") List<Integer> userIds,
-                             @Param("status") int status);
 }

@@ -19,8 +19,6 @@ public class FunctionStat {
 
     private Integer aiAssistant;
 
-    private Integer emergencyContact;
-
     private Integer postPublish;
 
     private Integer comment;
@@ -99,14 +97,6 @@ public class FunctionStat {
 
     public void setAiAssistant(Integer aiAssistant) {
         this.aiAssistant = aiAssistant;
-    }
-
-    public Integer getEmergencyContact() {
-        return emergencyContact;
-    }
-
-    public void setEmergencyContact(Integer emergencyContact) {
-        this.emergencyContact = emergencyContact;
     }
 
     public Integer getPostPublish() {

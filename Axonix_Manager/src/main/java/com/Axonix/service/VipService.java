@@ -1,13 +1,10 @@
-package com.Axonix.demo.mapper;
+package com.Axonix.service;
 
 import com.Axonix.demo.model.Vip;
 import com.Axonix.demo.model.VipExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
-import java.util.Date;
 
-
-public interface VipMapper {
+public interface VipService {
     long countByExample(VipExample example);
 
     int deleteByExample(VipExample example);
@@ -22,13 +19,11 @@ public interface VipMapper {
 
     Vip selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Vip record, @Param("example") VipExample example);
+    int updateByExampleSelective(Vip record, VipExample example);
 
-    int updateByExample(@Param("record") Vip record, @Param("example") VipExample example);
+    int updateByExample(Vip record, VipExample example);
 
     int updateByPrimaryKeySelective(Vip record);
 
     int updateByPrimaryKey(Vip record);
-
-    List<Integer> selectExpiredUserIds(@Param("currentTime") Date currentTime);
 }

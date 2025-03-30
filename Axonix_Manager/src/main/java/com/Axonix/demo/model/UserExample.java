@@ -1214,6 +1214,76 @@ public class UserExample {
             addCriterion("updated_at not between", value1, value2, "updatedAt");
             return (Criteria) this;
         }
+
+        public Criteria andDeviceTokenIsNull() {
+            addCriterion("device_token is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenIsNotNull() {
+            addCriterion("device_token is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenEqualTo(String value) {
+            addCriterion("device_token =", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenNotEqualTo(String value) {
+            addCriterion("device_token <>", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenGreaterThan(String value) {
+            addCriterion("device_token >", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenGreaterThanOrEqualTo(String value) {
+            addCriterion("device_token >=", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenLessThan(String value) {
+            addCriterion("device_token <", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenLessThanOrEqualTo(String value) {
+            addCriterion("device_token <=", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenLike(String value) {
+            addCriterion("device_token like", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenNotLike(String value) {
+            addCriterion("device_token not like", value, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenIn(List<String> values) {
+            addCriterion("device_token in", values, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenNotIn(List<String> values) {
+            addCriterion("device_token not in", values, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenBetween(String value1, String value2) {
+            addCriterion("device_token between", value1, value2, "deviceToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceTokenNotBetween(String value1, String value2) {
+            addCriterion("device_token not between", value1, value2, "deviceToken");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

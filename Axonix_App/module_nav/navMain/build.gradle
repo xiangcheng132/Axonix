@@ -62,16 +62,10 @@ dependencies {
 //    implementation 'com.amap.api:3dmap:9.1.0' //手机不支持，暂无法调试
     implementation 'com.amap.api:location:6.1.0'
     implementation 'com.amap.api:search:6.1.0'
-
     implementation 'com.amap.api:3dmap:8.0.0'
-//    implementation 'com.amap.api:location:6.1.0'
-//    implementation 'com.amap.api:search:6.1.0'
-//    implementation 'navi-3dmap-location-search:latest.integration'
+
 
 
     implementation project(':common:Index')
-//    implementation project(':module_emergency:emergencyMain')
-//    implementation project(':app')
-//    implementation project(':module_social:socialMain')
-//    implementation project(':module_user:userMain')
+
 }

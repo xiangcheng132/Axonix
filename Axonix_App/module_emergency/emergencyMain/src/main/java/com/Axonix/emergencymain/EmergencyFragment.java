@@ -28,7 +28,7 @@ import android.graphics.drawable.GradientDrawable;
 @Route(path = "/emergency/main")
 public class EmergencyFragment extends Fragment {
     private View circleView;
-    private Button btnSeekHelp, btnProvideHelp;
+    private Button btnSeekHelp, btnProvideHelp,btnHistory;
     private Animation pulseAnimation;
     private boolean isSeekingHelp = false;
     private AMapLocationClient locationClient;
@@ -50,8 +50,14 @@ public class EmergencyFragment extends Fragment {
         // 点击寻求帮助
         btnSeekHelp.setOnClickListener(v -> showConfirmDialog(true));
 
-        // 点击提供帮助
-        btnProvideHelp.setOnClickListener(v -> showConfirmDialog(false));
+        // 历史记录
+        btnHistory = view.findViewById(R.id.btnHistory);
+        btnHistory.setOnClickListener(v -> {
+            new HistoryDialogFragment().show(
+                    getParentFragmentManager(),
+                    "history_dialog"
+            );
+        });
     }
 
     private void showConfirmDialog(boolean isSeeking) {

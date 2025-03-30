@@ -18,6 +18,8 @@ public class SosNotification {
 
     private Date createdAt;
 
+    private Date sendTime;
+
     private String content;
 
     public Integer getId() {
@@ -74,6 +76,14 @@ public class SosNotification {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 
     public String getContent() {

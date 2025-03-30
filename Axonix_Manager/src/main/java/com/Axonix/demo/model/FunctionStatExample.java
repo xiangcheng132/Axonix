@@ -644,66 +644,6 @@ public class FunctionStatExample {
             return (Criteria) this;
         }
 
-        public Criteria andEmergencyContactIsNull() {
-            addCriterion("emergency_contact is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactIsNotNull() {
-            addCriterion("emergency_contact is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactEqualTo(Integer value) {
-            addCriterion("emergency_contact =", value, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactNotEqualTo(Integer value) {
-            addCriterion("emergency_contact <>", value, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactGreaterThan(Integer value) {
-            addCriterion("emergency_contact >", value, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactGreaterThanOrEqualTo(Integer value) {
-            addCriterion("emergency_contact >=", value, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactLessThan(Integer value) {
-            addCriterion("emergency_contact <", value, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactLessThanOrEqualTo(Integer value) {
-            addCriterion("emergency_contact <=", value, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactIn(List<Integer> values) {
-            addCriterion("emergency_contact in", values, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactNotIn(List<Integer> values) {
-            addCriterion("emergency_contact not in", values, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactBetween(Integer value1, Integer value2) {
-            addCriterion("emergency_contact between", value1, value2, "emergencyContact");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmergencyContactNotBetween(Integer value1, Integer value2) {
-            addCriterion("emergency_contact not between", value1, value2, "emergencyContact");
-            return (Criteria) this;
-        }
-
         public Criteria andPostPublishIsNull() {
             addCriterion("post_publish is null");
             return (Criteria) this;
