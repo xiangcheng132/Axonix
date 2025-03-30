@@ -1,6 +1,7 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
+      label-position="left">
       <div class="title-container">
         <h3 class="title">后台管理系统</h3>
       </div>
@@ -9,38 +10,23 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
+          tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
+        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
+          placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
       </div>
@@ -57,17 +43,21 @@ export default {
   data() {
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: ''
+      },
+      loginRules: {
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
       loading: false,
       passwordType: 'password',
       redirect: undefined
-    }
+    };
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -87,25 +77,22 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-          .then(() => {
-            // 登录成功后，跳转到 dashboard 页面
-            this.$router.push({ path: '/dashboard' })  // 直接跳转到 /dashboard
-          })
+          this.loading = true;
+          this.$store.dispatch('user/login', this.loginForm)  // ✅ 正确调用 Vuex login 方法
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/dashboard' }) // ✅ 登录成功后跳转
+            })
             .catch(error => {
-              console.error('❌ Login Failed:', error) // 打印具体错误
-              this.$message.error(error || 'Login failed, please try again!') // 显示错误信息
+              console.error('❌ 登录失败:', error)
+              this.$message.error(error || '登录失败')
             })
             .finally(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
+              this.loading = false;
+            });
         }
-      })
+      });
     }
+
   }
 }
 </script>

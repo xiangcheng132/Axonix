@@ -2,16 +2,14 @@ import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
-// user.js
+// 获取默认状态
 const getDefaultState = () => {
-  const token = getToken();  // 确保 token 被正确获取
   return {
-    token: token,
+    token: getToken(),
     name: '',
     avatar: ''
   }
 }
-
 
 const state = getDefaultState()
 
@@ -36,73 +34,50 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password })
         .then(response => {
-          console.log('✅ Login API Response:', response); // 打印完整的 API 返回
-          const { token } = response;
-  
-          // 确保 token 存在
-          if (!token) {
-            console.error('❌ Login failed: No token in response');
-            return reject('Login failed: Token is missing.');
-          }
-  
-          // 存储 token 到 localStorage 或 sessionStorage
+          const token = response.token || response.data?.token;
           setToken(token);
-  
-          // 更新 Vuex 状态
           commit('SET_TOKEN', token);
-  
-          resolve();  // 登录成功，继续执行后续操作
+          resolve();
         })
-        .catch(error => {
-          console.error('❌ Login Request Failed:', error); // 打印完整的错误信息
-          reject(error.response?.data?.message || 'Login request failed');
-        });
     });
   },
   
-  
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
 
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
+  async getInfo({ commit, state }) {
+    try {
+      const response = await getInfo(state.token)
+      const data = response.data
 
-        const { name, avatar } = data
+      if (!data) {
+        throw new Error('Verification failed, please login again.')
+      }
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
+      // 更新用户信息
+      commit('SET_NAME', data.username || 'Unknown')
+      commit('SET_AVATAR', data.avatar || '')
+
+      return data
+    } catch (error) {
+      console.error('❌ GetInfo Failed:', error)
+      throw error
+    }
   },
 
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove token first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+  async logout({ commit }) {
+    try {
+      // 前端 JWT 认证通常不需要后端 `logout` 请求
+      removeToken() // 先移除 token
+      resetRouter() // 重置路由
+      commit('RESET_STATE') // 清除 Vuex 状态
+    } catch (error) {
+      console.error('❌ Logout Failed:', error)
+      throw error
+    }
   },
 
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove token first
-      commit('RESET_STATE')
-      resolve()
-    })
+  async resetToken({ commit }) {
+    removeToken() // 清除 token
+    commit('RESET_STATE')
   }
 }
 
