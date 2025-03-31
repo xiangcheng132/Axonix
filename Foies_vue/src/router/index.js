@@ -21,12 +21,6 @@ export const constantRoutes = [
   },
 
   {
-    //添加用户
-    path: '/add-user',
-    component: () => import('@/views/User/AddUser.vue')
-  },
-
-  {
     //添加第三方api接口日志
     path: '/add-log',
     component: () => import('@/views/ThirdPartyApiLog/AddThirdPartyApiLog.vue')
@@ -38,17 +32,6 @@ export const constantRoutes = [
     component: () => import('@/views/Notification/AddNotification.vue')
   },
 
-  {
-    //添加支付日志
-    path: '/add-payment-log',
-    component: () => import('@/views/Payment/AddPaymentLog.vue')
-  },
-
-  {
-    //查看修改用户
-    path: '/edit-user',
-    component: () => import('@/views/User/EditUser.vue')
-  },
 
   {
     //添加操作记录日志
@@ -62,24 +45,10 @@ export const constantRoutes = [
     component: () => import('@/views/SignLanguageTranslationLog/AddSignLanguageTranslationLog.vue')
   },
 
-
   {
     //添加紧急求助记录
     path: '/add-emergency-request',
     component: () => import('@/views/EmergencyRequest/AddEmergencyRequest.vue')
-  },
-
-  {
-    //添加紧急联系人
-    path: '/add-emergency-contact',
-    component: () => import('@/views/EmergencyContact/AddEmergencyContact.vue')
-  },
-
-  {
-    //查看修改支付日志
-    path: '/payment-log-detail/:id',
-    name: 'PaymentLogDetail',
-    component: () => import('@/views/Payment/LogDetail.vue')
   },
 
   {
@@ -123,12 +92,6 @@ export const constantRoutes = [
     //查看修改紧急求助记录
     path: '/edit-emergency-request',
     component: () => import('@/views/EmergencyRequest/EditEmergencyRequest.vue'),
-    props: route => ({ id: route.query.id })
-  },
-  {
-    //查看修改紧急求助记录
-    path: '/edit-emergency-contact',
-    component: () => import('@/views/EmergencyContact/EditEmergencyContact.vue'),
     props: route => ({ id: route.query.id })
   },
 
@@ -218,13 +181,28 @@ export const constantRoutes = [
   {
     path: '/User',
     component: Layout,
+    redirect: '/User',
+    name: 'User',
+    meta: { title: '用户管理', icon: 'user' },
     children: [
       {
-        path: 'index',
-        name: 'User',
-        component: () => import('@/views/User/index'),
-        meta: { title: '用户管理', icon: 'user' }
-      }
+        path: 'Userinfo',
+        name: 'Userinfo',
+        component: () => import('@/views/Userinfo/index'),
+        meta: { title: '用户信息管理', icon: 'user' }
+      },
+      {
+        path: 'Uservip',
+        name: 'Uservip',
+        component: () => import('@/views/Uservip/index'),
+        meta: { title: '用户VIP管理', icon: 'user' }
+      },
+      {
+        path: 'Usercontact',
+        name: 'Usercontact',
+        component: () => import('@/views/Usercontact/index'),
+        meta: { title: '用户紧急联系人管理', icon: 'user' }
+      },
     ]
   },
 
@@ -272,19 +250,6 @@ export const constantRoutes = [
         name: 'SignLanguageTranslationLog',
         component: () => import('@/views/SignLanguageTranslationLog/index'),
         meta: { title: '手语翻译管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/Payment',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Payment',
-        component: () => import('@/views/Payment/index'),
-        meta: { title: '支付管理', icon: 'form' }
       }
     ]
   },
@@ -376,19 +341,6 @@ export const constantRoutes = [
         name: 'EmergencyRequest',
         component: () => import('@/views/EmergencyRequest/index'),
         meta: { title: '紧急求助管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/EmergencyContact',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'EmergencyContact',
-        component: () => import('@/views/EmergencyContact/index'),
-        meta: { title: '紧急联系人管理', icon: 'form' }
       }
     ]
   },
