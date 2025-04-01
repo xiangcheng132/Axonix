@@ -48,16 +48,7 @@ public class UserController {
 
     // 条件查询用户列表
     @PostMapping("/list")
-    public List<User> selectByExample(@RequestBody UserExample example) {
-        System.out.println("Received criteria:");
-        example.getOredCriteria().forEach(criteria -> {
-            criteria.getCriteria().forEach(criterion -> {
-                System.out.println("Condition: " + criterion.getCondition());
-                System.out.println("Value: " + criterion.getValue());
-            });
-        });
-        return userService.selectByExample(example);
-    }
+    public List<User> selectByExample(@RequestBody UserExample example) { return userService.selectByExample(example); }
 
     // 主键查询用户详情
     @GetMapping("/detail/{id}")

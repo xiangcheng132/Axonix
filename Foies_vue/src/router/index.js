@@ -21,152 +21,6 @@ export const constantRoutes = [
   },
 
   {
-    //添加第三方api接口日志
-    path: '/add-log',
-    component: () => import('@/views/ThirdPartyApiLog/AddThirdPartyApiLog.vue')
-  },
-
-  {
-    //添加通知
-    path: '/add-notification',
-    component: () => import('@/views/Notification/AddNotification.vue')
-  },
-
-
-  {
-    //添加操作记录日志
-    path: '/add-operation-log',
-    component: () => import('@/views/OperationLog/AddOperationLog.vue')
-  },
-
-  {
-    //添加手语翻译记录
-    path: '/add-SignLanguageTranslationlog',
-    component: () => import('@/views/SignLanguageTranslationLog/AddSignLanguageTranslationLog.vue')
-  },
-
-  {
-    //添加紧急求助记录
-    path: '/add-emergency-request',
-    component: () => import('@/views/EmergencyRequest/AddEmergencyRequest.vue')
-  },
-
-  {
-    //查看修改第三方api接口日志
-    path: '/log-detail',
-    name: 'LogDetail',
-    component: () => import('@/views/ThirdPartyApiLog/LogDetail.vue'),
-    props: route => ({ id: route.query.id })
-  },
-
-  {
-    //查看修改通知
-    path: '/edit-notification',
-    component: () => import('@/views/Notification/EditNotification.vue'),
-    props: route => ({ id: route.query.id })
-  },
-
-  {
-    //查看修改手语翻译记录
-    path: '/edit-SignLanguageTranslationLog',
-    name: 'LogDetail',
-    component: () => import('@/views/SignLanguageTranslationLog/EditSignLanguageTranslationLog.vue'),
-    props: route => ({ id: route.query.id })
-  },
-
-  {
-    //查看修改操作记录日志
-    path: '/edit-operation-log',
-    component: () => import('@/views/OperationLog/EditOperationLog.vue'),
-    props: route => ({ id: route.query.id })
-  },
-
-  {
-    //查看修改消息
-    path: '/edit-message',
-    component: () => import('@/views/Message/EditMessage.vue'),
-    props: route => ({ id: route.query.id })
-  },
-
-  {
-    //查看修改紧急求助记录
-    path: '/edit-emergency-request',
-    component: () => import('@/views/EmergencyRequest/EditEmergencyRequest.vue'),
-    props: route => ({ id: route.query.id })
-  },
-
-  {
-    //添加位置信息
-    path: '/add-location-share',
-    component: () => import('@/views/LocationShare/AddLocationShare.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-    //查看修改位置信息
-    path: '/edit-location-share',
-    component: () => import('@/views/LocationShare/EditLocationShare.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-    //添加好友关系信息
-    path: '/add-friend-relationship',
-    component: () => import('@/views/FriendRelationship/AddFriendRelationship.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-    //添加帖子
-    path: '/add-forum-post',
-    component: () => import('@/views/ForumPost/AddForumPost.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-  
-  {
-    //查看修改好友关系信息
-    path: '/edit-friend-relationship',
-    component: () => import('@/views/FriendRelationship/EditFriendRelationship.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-    //添加设施信息
-    path: '/add-facility',
-    component: () => import('@/views/Facility/AddFacility.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-    //查看修改设施信息
-    path: '/edit-facility',
-    component: () => import('@/views/Facility/EditFacility.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-
-    //查看修改帖子和评论
-    path: '/edit-forum-post/:id',
-    name:'ForumPostDetail',
-    component: () => import('@/views/ForumPost/EditForumPost.vue'),
-  },
-
-  {
-    //添加论坛分类信息
-    path: '/add-forum-category',
-    component: () => import('@/views/ForumCategory/AddForumCategory.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
-    //查看修改论坛分类信息
-    path: '/edit-forum-category',
-    component: () => import('@/views/ForumCategory/EditForumCategory.vue'),
-    props: route => ({ id: route.query.id }) 
-  },
-
-  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -179,6 +33,20 @@ export const constantRoutes = [
   },
 
   {
+    //管理员信息管理
+    path: '/Admininfo',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Admininfo',
+        component: () => import('@/views/Admininfo/index'),
+        meta: { title: '管理员信息', icon: 'user' }
+      }
+    ]
+  },
+
+  {
     path: '/User',
     component: Layout,
     redirect: '/User',
@@ -186,22 +54,63 @@ export const constantRoutes = [
     meta: { title: '用户管理', icon: 'user' },
     children: [
       {
+        //用户信息管理
         path: 'Userinfo',
         name: 'Userinfo',
         component: () => import('@/views/Userinfo/index'),
-        meta: { title: '用户信息管理', icon: 'user' }
+        meta: { title: '用户信息', icon: 'user' }
       },
       {
+        //用户VIP管理
         path: 'Uservip',
         name: 'Uservip',
         component: () => import('@/views/Uservip/index'),
-        meta: { title: '用户VIP管理', icon: 'user' }
+        meta: { title: '用户VIP', icon: 'user' }
       },
       {
+        //用户紧急联系人管理
         path: 'Usercontact',
         name: 'Usercontact',
         component: () => import('@/views/Usercontact/index'),
-        meta: { title: '用户紧急联系人管理', icon: 'user' }
+        meta: { title: '用户紧急联系人', icon: 'user' }
+      },
+    ]
+  },
+
+  {
+    //求助管理
+    path: '/Helpinfo',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Helpinfo',
+        component: () => import('@/views/Helpinfo/index'),
+        meta: { title: '求助记录', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/Logs',
+    component: Layout,
+    redirect: '/Logs',
+    name: 'Logs',
+    meta: { title: '系统日志', icon: 'form' },
+    children: [
+      {
+        //AI助理日志
+        path: 'AIlogs',
+        name: 'AIlogs',
+        component: () => import('@/views/AIlogs/index'),
+        meta: { title: 'AI助理日志', icon: 'form' }
+      },
+      {
+        //导航日志
+        path: 'NAVlogs',
+        name: 'NAVlogs',
+        component: () => import('@/views/NAVlogs/index'),
+        meta: { title: '导航日志', icon: 'form' }
       },
     ]
   },
@@ -211,139 +120,56 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Forum',
     name: 'Forum',
-    meta: { title: '论坛管理', icon: 'el-icon-s-help' },
+    meta: { title: '论坛管理', icon: 'form' },
     children: [
       {
-        path: 'ForumPost',
-        name: 'ForumPost',
-        component: () => import('@/views/ForumPost/index'),
-        meta: { title: '论坛帖子与评论管理', icon: 'table' }
+        //论坛帖子管理
+        path: 'Postinfo',
+        name: 'Postinfo',
+        component: () => import('@/views/Postinfo/index'),
+        meta: { title: '论坛帖子', icon: 'form' }
       },
       {
-        path: 'ForumCategory',
-        name: 'ForumCategory',
-        component: () => import('@/views/ForumCategory/index'),
-        meta: { title: '论坛分类管理', icon: 'table' }
-      }
+        //论坛评论管理
+        path: 'Commentinfo',
+        name: 'Commentinfo',
+        component: () => import('@/views/Commentinfo/index'),
+        meta: { title: '论坛评论', icon: 'form' }
+      },
     ]
   },
 
   {
-    path: '/ThirdPartyApiLog',
+    path: '/Notifications & Feedback',
     component: Layout,
+    redirect: '/Notifications & Feedback',
+    name: 'Notifications & Feedback',
+    meta: { title: '通知与反馈', icon: 'form' },
     children: [
       {
-        path: 'index',
-        name: 'ThirdPartyApiLog',
-        component: () => import('@/views/ThirdPartyApiLog/index'),
-        meta: { title: '第三方api管理', icon: 'form' }
-      }
+        //通知管理
+        path: 'Notifications',
+        name: 'Notifications',
+        component: () => import('@/views/Notifications/index'),
+        meta: { title: '通知', icon: 'form' }
+      },
+      {
+        //紧急SOS通知信息
+        path: 'SOSinfo',
+        name: 'SOSinfo',
+        component: () => import('@/views/SOSinfo/index'),
+        meta: { title: '紧急SOS通知', icon: 'form' }
+      },
+      {
+        //反馈管理
+        path: 'Feedback',
+        name: 'Feedback',
+        component: () => import('@/views/Feedback/index'),
+        meta: { title: '反馈', icon: 'form' }
+      },
     ]
   },
 
-  {
-    path: '/SignLanguageTranslationLog',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'SignLanguageTranslationLog',
-        component: () => import('@/views/SignLanguageTranslationLog/index'),
-        meta: { title: '手语翻译管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/OperationLog',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'OperationLog',
-        component: () => import('@/views/OperationLog/index'),
-        meta: { title: '操作记录管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/Notification',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Notification',
-        component: () => import('@/views/Notification/index'),
-        meta: { title: '通知管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/Message',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Message',
-        component: () => import('@/views/Message/index'),
-        meta: { title: '消息管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/LocationShare',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'LocationShare',
-        component: () => import('@/views/LocationShare/index'),
-        meta: { title: '位置共享管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/FriendRelationship',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'FriendRelationship',
-        component: () => import('@/views/FriendRelationship/index'),
-        meta: { title: '好友关系管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/Facility',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Facility',
-        component: () => import('@/views/Facility/index'),
-        meta: { title: '设施管理', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/EmergencyRequest',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'EmergencyRequest',
-        component: () => import('@/views/EmergencyRequest/index'),
-        meta: { title: '紧急求助管理', icon: 'form' }
-      }
-    ]
-  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

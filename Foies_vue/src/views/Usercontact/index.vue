@@ -4,6 +4,9 @@
       <el-form-item label="用户ID">
         <el-input v-model="searchForm.userId" placeholder="请输入用户ID" clearable />
       </el-form-item>
+      <el-form-item label="联系人用户ID">
+        <el-input v-model="searchForm.contactUserId" placeholder="请输入联系人用户ID" clearable />
+      </el-form-item>
       <el-form-item label="联系电话">
         <el-input v-model="searchForm.contactPhone" placeholder="请输入联系电话" clearable />
       </el-form-item>
@@ -23,10 +26,10 @@
       <el-table-column prop="contactUserId" label="联系人用户ID" width="120" />
       <el-table-column prop="contactPhone" label="联系电话" width="140" />
       <el-table-column prop="relationship" label="关系" width="120" />
-      <el-table-column prop="createdAt" label="创建时间" width="180">
+      <el-table-column prop="createdAt" label="创建时间" width="290">
         <template slot-scope="scope">{{ formatDate(scope.row.createdAt) }}</template>
       </el-table-column>
-      <el-table-column prop="updatedAt" label="更新时间" width="180">
+      <el-table-column prop="updatedAt" label="更新时间" width="290">
         <template slot-scope="scope">{{ formatDate(scope.row.updatedAt) }}</template>
       </el-table-column>
       <el-table-column label="操作" width="160" fixed="right">
@@ -70,6 +73,7 @@ export default {
       selectedContacts: [],
       searchForm: {
         userId: '',
+        contactUserId: '',
         contactPhone: ''
       },
       dialogVisible: false,
@@ -89,15 +93,43 @@ export default {
   },
   methods: {
     async fetchContacts() {
+      const example = {
+        oredCriteria: [{ criteria: [] }]
+      };
+
+      if (this.searchForm.userId) {
+        example.oredCriteria[0].criteria.push({
+          condition: "user_id LIKE",
+          value: `%${this.searchForm.userId}%`,
+          singleValue: true
+        });
+      }
+
+      if (this.searchForm.contactUserId) {
+        example.oredCriteria[0].criteria.push({
+          condition: "contact_user_id LIKE",
+          value: `%${this.searchForm.contactUserId}%`,
+          singleValue: true
+        });
+      }
+
+      if (this.searchForm.contactPhone) {
+        example.oredCriteria[0].criteria.push({
+          condition: "contact_phone LIKE",
+          value: `%${this.searchForm.contactPhone}%`,
+          singleValue: true
+        });
+      }
+
       try {
-        const response = await UserContactAPI.getContacts({ oredCriteria: [{ criteria: [] }] });
+        const response = await UserContactAPI.getContacts(example);
         this.contacts = response.data;
       } catch (error) {
         console.error('获取联系人失败', error);
       }
     },
     resetSearch() {
-      this.searchForm = { userId: '', contactPhone: '' };
+      this.searchForm = { userId: '', contactUserId: '', contactPhone: '' };
       this.fetchContacts();
     },
     handleSelectionChange(selection) {
@@ -111,7 +143,7 @@ export default {
         contactUserId: '', 
         contactPhone: '', 
         relationship: '',
-        createdAt: now, // 自动记录创建时间
+        createdAt: now, 
         updatedAt: '' 
       };
       this.dialogVisible = true;
@@ -123,7 +155,7 @@ export default {
     async submitForm() {
       try {
         const now = new Date().toISOString();
-        this.contact.updatedAt = now; // 自动记录更新时间
+        this.contact.updatedAt = now;
         
         if (this.contact.id) {
           await UserContactAPI.updateContact(this.contact);
@@ -174,7 +206,7 @@ export default {
 }
 
 .search-form {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .add-user-container {

@@ -31,8 +31,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import axios from 'axios';
-
 
 export default {
   name: 'Dashboard',
@@ -78,52 +76,8 @@ export default {
         backgroundColor = '#909399'; // 晚上灰色
       }
       return { backgroundColor };
-    },
-
-    statsList() {
-      return [
-        {
-          type: 'user',
-          title: '用户数量',
-          value: this.stats.userCount
-        },
-        {
-          type: 'post',
-          title: '论坛帖子',
-          value: this.stats.postCount
-        },
-        {
-          type: 'category',
-          title: '论坛分类',
-          value: this.stats.categoryCount
-        },
-        {
-          type: 'log',
-          title: '操作记录',
-          value: this.stats.logCount
-        },
-        {
-          type: 'api',
-          title: '第三方api日志',
-          value: this.stats.apiCount
-        },
-        {
-          type: 'pay',
-          title: '支付日志',
-          value: this.stats.payCount
-        },
-        {
-          type: 'facility',
-          title: '设施数量',
-          value: this.stats.facilityCount
-        },
-        {
-          type: 'emergencyrequest',
-          title: '紧急求助数量',
-          value: this.stats.emergencyrequestCount
-        },
-      ]
     }
+
   },
   methods: {
     updateTime() {
@@ -135,44 +89,9 @@ export default {
       })
     },
     async fetchStats() {
-      try {
-        const [userRes, postRes, categoryRes, logRes, apiRes, payRes, facilityRes, emergencyrequestRes] = await Promise.all([
-          axios.get('http://localhost:8080/users/count'),
-          axios.get('http://localhost:8080/forum-posts/count'),
-          axios.get('http://localhost:8080/forum-categories/count'),
-          axios.get('http://localhost:8080/operationLogs/count'),
-          axios.get('http://localhost:8080/third-party-api-logs/count'),
-          axios.get('http://localhost:8080/payments/count'),
-          axios.get('http://localhost:8080/facilities/count'),
-          axios.get('http://localhost:8080/emergency-requests/count'),
-        ])
-
-        this.stats = {
-          userCount: userRes.data,
-          postCount: postRes.data,
-          categoryCount: categoryRes.data,
-          logCount: logRes.data,
-          apiCount: apiRes.data,
-          payCount: payRes.data,
-          facilityCount: facilityRes.data,
-          emergencyrequestCount: emergencyrequestRes.data
-        }
-      } catch (error) {
-        console.error('获取统计数据失败:', error)
-      }
+     
     },
     handleStatClick(type) {
-      const routes = {
-        user: '/User/index',
-        post: '/Forum/ForumPost',
-        category: '/Forum/ForumCategory',
-        log: '/OperationLog/index',
-        api: '/ThirdPartyApiLog/index',
-        pay: '/payment/index',
-        facility: '/Facility/index',
-        emergencyrequest: '/EmergencyRequest/index'
-      }
-      this.$router.push(routes[type])
     }
   },
   mounted() {

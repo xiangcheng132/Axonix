@@ -105,7 +105,7 @@ export default {
 
             if (this.searchForm.userId) {
                 example.oredCriteria[0].criteria.push({
-                    condition: 'userId =',
+                    condition: 'user_id =',
                     value: this.searchForm.userId,
                     singleValue: true
                 });
@@ -118,6 +118,7 @@ export default {
                 console.error('获取VIP列表失败', error);
             }
         },
+
 
         resetSearch() {
             this.searchForm = { userId: '' };
@@ -214,6 +215,6 @@ export default {
 }
 
 .search-form {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 </style>

@@ -173,54 +173,35 @@ export default {
   },
   methods: {
     async fetchUsers() {
-      // 创建符合后端期望的查询条件结构
-      const example = {
-        oredCriteria: []
-      };
+  const example = {
+    oredCriteria: [{ criteria: [] }]
+  };
 
-      // 如果有用户名条件
-      if (this.searchForm.username) {
-        example.oredCriteria.push({
-          criteria: [{
-            condition: "username LIKE",
-            value: `%${this.searchForm.username}%`,
-            noValue: false,
-            singleValue: true,
-            betweenValue: false,
-            listValue: false
-          }]
-        });
-      }
+  if (this.searchForm.username) {
+    example.oredCriteria[0].criteria.push({
+      condition: "username LIKE",
+      value: `%${this.searchForm.username}%`,
+      singleValue: true
+    });
+  }
 
-      // 如果有电话条件
-      if (this.searchForm.phone) {
-        example.oredCriteria.push({
-          criteria: [{
-            condition: "phone LIKE",
-            value: `%${this.searchForm.phone}%`,
-            noValue: false,
-            singleValue: true,
-            betweenValue: false,
-            listValue: false
-          }]
-        });
-      }
+  if (this.searchForm.phone) {
+    example.oredCriteria[0].criteria.push({
+      condition: "phone LIKE",
+      value: `%${this.searchForm.phone}%`,
+      singleValue: true
+    });
+  }
 
-      // 如果没有条件，发送空查询
-      if (example.oredCriteria.length === 0) {
-        example.oredCriteria.push({ criteria: [] });
-      }
-
-      try {
-        const response = await UserAPI.getUsers(example);
-        console.log("Response data:", response.data);
-        this.users = Array.isArray(response.data) ? response.data : [];
-      } catch (error) {
-        console.error('获取用户列表失败', error);
-        this.$message.error('查询失败: ' + (error.response?.data?.message || error.message));
-        this.users = [];
-      }
-    },
+  try {
+    const response = await UserAPI.getUsers(example);
+    console.log("Response data type:", Array.isArray(response.data)); // 检查是否为数组
+    console.log("Response data:", response.data); // 打印返回的数据
+    this.users = response.data;
+  } catch (error) {
+    console.error('获取用户列表失败', error);
+  }
+},
 
     resetSearch() {
       this.searchForm = { username: '', phone: '' };
@@ -334,7 +315,7 @@ export default {
 }
 
 .search-form {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .add-user-container {
