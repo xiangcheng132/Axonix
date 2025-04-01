@@ -16,8 +16,16 @@
       </el-form-item>
     </el-form>
 
-    <el-button type="primary" @click="handleAdd">添加紧急联系人</el-button>
-    <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedContacts.length === 0">批量删除</el-button>
+    <!-- 操作按钮和记录数显示 -->
+    <el-row class="action-row" type="flex" justify="space-between" align="middle">
+      <el-col :span="8">
+        <el-button type="primary" @click="handleAdd">添加用户</el-button>
+        <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedContacts.length === 0">批量删除</el-button>
+      </el-col>
+      <el-col :span="8" class="record-count" style="text-align: right;">
+        <span>当前共有 {{ totalRecords }} 条记录</span>
+      </el-col>
+    </el-row>
 
     <el-table :data="contacts" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
@@ -70,6 +78,7 @@ export default {
   data() {
     return {
       contacts: [],
+      totalRecords: 0,  // 添加记录数
       selectedContacts: [],
       searchForm: {
         userId: '',
@@ -124,6 +133,10 @@ export default {
       try {
         const response = await UserContactAPI.getContacts(example);
         this.contacts = response.data;
+
+        // 获取记录总数并更新
+        const countResponse = await UserContactAPI.countContacts(example);
+        this.totalRecords = countResponse.data;  // 假设返回的是记录总数
       } catch (error) {
         console.error('获取联系人失败', error);
       }
@@ -137,14 +150,14 @@ export default {
     },
     handleAdd() {
       const now = new Date().toISOString();
-      this.contact = { 
-        id: null, 
-        userId: '', 
-        contactUserId: '', 
-        contactPhone: '', 
+      this.contact = {
+        id: null,
+        userId: '',
+        contactUserId: '',
+        contactPhone: '',
         relationship: '',
-        createdAt: now, 
-        updatedAt: '' 
+        createdAt: now,
+        updatedAt: ''
       };
       this.dialogVisible = true;
     },
@@ -156,7 +169,7 @@ export default {
       try {
         const now = new Date().toISOString();
         this.contact.updatedAt = now;
-        
+
         if (this.contact.id) {
           await UserContactAPI.updateContact(this.contact);
         } else {
@@ -176,7 +189,7 @@ export default {
     confirmBatchDelete() {
       this.$confirm('确定要删除选中的联系人吗？', '警告', { type: 'warning' })
         .then(() => this.handleBatchDelete())
-        .catch(() => {});
+        .catch(() => { });
     },
     async handleBatchDelete() {
       await Promise.all(this.selectedContacts.map(id => UserContactAPI.deleteContactById(id)));
@@ -216,5 +229,11 @@ export default {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-count {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #606266;
 }
 </style>

@@ -11,9 +11,17 @@
             </el-form-item>
         </el-form>
 
-        <!-- 操作按钮 -->
-        <el-button type="primary" @click="handleAdd">添加VIP</el-button>
-        <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedVips.length === 0">批量删除</el-button>
+        <!-- 操作按钮和记录数显示 -->
+        <el-row class="action-row" type="flex" justify="space-between" align="middle">
+            <el-col :span="8">
+                <el-button type="primary" @click="handleAdd">添加VIP</el-button>
+                <el-button type="danger" @click="confirmBatchDelete"
+                    :disabled="selectedVips.length === 0">批量删除</el-button>
+            </el-col>
+            <el-col :span="8" class="record-count" style="text-align: right;">
+                <span>当前共有 {{ totalRecords }} 条记录</span>
+            </el-col>
+        </el-row>
 
         <!-- VIP表格 -->
         <el-table :data="vips" border @selection-change="handleSelectionChange">
@@ -65,6 +73,7 @@
     </div>
 </template>
 
+
 <script>
 import VipAPI from '@/api/uservip_api.js';
 
@@ -85,6 +94,7 @@ export default {
                 endTime: '',
                 totalPayment: 0,
             },
+            totalRecords: 0,
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
                 levels: [{ required: true, message: '请输入VIP等级', trigger: 'blur' }],
@@ -112,16 +122,21 @@ export default {
             }
 
             try {
+                // 获取 VIP 列表
                 const response = await VipAPI.getVips(example);
                 this.vips = response.data;
+
+                // 获取记录总数并更新
+                const countResponse = await VipAPI.countVips(example);
+                this.totalRecords = countResponse.data;  // 假设返回的是记录总数
             } catch (error) {
                 console.error('获取VIP列表失败', error);
             }
         },
 
-
         resetSearch() {
             this.searchForm = { userId: '' };
+            this.totalRecords = 0; // 重置记录总数
             this.fetchVips();
         },
 
@@ -216,5 +231,11 @@ export default {
 
 .search-form {
     margin-bottom: 0px;
+}
+
+.record-count {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #606266;
 }
 </style>

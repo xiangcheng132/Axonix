@@ -13,19 +13,6 @@
         </div>
       </div>
     </el-card>
-
-    <div class="stat-cards">
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="stat in statsList" :key="stat.type">
-          <el-card class="stat-card" @click.native="handleStatClick(stat.type)">
-            <div class="stat-content">
-              <div class="stat-title">{{ stat.title }}</div>
-              <div class="stat-value">{{ stat.value }}</div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
   </div>
 </template>
 
@@ -77,7 +64,6 @@ export default {
       }
       return { backgroundColor };
     }
-
   },
   methods: {
     updateTime() {
@@ -89,9 +75,10 @@ export default {
       })
     },
     async fetchStats() {
-     
-    },
-    handleStatClick(type) {
+      // 在这里你可以请求后台接口来获取实际的统计数据
+      // 例如：
+      // const response = await fetch('/api/stats');
+      // this.stats = await response.json();
     }
   },
   mounted() {

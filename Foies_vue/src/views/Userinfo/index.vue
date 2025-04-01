@@ -14,9 +14,16 @@
       </el-form-item>
     </el-form>
 
-    <!-- 操作按钮 -->
-    <el-button type="primary" @click="handleAdd">添加用户</el-button>
-    <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedUsers.length === 0">批量删除</el-button>
+    <!-- 操作按钮和记录数显示 -->
+    <el-row class="action-row" type="flex" justify="space-between" align="middle">
+      <el-col :span="8">
+        <el-button type="primary" @click="handleAdd">添加用户</el-button>
+        <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedUsers.length === 0">批量删除</el-button>
+      </el-col>
+      <el-col :span="8" class="record-count" style="text-align: right;">
+        <span>当前共有 {{ totalRecords }} 条记录</span>
+      </el-col>
+    </el-row>
 
     <!-- 用户表格 -->
     <el-table :data="users" border @selection-change="handleSelectionChange">
@@ -138,11 +145,12 @@ export default {
     return {
       users: [],
       selectedUsers: [],
+      totalRecords: 0,  // 添加记录数
       searchForm: {
         username: '',
         phone: ''
       },
-      dialogVisible: false,  // 控制弹出框显示
+      dialogVisible: false,
       user: {
         id: null,
         username: '',
@@ -168,40 +176,44 @@ export default {
       }
     };
   },
+
   created() {
     this.fetchUsers();
   },
   methods: {
     async fetchUsers() {
-  const example = {
-    oredCriteria: [{ criteria: [] }]
-  };
+      const example = {
+        oredCriteria: [{ criteria: [] }]
+      };
 
-  if (this.searchForm.username) {
-    example.oredCriteria[0].criteria.push({
-      condition: "username LIKE",
-      value: `%${this.searchForm.username}%`,
-      singleValue: true
-    });
-  }
+      if (this.searchForm.username) {
+        example.oredCriteria[0].criteria.push({
+          condition: "username LIKE",
+          value: `%${this.searchForm.username}%`,
+          singleValue: true
+        });
+      }
 
-  if (this.searchForm.phone) {
-    example.oredCriteria[0].criteria.push({
-      condition: "phone LIKE",
-      value: `%${this.searchForm.phone}%`,
-      singleValue: true
-    });
-  }
+      if (this.searchForm.phone) {
+        example.oredCriteria[0].criteria.push({
+          condition: "phone LIKE",
+          value: `%${this.searchForm.phone}%`,
+          singleValue: true
+        });
+      }
 
-  try {
-    const response = await UserAPI.getUsers(example);
-    console.log("Response data type:", Array.isArray(response.data)); // 检查是否为数组
-    console.log("Response data:", response.data); // 打印返回的数据
-    this.users = response.data;
-  } catch (error) {
-    console.error('获取用户列表失败', error);
-  }
-},
+      try {
+        const response = await UserAPI.getUsers(example);
+        this.users = response.data;
+
+        // 获取记录总数并更新
+        const countResponse = await UserAPI.countUsers(example);
+        this.totalRecords = countResponse.data; // 假设返回的是记录总数
+      } catch (error) {
+        console.error('获取用户列表失败', error);
+      }
+    },
+
 
     resetSearch() {
       this.searchForm = { username: '', phone: '' };
@@ -307,7 +319,7 @@ export default {
 }
 
 .el-table {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .el-button {
@@ -325,5 +337,15 @@ export default {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-count {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.action-row {
+  margin-bottom: 20px;
 }
 </style>
