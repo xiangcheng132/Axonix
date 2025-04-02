@@ -201,6 +201,7 @@ export default {
           singleValue: true
         });
       }
+      console.log("发送的数据格式：", example);
 
       try {
         const response = await UserAPI.getUsers(example);
@@ -296,6 +297,23 @@ export default {
         console.error('批量删除失败', error);
       }
     },
+
+    async handleDelete(userId) {
+    this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+      .then(async () => {
+        try {
+          await UserAPI.deleteUser(userId);  // 调用删除 API
+          this.$message.success('删除成功');
+          this.fetchUsers();  // 删除后重新加载用户列表
+        } catch (error) {
+          console.error('删除失败', error);
+          this.$message.error('删除失败');
+        }
+      })
+      .catch(() => {
+        // 如果用户取消操作，什么都不做
+      });
+  },
 
     formatGender(gender) {
       return gender === 1 ? "男" : gender === 2 ? "女" : "未知";

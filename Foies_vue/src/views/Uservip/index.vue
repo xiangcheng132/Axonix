@@ -204,13 +204,20 @@ export default {
         },
 
         async handleDelete(id) {
-            try {
-                await VipAPI.deleteVip(id);
-                this.fetchVips();
+            this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+            .then(async () => {
+                try {
+                await VipAPI.deleteVip(id);  
                 this.$message.success('删除成功');
-            } catch (error) {
-                console.error('删除VIP失败', error);
-            }
+                this.fetchVips();  
+                } catch (error) {
+                console.error('删除失败', error);
+                this.$message.error('删除VIP失败');
+                }
+            })
+            .catch(() => {
+                // 如果用户取消操作，什么都不做
+            });
         }
     }
 };
