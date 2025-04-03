@@ -166,9 +166,9 @@ export default {
                 if (valid) {
                     try {
                         if (this.vip.id) {
-                            await VipAPI.updateVip(this.vip);  // 更新现有VIP
+                            await VipAPI.updateVip(this.vip); 
                         } else {
-                            await VipAPI.addVip(this.vip);  // 添加新VIP
+                            await VipAPI.addVip(this.vip);  
                         }
                         this.$message.success('VIP信息保存成功');
                         this.dialogVisible = false;

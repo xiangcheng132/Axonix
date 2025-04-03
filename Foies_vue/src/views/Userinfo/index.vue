@@ -201,7 +201,6 @@ export default {
           singleValue: true
         });
       }
-      console.log("发送的数据格式：", example);
 
       try {
         const response = await UserAPI.getUsers(example);
