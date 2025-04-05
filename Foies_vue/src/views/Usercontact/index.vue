@@ -27,7 +27,7 @@
       </el-col>
     </el-row>
 
-    <el-table :data="contacts" border @selection-change="handleSelectionChange">
+    <el-table :data="contacts" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="userId" label="用户ID" width="100" />
@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       contacts: [],
-      totalRecords: 0,  // 添加记录数
+      totalRecords: 0,
       selectedContacts: [],
       searchForm: {
         userId: '',
@@ -134,9 +134,8 @@ export default {
         const response = await UserContactAPI.getContacts(example);
         this.contacts = response.data;
 
-        // 获取记录总数并更新
         const countResponse = await UserContactAPI.countContacts(example);
-        this.totalRecords = countResponse.data;  // 假设返回的是记录总数
+        this.totalRecords = countResponse.data;
       } catch (error) {
         console.error('获取联系人失败', error);
       }
@@ -186,14 +185,29 @@ export default {
       await UserContactAPI.deleteContactById(id);
       this.fetchContacts();
     },
+
     confirmBatchDelete() {
-      this.$confirm('确定要删除选中的联系人吗？', '警告', { type: 'warning' })
-        .then(() => this.handleBatchDelete())
-        .catch(() => { });
+      if (this.selectedContacts.length === 0) return;
+      this.$confirm('确定要删除选中的联系人吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
+      })
+        .then(() => this.handleBatchDelete())  // 确认后执行删除
+        .catch(() => { });  // 取消时不做任何事情
     },
+
     async handleBatchDelete() {
-      await Promise.all(this.selectedContacts.map(id => UserContactAPI.deleteContactById(id)));
-      this.fetchContacts();
+      try {
+        // 执行批量删除
+        await Promise.all(this.selectedContacts.map(id => UserContactAPI.deleteContactById(id)));
+        this.fetchContacts();  // 刷新联系人列表
+        this.selectedContacts = [];  // 清空选中的联系人
+        this.$message.success('批量删除成功');
+      } catch (error) {
+        console.error('批量删除失败', error);
+        this.$message.error('批量删除失败');
+      }
     },
     closeDialog() {
       this.dialogVisible = false;

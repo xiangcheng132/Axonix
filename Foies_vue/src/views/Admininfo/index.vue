@@ -26,7 +26,7 @@
     </el-row>
 
     <!-- 管理员表格 -->
-    <el-table :data="admins" border @selection-change="handleSelectionChange">
+    <el-table :data="admins" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="username" label="用户名" />

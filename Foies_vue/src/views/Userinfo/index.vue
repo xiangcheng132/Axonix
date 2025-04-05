@@ -26,7 +26,7 @@
     </el-row>
 
     <!-- 用户表格 -->
-    <el-table :data="users" border @selection-change="handleSelectionChange">
+    <el-table :data="users" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="username" label="用户名" width="120" />
@@ -145,7 +145,7 @@ export default {
     return {
       users: [],
       selectedUsers: [],
-      totalRecords: 0,  // 添加记录数
+      totalRecords: 0,
       searchForm: {
         username: '',
         phone: ''
@@ -206,9 +206,8 @@ export default {
         const response = await UserAPI.getUsers(example);
         this.users = response.data;
 
-        // 获取记录总数并更新
         const countResponse = await UserAPI.countUsers(example);
-        this.totalRecords = countResponse.data; // 假设返回的是记录总数
+        this.totalRecords = countResponse.data;
       } catch (error) {
         console.error('获取用户列表失败', error);
       }
@@ -225,8 +224,8 @@ export default {
     },
 
     handleAdd() {
-      const now = new Date().toISOString(); // 获取当前时间
-      this.user = { // 重置用户数据以便添加新用户
+      const now = new Date().toISOString();
+      this.user = {
         id: null,
         username: '',
         password: '',
@@ -240,7 +239,7 @@ export default {
         address: '',
         disabilityType: 0,
         isVip: 0,
-        createdAt: now, // 自动写入当前时间为创建时间
+        createdAt: now,
         updatedAt: ''
       };
       this.dialogVisible = true;
@@ -248,7 +247,7 @@ export default {
 
 
     handleEdit(user) {
-      this.user = { ...user };  // 填充要编辑的用户数据
+      this.user = { ...user };
       this.dialogVisible = true;
     },
 
@@ -260,9 +259,9 @@ export default {
 
           try {
             if (this.user.id) {
-              await UserAPI.updateUser(this.user);  // 更新现有用户
+              await UserAPI.updateUser(this.user);
             } else {
-              await UserAPI.addUser(this.user);  // 添加新用户
+              await UserAPI.addUser(this.user);
             }
             this.$message.success('用户信息保存成功');
             this.dialogVisible = false;
@@ -279,13 +278,6 @@ export default {
       this.dialogVisible = false;
     },
 
-    confirmBatchDelete() {
-      if (this.selectedUsers.length === 0) return;
-      this.$confirm('确定要删除选中的用户吗？', '警告', { type: 'warning' })
-        .then(() => this.handleBatchDelete())
-        .catch(() => { });
-    },
-
     async handleBatchDelete() {
       try {
         await Promise.all(this.selectedUsers.map(id => UserAPI.deleteUser(id)));
@@ -298,21 +290,31 @@ export default {
     },
 
     async handleDelete(userId) {
-    this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
-      .then(async () => {
-        try {
-          await UserAPI.deleteUser(userId);  // 调用删除 API
-          this.$message.success('删除成功');
-          this.fetchUsers();  // 删除后重新加载用户列表
-        } catch (error) {
-          console.error('删除失败', error);
-          this.$message.error('删除失败');
-        }
+      this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+        .then(async () => {
+          try {
+            await UserAPI.deleteUser(userId);
+            this.$message.success('删除成功');
+            this.fetchUsers();
+          } catch (error) {
+            console.error('删除失败', error);
+            this.$message.error('删除失败');
+          }
+        })
+        .catch(() => {
+        });
+    },
+    
+    confirmBatchDelete() {
+      if (this.selectedUsers.length === 0) return;
+      this.$confirm('确定要删除选中的用户吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
       })
-      .catch(() => {
-        // 如果用户取消操作，什么都不做
-      });
-  },
+        .then(() => this.handleBatchDelete())
+        .catch(() => { });
+    },
 
     formatGender(gender) {
       return gender === 1 ? "男" : gender === 2 ? "女" : "未知";

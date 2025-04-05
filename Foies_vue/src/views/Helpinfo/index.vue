@@ -23,7 +23,7 @@
     </el-row>
 
     <!-- 求助记录表格 -->
-    <el-table :data="helpRequests" border @selection-change="handleSelectionChange">
+    <el-table :data="helpRequests" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="requesterId" label="求助者ID" width="120" />
@@ -46,11 +46,6 @@
       </el-table-column>
       <el-table-column prop="updatedAt" label="更新时间" width="180">
         <template slot-scope="scope">{{ formatDate(scope.row.updatedAt) }}</template>
-      </el-table-column>
-      <el-table-column label="操作" width="160" fixed="right">
-        <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-        </template>
       </el-table-column>
     </el-table>
   </div>
