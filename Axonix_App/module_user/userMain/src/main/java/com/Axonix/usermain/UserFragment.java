@@ -67,6 +67,7 @@ public class UserFragment extends Fragment
                 this
         );
         addressHelper.initAddressSpinners();
+        addressHelper.setSpinnerEnabled(false);
 
         btnEdit.setOnClickListener(v -> toggleEditMode());
 
@@ -215,11 +216,10 @@ public class UserFragment extends Fragment
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     currentUser = response.body();
-                    setAddressSpinnersWithUserData();
                 } else {
-                    setAddressSpinnersWithUserData();
                     Toast.makeText(getContext(), "加载失败，显示默认数据", Toast.LENGTH_SHORT).show();
                 }
+                setAddressSpinnersWithUserData();
                 updateUserInfoDisplay();
             }
 

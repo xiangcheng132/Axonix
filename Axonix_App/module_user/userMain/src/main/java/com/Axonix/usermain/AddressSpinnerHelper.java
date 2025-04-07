@@ -62,7 +62,7 @@ public class AddressSpinnerHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setSpinnerAlpha(0.8f);
+        setSpinnerAlpha(0.5f);
     }
 
     public void setupProvinceSpinner() {

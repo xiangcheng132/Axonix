@@ -56,7 +56,6 @@ public class UserInfo {
     public void setDisabilityType(int disabilityType) { this.disabilityType = disabilityType; }
     public void setVip(boolean vip) { isVip = vip; }
     public void setCreateTime(String createTime) { this.createTime = createTime; }
-
     public String getFullAddress() {
         return province + " " + city + " " + district;
     }

@@ -6,4 +6,5 @@
     <color name="gray_light">#F5F5F5</color>
     <color name="blue_light">#6495ED</color>
     <color name="gray">#E0E0E0</color>
+    <color name="background_color">#FEF7FF</color>
 </resources>
