@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,35 +11,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <!-- 用户名 -->
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="用户名称"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:text="用户名称"/>
 
         <!-- 帖子内容 -->
         <TextView
-            android:id="@+id/tv_post_content"
+            android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="这里是帖子内容..."
+            android:layout_marginTop="4dp"
+            android:maxLines="5"
+            android:ellipsize="end"
             android:textSize="14sp"
-            android:paddingTop="4dp"/>
+            android:text="这里是帖子内容..."/>
 
         <!-- 时间 -->
         <TextView
-            android:id="@+id/tv_post_time"
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2025-02-22 12:00"
+            android:layout_marginTop="4dp"
             android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:paddingTop="4dp"/>
+            android:textColor="#60000000"
+            android:text="2024-03-21 12:00"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

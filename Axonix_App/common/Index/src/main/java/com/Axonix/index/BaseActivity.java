@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity {
-
+    public BottomNavigationView bottomNavigation;
+    public FloatingActionButton fabSos;
     private final Map<Integer, String> routeMap = new HashMap<>();
     private Fragment currentFragment;
 
@@ -37,6 +38,8 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void initRoutes() {
         routeMap.put(R.id.nav_home, "/index/main");
         routeMap.put(R.id.nav_nav, "/nav/main");
@@ -46,16 +49,16 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavItemSelected);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(this::onNavItemSelected);
 
         // 设置默认选中首页
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
     }
 
     private void setupSOSButton() {
-        FloatingActionButton sosButton = findViewById(R.id.fab_sos);
-        sosButton.setOnClickListener(new View.OnClickListener() {
+        fabSos = findViewById(R.id.fab_sos);
+        fabSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 跳转到拨号界面并输入 110
@@ -71,17 +74,17 @@ public class BaseActivity extends AppCompatActivity {
         return switchFragment(id);
     }
 
-    private boolean switchFragment(int itemId) {
+    public boolean switchFragment(int itemId) {
         String routePath = routeMap.get(itemId);
         if (routePath != null) {
             Fragment fragment = (Fragment) ARouter.getInstance().build(routePath).navigation();
             if (fragment != null) {
                 Log.d("BaseActivity", "成功获取 Fragment: " + routePath);
                 replaceFragment(fragment);
+                return true;
             } else {
                 Log.e("BaseActivity", "获取 Fragment 失败: " + routePath);
             }
-            return true;
         }
         return false;
     }
@@ -91,15 +94,24 @@ public class BaseActivity extends AppCompatActivity {
             return;
         }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (currentFragment != null) {
-            transaction.hide(currentFragment);
-        }
-        if (!newFragment.isAdded()) {
-            transaction.add(R.id.content_frame, newFragment);
-        } else {
-            transaction.show(newFragment);
-        }
+        transaction.replace(R.id.content_frame, newFragment); // 直接替换当前Fragment
         transaction.commit();
         currentFragment = newFragment;
+    }
+
+    public void setNavigationVisibility(boolean show) {
+        runOnUiThread(() -> {
+            int visibility = show ? View.VISIBLE : View.GONE;
+            // 控制底部导航栏
+            if (bottomNavigation != null) {
+                bottomNavigation.setVisibility(visibility);
+                bottomNavigation.getMenu().setGroupEnabled(0, show); // 禁用/启用交互
+            }
+            // 控制悬浮按钮
+            if (fabSos != null) {
+                fabSos.setVisibility(visibility);
+                fabSos.setClickable(show); // 控制点击状态
+            }
+        });
     }
 }

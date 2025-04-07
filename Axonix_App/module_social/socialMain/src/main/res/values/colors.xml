@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_blue">#2196F3</color>
+    <color name="text_secondary">#60000000</color>
+    <color name="backgroundColor">#FEF7FF</color>
+
+    <color name="background">#FAFAFA</color>
+    <color name="toolbar_background">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
+
 </resources>

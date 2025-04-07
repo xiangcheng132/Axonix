@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.Axonix.adapter.ContactAdapter;
 import com.Axonix.model.EmergencyContact;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.android.arouter.facade.annotation.Route;
 import java.util.Arrays;
 import java.util.List;
+import com.alibaba.android.arouter.facade.annotation.Route;
+
 
 @Route(path = "/index/main")
 public class MainFragment extends Fragment {
@@ -33,17 +34,16 @@ public class MainFragment extends Fragment {
         view.findViewById(R.id.btn_traffic).setOnClickListener(v ->
                 ARouter.getInstance().build("/feature/traffic").navigation());
 
-        // 初始化联系人列表（确保号码无短横线）
+        // 初始化联系人列表
         rvContacts = view.findViewById(R.id.rv_contacts);
         setupContacts();
         return view;
     }
 
     private void setupContacts() {
-        // 模拟数据（必须使用纯数字！）
         List<EmergencyContact> contacts = Arrays.asList(
-                new EmergencyContact("张三", "13800138000", "家人"),
-                new EmergencyContact("李四", "13900139000", "朋友")
+                new EmergencyContact("紧急联系人A", "13800138000", "家人"),
+                new EmergencyContact("紧急联系人B", "13900139000", "同事")
         );
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));

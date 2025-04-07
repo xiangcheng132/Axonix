@@ -1,0 +1,6 @@
+<!-- res/values/styles.xml -->
+<resources>
+    <style name="CustomSpinnerDropDownItem" parent="android:Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textSize">12sp</item>
+    </style>
+</resources>

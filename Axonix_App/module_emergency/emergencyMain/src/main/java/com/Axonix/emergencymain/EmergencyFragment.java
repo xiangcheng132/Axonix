@@ -50,6 +50,9 @@ public class EmergencyFragment extends Fragment {
         // 点击寻求帮助
         btnSeekHelp.setOnClickListener(v -> showConfirmDialog(true));
 
+        // 点击提供帮助
+        btnProvideHelp.setOnClickListener(v -> showConfirmDialog(false));
+
         // 历史记录
         btnHistory = view.findViewById(R.id.btnHistory);
         btnHistory.setOnClickListener(v -> {
@@ -73,9 +76,8 @@ public class EmergencyFragment extends Fragment {
         isSeekingHelp = isSeeking;
 
         // **设置动态颜色（寻求帮助红色，提供帮助蓝色）**
-        int colorRes = isSeeking ? R.color.red_light : R.color.blue_light;
-        int targetColor = ContextCompat.getColor(requireContext(), colorRes);
-        animateCircleColor(targetColor);
+        int colorRes = isSeeking ? R.color.pulse_red_end : R.color.pulse_blue_end;
+        animateCircleColor(colorRes);
 
         // **加载不同的脉冲动画**
         int animRes = isSeeking ? R.anim.pulse_red : R.anim.pulse_blue;
@@ -86,14 +88,22 @@ public class EmergencyFragment extends Fragment {
         showPrivacyDialog();
     }
 
-    private void animateCircleColor(int targetColor) {
+    private void animateCircleColor(int targetColorRes) {
         GradientDrawable drawable = (GradientDrawable) circleView.getBackground();
         if (drawable != null) {
+            // 修复：从当前颜色开始过渡
             int startColor = ((GradientDrawable) circleView.getBackground()).getColor().getDefaultColor();
+            int endColor = ContextCompat.getColor(requireContext(), targetColorRes);
 
-            ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, targetColor);
+            ValueAnimator colorAnimator = ValueAnimator.ofObject(
+                    new ArgbEvaluator(),
+                    startColor,
+                    endColor
+            );
             colorAnimator.setDuration(1000);
-            colorAnimator.addUpdateListener(animator -> drawable.setColor((int) animator.getAnimatedValue()));
+            colorAnimator.addUpdateListener(animator -> {
+                drawable.setColor((int) animator.getAnimatedValue());
+            });
             colorAnimator.start();
         }
     }

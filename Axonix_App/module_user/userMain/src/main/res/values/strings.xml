@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">module_user</string>
+    <string name="default_name">Axonix_user</string>
+    <string name="select_province">请选择省份</string>
+    <string name="logout">退出登录</string>
+    <string-array name="disability_types">
+        <item>无</item>
+        <item>视障</item>
+        <item>听障</item>
+        <item>其他障碍</item>
+    </string-array>
 </resources>
