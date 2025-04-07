@@ -15,6 +15,33 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import * as echarts from 'echarts'
+
+import userApi from '@/api/user_api' 
+import vipApi from '@/api/uservip_api'
+import helpinfoApi from '@/api/helpinfo_api'
+import ailogApi from '@/api/ai_log_api'
+import navlogApi from '@/api/nav_log_api'
+import postinfoApi from '@/api/postinfo_api'
+import commentinfoApi from './api/commentinfo_api'
+import notificationsApi from '@/api/notifications_api'
+import sosinfoApi from '@/api/sosinfo_api'
+import feedbackApi from './api/feedback_api'
+
+Vue.prototype.$api = {
+  user: userApi,
+  vip: vipApi,
+  helpinfo: helpinfoApi,
+  ailog: ailogApi,
+  navlog: navlogApi,
+  postinfo: postinfoApi,
+  commentinfo: commentinfoApi,
+  notifications: notificationsApi,
+  sosinfo: sosinfoApi,
+  feedback: feedbackApi
+}
+Vue.prototype.$echarts = echarts
+
 if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()

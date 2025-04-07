@@ -32,4 +32,9 @@ export default {
   async getVipDetail(id) {
     return axios.get(`${apiUrl}/select/${id}`);
   },
+
+  countVips(example = {}) {
+    return axios.post(`${apiUrl}/count`, example);
+  }
+  
 };

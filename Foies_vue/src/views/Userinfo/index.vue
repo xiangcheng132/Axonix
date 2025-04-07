@@ -14,12 +14,19 @@
       </el-form-item>
     </el-form>
 
-    <!-- 操作按钮 -->
-    <el-button type="primary" @click="handleAdd">添加用户</el-button>
-    <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedUsers.length === 0">批量删除</el-button>
+    <!-- 操作按钮和记录数显示 -->
+    <el-row class="action-row" type="flex" justify="space-between" align="middle">
+      <el-col :span="8">
+        <el-button type="primary" @click="handleAdd">添加用户</el-button>
+        <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedUsers.length === 0">批量删除</el-button>
+      </el-col>
+      <el-col :span="8" class="record-count" style="text-align: right;">
+        <span>当前共有 {{ totalRecords }} 条记录</span>
+      </el-col>
+    </el-row>
 
     <!-- 用户表格 -->
-    <el-table :data="users" border @selection-change="handleSelectionChange">
+    <el-table :data="users" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="username" label="用户名" width="120" />
@@ -138,11 +145,12 @@ export default {
     return {
       users: [],
       selectedUsers: [],
+      totalRecords: 0,
       searchForm: {
         username: '',
         phone: ''
       },
-      dialogVisible: false,  // 控制弹出框显示
+      dialogVisible: false,
       user: {
         id: null,
         username: '',
@@ -168,59 +176,43 @@ export default {
       }
     };
   },
+
   created() {
     this.fetchUsers();
   },
   methods: {
     async fetchUsers() {
-      // 创建符合后端期望的查询条件结构
       const example = {
-        oredCriteria: []
+        oredCriteria: [{ criteria: [] }]
       };
 
-      // 如果有用户名条件
       if (this.searchForm.username) {
-        example.oredCriteria.push({
-          criteria: [{
-            condition: "username LIKE",
-            value: `%${this.searchForm.username}%`,
-            noValue: false,
-            singleValue: true,
-            betweenValue: false,
-            listValue: false
-          }]
+        example.oredCriteria[0].criteria.push({
+          condition: "username LIKE",
+          value: `%${this.searchForm.username}%`,
+          singleValue: true
         });
       }
 
-      // 如果有电话条件
       if (this.searchForm.phone) {
-        example.oredCriteria.push({
-          criteria: [{
-            condition: "phone LIKE",
-            value: `%${this.searchForm.phone}%`,
-            noValue: false,
-            singleValue: true,
-            betweenValue: false,
-            listValue: false
-          }]
+        example.oredCriteria[0].criteria.push({
+          condition: "phone LIKE",
+          value: `%${this.searchForm.phone}%`,
+          singleValue: true
         });
-      }
-
-      // 如果没有条件，发送空查询
-      if (example.oredCriteria.length === 0) {
-        example.oredCriteria.push({ criteria: [] });
       }
 
       try {
         const response = await UserAPI.getUsers(example);
-        console.log("Response data:", response.data);
-        this.users = Array.isArray(response.data) ? response.data : [];
+        this.users = response.data;
+
+        const countResponse = await UserAPI.countUsers(example);
+        this.totalRecords = countResponse.data;
       } catch (error) {
         console.error('获取用户列表失败', error);
-        this.$message.error('查询失败: ' + (error.response?.data?.message || error.message));
-        this.users = [];
       }
     },
+
 
     resetSearch() {
       this.searchForm = { username: '', phone: '' };
@@ -232,8 +224,8 @@ export default {
     },
 
     handleAdd() {
-      const now = new Date().toISOString(); // 获取当前时间
-      this.user = { // 重置用户数据以便添加新用户
+      const now = new Date().toISOString();
+      this.user = {
         id: null,
         username: '',
         password: '',
@@ -247,7 +239,7 @@ export default {
         address: '',
         disabilityType: 0,
         isVip: 0,
-        createdAt: now, // 自动写入当前时间为创建时间
+        createdAt: now,
         updatedAt: ''
       };
       this.dialogVisible = true;
@@ -255,7 +247,7 @@ export default {
 
 
     handleEdit(user) {
-      this.user = { ...user };  // 填充要编辑的用户数据
+      this.user = { ...user };
       this.dialogVisible = true;
     },
 
@@ -267,9 +259,9 @@ export default {
 
           try {
             if (this.user.id) {
-              await UserAPI.updateUser(this.user);  // 更新现有用户
+              await UserAPI.updateUser(this.user);
             } else {
-              await UserAPI.addUser(this.user);  // 添加新用户
+              await UserAPI.addUser(this.user);
             }
             this.$message.success('用户信息保存成功');
             this.dialogVisible = false;
@@ -286,13 +278,6 @@ export default {
       this.dialogVisible = false;
     },
 
-    confirmBatchDelete() {
-      if (this.selectedUsers.length === 0) return;
-      this.$confirm('确定要删除选中的用户吗？', '警告', { type: 'warning' })
-        .then(() => this.handleBatchDelete())
-        .catch(() => { });
-    },
-
     async handleBatchDelete() {
       try {
         await Promise.all(this.selectedUsers.map(id => UserAPI.deleteUser(id)));
@@ -302,6 +287,33 @@ export default {
       } catch (error) {
         console.error('批量删除失败', error);
       }
+    },
+
+    async handleDelete(userId) {
+      this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+        .then(async () => {
+          try {
+            await UserAPI.deleteUser(userId);
+            this.$message.success('删除成功');
+            this.fetchUsers();
+          } catch (error) {
+            console.error('删除失败', error);
+            this.$message.error('删除失败');
+          }
+        })
+        .catch(() => {
+        });
+    },
+    
+    confirmBatchDelete() {
+      if (this.selectedUsers.length === 0) return;
+      this.$confirm('确定要删除选中的用户吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
+      })
+        .then(() => this.handleBatchDelete())
+        .catch(() => { });
     },
 
     formatGender(gender) {
@@ -326,7 +338,7 @@ export default {
 }
 
 .el-table {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .el-button {
@@ -334,7 +346,7 @@ export default {
 }
 
 .search-form {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .add-user-container {
@@ -344,5 +356,15 @@ export default {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-count {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.action-row {
+  margin-bottom: 20px;
 }
 </style>

@@ -35,12 +35,24 @@ const actions = {
       login({ username: username.trim(), password: password })
         .then(response => {
           const token = response.token || response.data?.token;
-          setToken(token);
-          commit('SET_TOKEN', token);
-          resolve();
+          if (token) {
+            setToken(token);
+            commit('SET_TOKEN', token);
+            resolve();
+          } else {
+            reject('No token returned');
+          }
         })
+        .catch(error => {
+          console.error('❌ Login Error:', error);  // 打印详细错误信息
+          reject(error.response?.data?.message || '登录失败，请检查用户名或密码');
+        });
     });
   },
+  
+  // 其他 actions...
+
+
   
 
   async getInfo({ commit, state }) {

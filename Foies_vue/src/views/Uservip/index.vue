@@ -11,12 +11,20 @@
             </el-form-item>
         </el-form>
 
-        <!-- 操作按钮 -->
-        <el-button type="primary" @click="handleAdd">添加VIP</el-button>
-        <el-button type="danger" @click="confirmBatchDelete" :disabled="selectedVips.length === 0">批量删除</el-button>
+        <!-- 操作按钮和记录数显示 -->
+        <el-row class="action-row" type="flex" justify="space-between" align="middle">
+            <el-col :span="8">
+                <el-button type="primary" @click="handleAdd">添加VIP</el-button>
+                <el-button type="danger" @click="confirmBatchDelete"
+                    :disabled="selectedVips.length === 0">批量删除</el-button>
+            </el-col>
+            <el-col :span="8" class="record-count" style="text-align: right;">
+                <span>当前共有 {{ totalRecords }} 条记录</span>
+            </el-col>
+        </el-row>
 
         <!-- VIP表格 -->
-        <el-table :data="vips" border @selection-change="handleSelectionChange">
+        <el-table :data="vips" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="id" label="ID" width="100" />
             <el-table-column prop="userId" label="用户ID" width="100" />
@@ -65,6 +73,7 @@
     </div>
 </template>
 
+
 <script>
 import VipAPI from '@/api/uservip_api.js';
 
@@ -85,6 +94,7 @@ export default {
                 endTime: '',
                 totalPayment: 0,
             },
+            totalRecords: 0,
             rules: {
                 userId: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
                 levels: [{ required: true, message: '请输入VIP等级', trigger: 'blur' }],
@@ -105,7 +115,7 @@ export default {
 
             if (this.searchForm.userId) {
                 example.oredCriteria[0].criteria.push({
-                    condition: 'userId =',
+                    condition: 'user_id =',
                     value: this.searchForm.userId,
                     singleValue: true
                 });
@@ -114,6 +124,9 @@ export default {
             try {
                 const response = await VipAPI.getVips(example);
                 this.vips = response.data;
+
+                const countResponse = await VipAPI.countVips(example);
+                this.totalRecords = countResponse.data;
             } catch (error) {
                 console.error('获取VIP列表失败', error);
             }
@@ -121,6 +134,7 @@ export default {
 
         resetSearch() {
             this.searchForm = { userId: '' };
+            this.totalRecords = 0;
             this.fetchVips();
         },
 
@@ -129,7 +143,7 @@ export default {
         },
 
         handleAdd() {
-            this.vip = { // 重置VIP数据以便添加新VIP
+            this.vip = {
                 id: null,
                 userId: 0,
                 levels: 0,
@@ -141,7 +155,7 @@ export default {
         },
 
         handleEdit(vip) {
-            this.vip = { ...vip };  // 填充要编辑的VIP数据
+            this.vip = { ...vip };
             this.dialogVisible = true;
         },
 
@@ -150,9 +164,9 @@ export default {
                 if (valid) {
                     try {
                         if (this.vip.id) {
-                            await VipAPI.updateVip(this.vip);  // 更新现有VIP
+                            await VipAPI.updateVip(this.vip);
                         } else {
-                            await VipAPI.addVip(this.vip);  // 添加新VIP
+                            await VipAPI.addVip(this.vip);
                         }
                         this.$message.success('VIP信息保存成功');
                         this.dialogVisible = false;
@@ -171,7 +185,11 @@ export default {
 
         confirmBatchDelete() {
             if (this.selectedVips.length === 0) return;
-            this.$confirm('确定要删除选中的VIP吗？', '警告', { type: 'warning' })
+            this.$confirm('确定要删除选中的VIP信息吗？', '警告', {
+                type: 'warning',
+                cancelButtonText: '取消',
+                confirmButtonText: '确定'
+            })
                 .then(() => this.handleBatchDelete())
                 .catch(() => { });
         },
@@ -188,13 +206,20 @@ export default {
         },
 
         async handleDelete(id) {
-            try {
-                await VipAPI.deleteVip(id);
-                this.fetchVips();
-                this.$message.success('删除成功');
-            } catch (error) {
-                console.error('删除VIP失败', error);
-            }
+            this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+                .then(async () => {
+                    try {
+                        await VipAPI.deleteVip(id);
+                        this.$message.success('删除成功');
+                        this.fetchVips();
+                    } catch (error) {
+                        console.error('删除失败', error);
+                        this.$message.error('删除VIP失败');
+                    }
+                })
+                .catch(() => {
+                    // 如果用户取消操作，什么都不做
+                });
         }
     }
 };
@@ -214,6 +239,12 @@ export default {
 }
 
 .search-form {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
+}
+
+.record-count {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #606266;
 }
 </style>
