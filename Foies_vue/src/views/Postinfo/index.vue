@@ -179,7 +179,10 @@ export default {
     },
 
     async handleDelete(postId) {
-      this.$confirm('确定要删除该帖子吗？', '警告', { type: 'warning' })
+      this.$confirm('确定要删除该帖子吗？', '警告', { 
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定' })
         .then(async () => {
           try {
             await PostinfoAPI.deleteForumPost(postId);

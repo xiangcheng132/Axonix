@@ -27,7 +27,7 @@
       </el-col>
     </el-row>
 
-    <el-table :data="contacts" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
+    <el-table :data="contacts" border @selection-change="handleSelectionChange" :empty-text="'没有数据'">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="userId" label="用户ID" width="100" />
@@ -182,8 +182,24 @@ export default {
       }
     },
     async handleDelete(id) {
-      await UserContactAPI.deleteContactById(id);
-      this.fetchContacts();
+      this.$confirm('确定要删除该联系人吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
+      })
+        .then(async () => {
+          try {
+            await UserContactAPI.deleteContactById(id);
+            this.$message.success('删除成功');
+            this.fetchContacts();
+          } catch (error) {
+            console.error('删除失败', error);
+            this.$message.error('删除失败');
+          }
+        })
+        .catch(() => {
+          this.$message.info('已取消删除');
+        });
     },
 
     confirmBatchDelete() {

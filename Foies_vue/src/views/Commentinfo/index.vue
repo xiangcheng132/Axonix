@@ -28,7 +28,7 @@
     </el-row>
 
     <!-- 评论表格 -->
-    <el-table :data="comments" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
+    <el-table :data="comments" border @selection-change="handleSelectionChange" :empty-text="'没有数据'">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="userId" label="用户ID" />
@@ -44,12 +44,7 @@
       <el-table-column prop="status" label="审核状态" width="120">
         <template slot-scope="scope">
           <el-select v-model="scope.row.status" @change="updateStatus(scope.row)" size="small">
-            <el-option
-              v-for="(label, value) in statusMap"
-              :key="value"
-              :label="label"
-              :value="value"
-            />
+            <el-option v-for="(label, value) in statusMap" :key="value" :label="label" :value="value" />
           </el-select>
         </template>
       </el-table-column>
@@ -114,7 +109,7 @@ export default {
 
       if (this.searchForm.userId) {
         example.oredCriteria[0].criteria.push({
-          condition: "userId =",
+          condition: "user_id =",
           value: this.searchForm.userId,
           singleValue: true
         });
@@ -152,14 +147,33 @@ export default {
 
     // 删除评论
     async handleDelete(id) {
-      try {
-        await CommentAPI.deleteComment(id);
-        this.$message.success('删除成功');
-        this.fetchComments();
-      } catch (error) {
-        this.$message.error('删除失败');
-        console.error(error);
-      }
+      this.$confirm('确定要删除这条评论吗？', '提示', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+            CommentAPI.deleteComment(id)
+              .then(() => {
+                this.$message.success('删除成功');
+                this.fetchComments();
+                done();
+              })
+              .catch(error => {
+                this.$message.error('删除失败');
+                console.error(error);
+              })
+              .finally(() => {
+                instance.confirmButtonLoading = false;
+              });
+          } else {
+            done();
+          }
+        }
+      }).catch(() => {
+        this.$message.info('已取消删除');
+      });
     },
 
     async confirmBatchDelete() {
