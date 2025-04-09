@@ -206,7 +206,11 @@ export default {
         },
 
         async handleDelete(id) {
-            this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+            this.$confirm('确定要删除该用户吗？', '警告', { 
+                type: 'warning',
+                cancelButtonText: '取消',
+                confirmButtonText: '确定'
+             })
                 .then(async () => {
                     try {
                         await VipAPI.deleteVip(id);

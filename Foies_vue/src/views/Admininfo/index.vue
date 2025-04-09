@@ -26,7 +26,7 @@
     </el-row>
 
     <!-- 管理员表格 -->
-    <el-table :data="admins" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
+    <el-table :data="admins" border @selection-change="handleSelectionChange" :empty-text="'没有数据'">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="username" label="用户名" />
@@ -179,14 +179,38 @@ export default {
         }
       });
     },
-
+    // 在methods中添加这个方法
+    async handleDelete(id) {
+      this.$confirm('确定要删除此管理员吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
+      })
+        .then(async () => {
+          try {
+            await AdminAPI.deleteAdmin(id);
+            this.$message.success('删除成功');
+            this.fetchAdmins(); // 刷新列表
+          } catch (error) {
+            this.$message.error('删除失败');
+            console.error('删除管理员失败', error);
+          }
+        })
+        .catch(() => {
+          this.$message.info('已取消删除');
+        });
+    },
     closeDialog() {
       this.dialogVisible = false;
     },
 
     confirmBatchDelete() {
       if (this.selectedAdmins.length === 0) return;
-      this.$confirm('确定要删除选中的管理员吗？', '警告', { type: 'warning' })
+      this.$confirm('确定要删除选中的管理员吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
+      })
         .then(() => this.handleBatchDelete())
         .catch(() => { });
     },

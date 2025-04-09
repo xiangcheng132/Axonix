@@ -27,7 +27,7 @@
     </el-row>
 
     <!-- 通知表格 -->
-    <el-table :data="notifications" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
+    <el-table :data="notifications" border @selection-change="handleSelectionChange" :empty-text="'没有数据'">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="title" label="标题" />
@@ -232,15 +232,41 @@ export default {
       }
     },
 
-    // 删除单个通知
     async handleDelete(id) {
       try {
-        await NotificationAPI.deleteNotificationById(id);
-        this.fetchNotifications();
-        this.$message.success('删除成功');
+        // 显示确认对话框
+        await this.$confirm('确定要删除这条通知吗？', '提示', {
+          type: 'warning',
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          confirmButtonClass: 'el-button--danger',  // 将确定按钮设为红色强调
+          closeOnClickModal: false,  // 禁止点击遮罩层关闭
+          beforeClose: async (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true;  // 显示加载状态
+              try {
+                await NotificationAPI.deleteNotificationById(id);
+                this.$message.success('删除成功');
+                this.fetchNotifications();
+              } catch (error) {
+                console.error('删除失败', error);
+                this.$message.error('删除失败');
+                throw error;  // 重新抛出错误以阻止对话框关闭
+              } finally {
+                instance.confirmButtonLoading = false;
+                done();  // 无论成功失败都关闭对话框
+              }
+            } else {
+              done();  // 取消操作直接关闭
+              this.$message.info('已取消删除');
+            }
+          }
+        });
       } catch (error) {
-        console.error('删除失败', error);
-        this.$message.error('删除失败');
+        // 这里捕获的是确认对话框的取消操作或beforeClose中的错误
+        if (error !== 'cancel') {
+          console.error('删除处理异常', error);
+        }
       }
     },
 

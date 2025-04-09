@@ -26,7 +26,7 @@
     </el-row>
 
     <!-- 用户表格 -->
-    <el-table :data="users" border @selection-change="handleSelectionChange":empty-text="'没有数据'">
+    <el-table :data="users" border @selection-change="handleSelectionChange" :empty-text="'没有数据'">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="username" label="用户名" width="120" />
@@ -290,7 +290,11 @@ export default {
     },
 
     async handleDelete(userId) {
-      this.$confirm('确定要删除该用户吗？', '警告', { type: 'warning' })
+      this.$confirm('确定要删除该用户吗？', '警告', {
+        type: 'warning',
+        cancelButtonText: '取消',
+        confirmButtonText: '确定'
+      })
         .then(async () => {
           try {
             await UserAPI.deleteUser(userId);
@@ -304,7 +308,7 @@ export default {
         .catch(() => {
         });
     },
-    
+
     confirmBatchDelete() {
       if (this.selectedUsers.length === 0) return;
       this.$confirm('确定要删除选中的用户吗？', '警告', {
