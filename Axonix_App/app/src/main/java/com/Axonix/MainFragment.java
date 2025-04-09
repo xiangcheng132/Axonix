@@ -43,6 +43,11 @@ public class MainFragment extends Fragment {
             navigateToFragment(trafficFragment, "traffic");
         });
 
+        view.findViewById(R.id.btn_communicate).setOnClickListener(v -> {
+            Fragment communicateFragment = new AccessibilityCommunicationFragment();
+            navigateToFragment(communicateFragment, "communicate");
+        });
+
 
         // 初始化联系人列表
         rvContacts = view.findViewById(R.id.rv_contacts);
