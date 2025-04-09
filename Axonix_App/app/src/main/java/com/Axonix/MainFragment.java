@@ -2,16 +2,20 @@ package com.Axonix;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.Axonix.adapter.ContactAdapter;
 import com.Axonix.model.EmergencyContact;
+import com.Axonix.socialmain.PostDetailFragment;
 import com.alibaba.android.arouter.launcher.ARouter;
 import java.util.Arrays;
 import java.util.List;
@@ -22,17 +26,23 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 public class MainFragment extends Fragment {
 
     private RecyclerView rvContacts;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // 按钮跳转
-        view.findViewById(R.id.btn_ai).setOnClickListener(v ->
-                ARouter.getInstance().build("/feature/ai").navigation());
-        view.findViewById(R.id.btn_traffic).setOnClickListener(v ->
-                ARouter.getInstance().build("/feature/traffic").navigation());
+        view.findViewById(R.id.btn_ai).setOnClickListener(v -> {
+            Fragment aiFragment = new AIAssistantFragment();
+            navigateToFragment(aiFragment, "ai");
+        });
+
+        view.findViewById(R.id.btn_traffic).setOnClickListener(v -> {
+            Fragment trafficFragment = new TrafficRecognitionFragment();
+            navigateToFragment(trafficFragment, "traffic");
+        });
+
 
         // 初始化联系人列表
         rvContacts = view.findViewById(R.id.rv_contacts);
@@ -52,5 +62,19 @@ public class MainFragment extends Fragment {
             startActivity(intent);
         });
         rvContacts.setAdapter(adapter);
+    }
+
+    private void navigateToFragment(Fragment targetFragment, String tag) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+        );
+        transaction.replace(com.Axonix.index.R.id.content_frame, targetFragment);
+        transaction.addToBackStack(tag);
+        transaction.commit();
     }
 }

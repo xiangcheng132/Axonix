@@ -1,9 +1,15 @@
 package com.Axonix.socialmain;
 
 import android.content.Context;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.Axonix.socialmain.model.Post;
+import com.Axonix.socialmain.model.Comment;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SocialEventHandler {
     private Context context;
@@ -15,7 +21,6 @@ public class SocialEventHandler {
     }
 
     public void handleCreatePost() {
-        // 添加Fragment前先清除当前容器中的Fragment
         Fragment current = fragmentManager.findFragmentById(R.id.container);
         if (current != null) {
             fragmentManager.beginTransaction().remove(current).commitNow();
@@ -34,12 +39,14 @@ public class SocialEventHandler {
     }
 
     public void handlePostClick(String postId) {
-        Fragment current = fragmentManager.findFragmentById(R.id.container);
-        if (current != null) {
-            fragmentManager.beginTransaction().remove(current).commitNow();
-        }
 
-        Fragment detailFragment = PostDetailFragment.newInstance(postId);
+        Post post = new Post("user","我是标题","我是内容","已发布","2025-4-9 0:39",200,0);
+        List<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("user1","我是评论1","已发布","2025-4-9 0:40",10,0));
+        comments.add(new Comment("user2","我是评论2","已发布","2025-4-9 0:50",10,1));
+
+        Fragment detailFragment = new PostDetailFragment(post, comments);
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(
                 R.anim.slide_in_right,

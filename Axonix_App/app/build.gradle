@@ -2,13 +2,31 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        def taskName = "print${variant.name.capitalize()}SHA1"
+        tasks.create(name: taskName) {
+            doLast {
+                def keystore = file("${System.getProperty("user.home")}/.android/debug.keystore")
+                def alias = "androiddebugkey"
+                def storepass = "android"
+                def keypass = "android"
+                def command = "keytool -list -v -keystore ${keystore} -alias ${alias} -storepass ${storepass} -keypass ${keypass}"
+                println "Running command: $command"
+                def process = command.execute()
+                println process.text
+            }
+        }
+    }
+}
+
 android {
     namespace 'com.Axonix'
     compileSdk 35
 
     defaultConfig {
         applicationId "com.Axonix"
-        minSdk 27
+        minSdk 29
         targetSdk 34
         versionCode 1
         versionName "1.0"

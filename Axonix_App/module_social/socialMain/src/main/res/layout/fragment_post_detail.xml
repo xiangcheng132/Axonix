@@ -1,44 +1,156 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_post_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/backgroundColor">
 
-    <!-- 返回按钮 -->
-    <Button
+    <!-- 顶部 Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="返回"/>
-
-    <!-- 帖子内容 -->
-    <TextView
-        android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="16sp"/>
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="返回"
+        android:clickable="true"
+        android:focusable="true" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="8dp">
 
-        <TextView
-            android:id="@+id/tv_likes"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="👍 0"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_dislikes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="👎 0"/>
-    </LinearLayout>
-</LinearLayout>
+            <!-- 帖子信息卡片 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_post_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:padding="16dp"> <!-- 增加卡片的内边距 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="14dp">
+
+                        <!-- 用户名 -->
+                        <TextView
+                            android:id="@+id/tv_username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="用户名"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1" /> <!-- 自动填充剩余空间，使状态靠右 -->
+
+                        <!-- 状态 -->
+                        <TextView
+                            android:id="@+id/tv_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="在线"
+                            android:textSize="10sp"
+                            android:textColor="@android:color/darker_gray"
+                            android:layout_gravity="end" /> <!-- 靠右显示 -->
+                    </LinearLayout>
+
+                    <!-- 帖子标题 -->
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="帖子标题"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginStart="10dp"/> <!-- 增加标题与上部内容的间距 -->
+
+                    <!-- 帖子内容 -->
+                    <TextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="帖子内容"
+                        android:textSize="16sp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <!-- 发布时间、喜欢数、不喜欢数 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="4dp">
+
+                        <TextView
+                            android:id="@+id/tv_publish_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="发布时间：2025-04-08"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/darker_gray"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:id="@+id/tv_likes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👍 0"
+                            android:layout_marginStart="16dp" />
+
+                        <TextView
+                            android:id="@+id/tv_dislikes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👎 0"
+                            android:layout_marginStart="16dp"
+                            android:layout_gravity="end" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 评论卡片 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:id="@+id/comment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- 评论项会动态添加到这里 -->
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

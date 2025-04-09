@@ -59,10 +59,8 @@ public class LoginFragment extends Fragment {
 
                 // 替换Fragment容器内容
                 transaction.replace(com.Axonix.index.R.id.content_frame, registerFragment);
-
                 // 可选：添加到返回栈
                 transaction.addToBackStack("register");
-
                 transaction.commit();
             } else {
                 Toast.makeText(getContext(), "页面跳转失败", Toast.LENGTH_SHORT).show();

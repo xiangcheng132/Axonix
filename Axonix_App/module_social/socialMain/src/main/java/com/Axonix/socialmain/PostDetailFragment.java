@@ -4,57 +4,71 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
-import com.alibaba.android.arouter.facade.annotation.Route;
+import androidx.fragment.app.FragmentManager;
+import com.Axonix.socialmain.R;
+import com.Axonix.socialmain.model.Comment;
+import com.Axonix.socialmain.model.Post;
+import com.google.android.material.appbar.MaterialToolbar;
 
-@Route(path = "/social/detail")
+
+import java.util.List;
+
 public class PostDetailFragment extends Fragment {
-    private static final String ARG_POST_ID = "post_id";
-    private String postId;
 
-    // 添加 newInstance 方法
-    public static PostDetailFragment newInstance(String postId) {
-        PostDetailFragment fragment = new PostDetailFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_POST_ID, postId);
-        fragment.setArguments(args);
-        return fragment;
+    private Post post;
+    private List<Comment> comments;
+    private MaterialToolbar btnBack;
+
+    public PostDetailFragment(Post post, List<Comment> comments) {
+        this.post = post;
+        this.comments = comments;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            postId = getArguments().getString(ARG_POST_ID);
-        }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_detail, container, false);
 
-        TextView tvContent = view.findViewById(R.id.tv_content);
-        TextView tvLikes = view.findViewById(R.id.tv_likes);
-        TextView tvDislikes = view.findViewById(R.id.tv_dislikes);
-
-        // 模拟数据加载
-        tvContent.setText("帖子ID：" + postId + "\n详细内容...");
-        tvLikes.setText("👍 15");
-        tvDislikes.setText("👎 2");
-
-        // 返回按钮
-        view.findViewById(R.id.btn_back).setOnClickListener(v -> {
-            if (getParentFragment() != null) {
-                getParentFragment().getChildFragmentManager().popBackStack();
-            }
+        bindPostData(view);
+        addComments(view, comments);
+        FragmentManager fragmentManager = getParentFragmentManager();
+        btnBack = view.findViewById(R.id.btn_back);
+        btnBack.setNavigationOnClickListener(v -> {
+            fragmentManager.popBackStack();
         });
-
         return view;
+    }
+
+    private void bindPostData(View view) {
+        ((TextView) view.findViewById(R.id.tv_username)).setText(post.getUsername());
+        ((TextView) view.findViewById(R.id.tv_title)).setText(post.getTitle());
+        ((TextView) view.findViewById(R.id.tv_content)).setText(post.getContent());
+        ((TextView) view.findViewById(R.id.tv_status)).setText("状态：" + post.getStatus());
+        ((TextView) view.findViewById(R.id.tv_publish_time)).setText("发布时间：" + post.getPublishTime());
+        ((TextView) view.findViewById(R.id.tv_likes)).setText("👍 " + post.getLikes());
+        ((TextView) view.findViewById(R.id.tv_dislikes)).setText("👎 " + post.getDislikes());
+    }
+
+    private void addComments(View view, List<Comment> commentList) {
+        LinearLayout commentContainer = view.findViewById(R.id.comment_container);
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        commentContainer.removeAllViews();
+
+        for (Comment comment : commentList) {
+            View itemView = inflater.inflate(R.layout.item_comment, commentContainer, false);
+
+            ((TextView) itemView.findViewById(R.id.tv_comment_username)).setText(comment.getUsername());
+            ((TextView) itemView.findViewById(R.id.tv_comment_time)).setText(comment.getTime());
+            ((TextView) itemView.findViewById(R.id.tv_comment_status)).setText("状态：" + comment.getStatus());
+            ((TextView) itemView.findViewById(R.id.tv_comment_content)).setText(comment.getContent());
+            ((TextView) itemView.findViewById(R.id.tv_comment_likes)).setText("👍 " + comment.getLikes());
+            ((TextView) itemView.findViewById(R.id.tv_comment_dislikes)).setText("👎 " + comment.getDislikes());
+
+            commentContainer.addView(itemView);
+        }
     }
 }

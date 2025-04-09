@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+
+    android:layout_marginBottom="12dp"> <!-- 每个评论之间的间距 -->
+<!--    android:background="@drawable/bg_comment_item"-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 用户名 -->
+        <TextView
+            android:id="@+id/tv_comment_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="评论者用户名"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_weight="1" />
+        <!-- 状态 -->
+        <TextView
+            android:id="@+id/tv_comment_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@android:color/darker_gray"
+            android:text="状态：正常"
+            android:layout_gravity="end"/>
+    </LinearLayout>
+
+
+
+
+    <TextView
+        android:id="@+id/tv_comment_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="评论内容……"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+        <TextView
+            android:id="@+id/tv_comment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2025-04-08 15:00"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_comment_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="👍 2" />
+
+        <TextView
+            android:id="@+id/tv_comment_dislikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="👎 0"
+            android:layout_gravity="end" />
+    </LinearLayout>
+</LinearLayout>

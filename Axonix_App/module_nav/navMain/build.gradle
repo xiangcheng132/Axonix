@@ -5,15 +5,18 @@ if (isAppModule) {
 } else {
     apply plugin: 'com.android.library'
 }
+
 android {
     namespace 'com.Axonix.navmain'
     compileSdk 35
+
+
 
     defaultConfig {
         if (isAppModule) {
             applicationId "com.Axonix.navmain"
         }
-        minSdk 27
+        minSdk 29
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -59,10 +62,14 @@ dependencies {
     implementation libs.arouter.api // 引入 ARouter 核心库
     annotationProcessor libs.arouter.compiler // 引入 ARouter 编译器（注解）
 
-//    implementation 'com.amap.api:3dmap:9.1.0' //手机不支持，暂无法调试
-    implementation 'com.amap.api:location:6.1.0'
-    implementation 'com.amap.api:search:6.1.0'
-    implementation 'com.amap.api:3dmap:8.0.0'
+    implementation 'com.amap.api:location:6.1.0'       // 定位
+    implementation 'com.amap.api:search:6.1.0'         // 搜索
+    implementation ('com.amap.api:navi-3dmap:7.8.0_3dmap7.8.0') {    // 导航 SDK（不包含地图）
+        exclude group: 'com.amap.api', module: '3dmap'
+    }
+
+//    implementation 'com.amap.api:3dmap:7.8.0'          // 3D 地图
+//    implementation 'com.amap.api:navi-3dmap:7.8.0_3dmap7.8.0'     // 导航
 
 
 
