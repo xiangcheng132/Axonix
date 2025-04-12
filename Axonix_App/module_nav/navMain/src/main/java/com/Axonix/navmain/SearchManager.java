@@ -1,6 +1,8 @@
 package com.Axonix.navmain;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.help.Inputtips;
 import com.amap.api.services.help.InputtipsQuery;
@@ -22,6 +24,7 @@ public class SearchManager {
     }
 
     public void searchPOI(String keyword, LatLonPoint center, SearchResultListener listener) {
+        Log.d("search","搜索一次");
         InputtipsQuery query = new InputtipsQuery(keyword, center != null ? center.toString() : "");
         Inputtips inputTips = new Inputtips(context, query);
         inputTips.setInputtipsListener(new Inputtips.InputtipsListener() {

@@ -17,8 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.amap.api.location.AMapLocationClient;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
@@ -41,6 +44,13 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
 
     private View rootView;
     private SearchView searchView;
+
+    private RecyclerView searchResultsRecyclerView;
+    private SearchResultsAdapter searchResultsAdapter;
+
+    private LatLng currentLocation,endLocation;
+
+    private boolean isSearching = false; // 用来标记是否正在搜索
 
     // 注册权限请求器
     private final ActivityResultLauncher<String[]> permissionLauncher =
@@ -65,25 +75,75 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_nav, container, false);
 
+
+        searchResultsRecyclerView = rootView.findViewById(R.id.searchResultsRecyclerView);
+        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchResultsAdapter = new SearchResultsAdapter(null, new SearchResultsAdapter.OnItemClickListener() {
+//            点击地点，地图位置移动
+            @Override
+            public void onItemClick(Tip tip) {
+                if (tip.getPoint() != null) {
+                    LatLng targetLatLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+                    mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(targetLatLng, 16));
+                    mapDisplay.getAMap().addMarker(new MarkerOptions().position(targetLatLng).title(tip.getName()));
+                    searchResultsRecyclerView.setVisibility(View.GONE);
+                }
+            }
+//             出发按钮功能
+            @Override
+            public void onDepartClick(Tip tip) {
+                if (currentLocation != null && tip.getPoint() != null) {
+                    LatLng destination = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+                    navigationManager.calculateRoute(currentLocation, destination, RouteType.DRIVING);
+                    Toast.makeText(getContext(), "正在导航...", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(getContext(), "当前位置尚未确定", Toast.LENGTH_SHORT).show();
+                }
+                searchResultsRecyclerView.setVisibility(View.GONE);
+            }
+        });
+        searchResultsRecyclerView.setAdapter(searchResultsAdapter);
+
         // 检查并请求权限
         if (MapPermissions.hasAllPermissions(requireActivity())) {
             initMapAndLocation();  // 权限已授予，直接初始化地图和定位
         } else {
-            permissionLauncher.launch(MapPermissions.PERMISSIONS);  // 否则请求权限
+            permissionLauncher.launch(MapPermissions.PERMISSIONS);
         }
 
         searchView = rootView.findViewById(R.id.searchView);
-        searchView.setIconifiedByDefault(true); // 初始时只显示图标
-
-        // 设置初始宽度
+        searchView.setIconifiedByDefault(true);
         setSearchViewInitialWidth();
-
-        // 初始化搜索框
         setUpSearchView();
 
         return rootView;
     }
 
+    private void initMapAndLocation() {
+        AMapLocationClient.updatePrivacyShow(requireContext(), true, true);
+        AMapLocationClient.updatePrivacyAgree(requireContext(), true);
+
+        // 初始化地图
+        mapView = rootView.findViewById(R.id.map);
+        mapDisplay = new MapDisplayManager();
+        mapDisplay.initMap(mapView, null);
+        mapDisplay.getAMap().setOnMapClickListener(latLng -> {
+            searchResultsRecyclerView.setVisibility(View.GONE);
+            searchView.clearFocus();
+        });
+
+        // 初始化定位
+        locationManager = new LocationManager();
+        locationManager.setLocationListener(this);
+        locationManager.startLocation(requireContext(), mapDisplay.getAMap());
+
+        // 初始化导航
+        navigationManager = new NavigationManager(requireContext(),mapDisplay.getAMap());
+
+        // 初始化搜索管理器
+        searchManager = new SearchManager(requireContext());
+    }
     private void setSearchViewInitialWidth() {
         // 设置搜索框初始宽度为 40dp
         int initialWidth = (int) getResources().getDimension(R.dimen.searchView_initial_width); // 40dp
@@ -97,27 +157,40 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchPOI(query);  // 提交搜索
+                searchPOI(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;  // 输入变化时无需处理
+                if (newText.trim().isEmpty()) {
+                    searchResultsRecyclerView.setVisibility(View.GONE);
+                }
+                return false;
             }
         });
 
-        // 搜索框点击图标时触发展开
-        searchView.setOnSearchClickListener(v -> expandSearchView());
-
-        // 监听输入框内容变化，结束输入后如果为空则收缩搜索框
-        searchView.setOnCloseListener(() -> {
-            if (searchView.getQuery().length() == 0) {
-                shrinkSearchView();  // 如果没有输入内容，收缩搜索框
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            // 当搜索框获取焦点且文字非空时，显示搜索结果列表
+            if (hasFocus && !searchView.getQuery().toString().trim().isEmpty()) {
+                searchResultsRecyclerView.setVisibility(View.VISIBLE);
             }
+        });
+
+        searchView.setOnSearchClickListener(v -> {
+            expandSearchView();
+        });
+
+        // 当搜索框关闭时，如果当前没有内容，则收缩搜索框，并隐藏结果列表
+        searchView.setOnCloseListener(() -> {
+            searchView.setQuery("", false); // 清空搜索框文本
+            shrinkSearchView();
+            searchResultsRecyclerView.setVisibility(View.GONE);
             return false;
         });
+
     }
+
 
     private void expandSearchView() {
         // 使用 ViewTreeObserver 来监听视图的布局完成
@@ -164,77 +237,71 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
 
 
     private void searchPOI(String keyword) {
-        // 延迟处理，用户点击搜索时才执行查询
-        locationManager.getLocation(new LocationManager.LocationListener() {
-            @Override
-            public void onLocationReceived(double lat, double lng) {
-                if (lat == 0 && lng == 0) {
-                    Toast.makeText(requireContext(), "定位失败", Toast.LENGTH_SHORT).show();
-                    return;
+        Log.d("搜索函数", "触发搜索函数1");
+
+        if (keyword.trim().isEmpty()) {
+            searchResultsRecyclerView.setVisibility(View.GONE);
+            return;
+        }
+
+        if (isSearching) {
+            // 如果正在搜索，直接返回，不再重复搜索
+            return;
+        }
+
+        isSearching = true; // 设置标志，表示正在搜索
+
+        // 获取当前位置，直接执行查询
+        if (currentLocation != null) {
+            LatLonPoint centerPoint = new LatLonPoint(currentLocation.latitude, currentLocation.longitude);
+            Log.d("searchPOI", "当前位置: " + currentLocation.latitude + ", " + currentLocation.longitude);
+
+            searchManager.searchPOI(keyword, centerPoint, new SearchManager.SearchResultListener() {
+                @Override
+                public void onSearchResult(List<Tip> tips) {
+                    isSearching = false; // 搜索完成，重置标志
+
+                    if (tips != null && !tips.isEmpty()) {
+                        // 清除旧标记
+                        mapDisplay.getAMap().clear();
+
+                        // 更新 RecyclerView 数据
+                        searchResultsAdapter.updateData(tips);
+                        searchResultsRecyclerView.setVisibility(View.VISIBLE);
+
+                        // 同时在地图上添加所有标记
+                        for (Tip tip : tips) {
+                            LatLng searchLatLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+                            mapDisplay.getAMap().addMarker(new MarkerOptions().position(searchLatLng).title(tip.getName()));
+                        }
+
+                        // 移动地图至第一个搜索结果
+                        LatLng firstResultLatLng = new LatLng(tips.get(0).getPoint().getLatitude(), tips.get(0).getPoint().getLongitude());
+                        mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(firstResultLatLng, 16));
+                    } else {
+                        Toast.makeText(requireContext(), "没有找到相关地点", Toast.LENGTH_SHORT).show();
+                        searchResultsRecyclerView.setVisibility(View.GONE);
+                    }
                 }
 
-                LatLonPoint centerPoint = new LatLonPoint(lat, lng);
-                Log.d("searchPOI", "定位点: " + lat + ", " + lng);
-
-                searchManager.searchPOI(keyword, centerPoint, new SearchManager.SearchResultListener() {
-                    @Override
-                    public void onSearchResult(List<Tip> tips) {
-                        if (tips != null && !tips.isEmpty()) {
-                            // 清除旧标记
-                            mapDisplay.getAMap().clear();
-                            Log.d("searchPOI", "搜索结果数量: " + tips.size());
-
-                            // 在地图上添加新的标记
-                            for (Tip tip : tips) {
-                                LatLng searchLatLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
-                                mapDisplay.getAMap().addMarker(new MarkerOptions().position(searchLatLng).title(tip.getName()));
-                            }
-                            // 移动地图至搜索结果的第一个地点
-                            LatLng firstResultLatLng = new LatLng(tips.get(0).getPoint().getLatitude(), tips.get(0).getPoint().getLongitude());
-                            mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(firstResultLatLng, 16));
-                        } else {
-                            Toast.makeText(requireContext(), "没有找到相关地点", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(AMapException e) {
-                        Toast.makeText(requireContext(), "搜索失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }, requireContext(), mapDisplay.getAMap());
+                @Override
+                public void onFailure(AMapException e) {
+                    isSearching = false; // 搜索失败，重置标志
+                    Toast.makeText(requireContext(), "搜索失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    searchResultsRecyclerView.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            Toast.makeText(requireContext(), "当前位置尚未确定", Toast.LENGTH_SHORT).show();
+            isSearching = false; // 搜索结束，重置标志
+        }
     }
 
-
-    private void initMapAndLocation() {
-        // 初始化地图
-        mapView = rootView.findViewById(R.id.map);
-        mapDisplay = new MapDisplayManager();
-        mapDisplay.initMap(mapView, null);
-
-        // 初始化定位
-        locationManager = new LocationManager();
-        locationManager.setLocationListener(this);
-        locationManager.startLocation(requireContext(), mapDisplay.getAMap());
-
-        // 初始化导航
-        navigationManager = new NavigationManager(requireContext(),mapDisplay.getAMap());
-
-        // 初始化搜索管理器
-        searchManager = new SearchManager(requireContext());
-    }
 
     @Override
     public void onLocationReceived(double lat, double lng) {
-        LatLng currentLocation = new LatLng(lat, lng);
-        LatLng destination = new LatLng(39.908691, 116.397499);
+        currentLocation = new LatLng(lat, lng);
 
-        if (navigationManager != null) {
-//            navigationManager.calculateRoute(currentLocation, destination, NavigationManager.RouteType.DRIVING);
-            navigationManager.calculateRoute(currentLocation, destination, RouteType.DRIVING);
-
-        }
     }
 
 

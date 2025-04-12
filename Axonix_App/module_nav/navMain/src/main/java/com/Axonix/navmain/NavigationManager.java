@@ -168,7 +168,7 @@ public class NavigationManager implements AMapNaviListener {
         if (naviInfo != null) {
             String roadName = naviInfo.getCurrentRoadName();  // 获取当前道路
             String nextRoadName = naviInfo.getNextRoadName(); // 获取下一道路
-            showToast("当前道路名称: " + roadName + "\n下一道路名称: " + nextRoadName + "\n导航提示: ");
+//            showToast("当前道路名称: " + roadName + "\n下一道路名称: " + nextRoadName + "\n导航提示: ");
         }
     }
 
