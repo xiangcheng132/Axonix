@@ -88,7 +88,7 @@ public class AdminController {
         return adminService.updateByPrimaryKey(record);
     }
 
-
+    // 管理员登录
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Admin admin) {
         AdminExample example = new AdminExample();
@@ -108,6 +108,7 @@ public class AdminController {
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
 
+    // 管理员登录获取管理员信息
     @GetMapping("/getUserInfo")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -123,6 +124,7 @@ public class AdminController {
         return ResponseEntity.ok(admin);
     }
 
+    // 管理员登出
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
