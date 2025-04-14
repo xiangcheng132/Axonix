@@ -1,6 +1,8 @@
-plugins {
-    alias(libs.plugins.android.application)
-}
+apply plugin: 'com.huawei.agconnect'
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+
 
 android.applicationVariants.all { variant ->
     variant.outputs.all {
@@ -30,7 +32,9 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
+        manifestPlaceholders += [
+                hw_app_id : "113945503" // 与AndroidManifest中的appid保持一致
+        ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -40,6 +44,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            // 完全不需要签名配置，系统自动处理
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -52,6 +61,9 @@ android {
     buildFeatures {
         buildConfig = true // 确保启用 BuildConfig
     }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
 }
 
 dependencies {
@@ -61,6 +73,8 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.transportation.consumer
+    implementation libs.core.ktx
+    implementation libs.lifecycle.viewmodel.ktx
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -75,4 +89,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+     implementation 'com.huawei.hms:hwid:6.11.0.300'
+     implementation 'com.huawei.hms:hmscoreinstaller:6.11.0.301'
+     implementation 'com.huawei.agconnect:agconnect-core:1.9.1.300'
+     implementation 'com.huawei.hms:push:6.12.0.300'
 }

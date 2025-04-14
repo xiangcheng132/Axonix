@@ -9,4 +9,16 @@
         <item>听障</item>
         <item>其他障碍</item>
     </string-array>
+    <string-array name="gender_options">
+        <item>未知</item>
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+    <string-array name="disability_options">
+        <item>无</item>
+        <item>视障</item>
+        <item>听障</item>
+        <item>其他障碍</item>
+    </string-array>
+
 </resources>

@@ -10,7 +10,14 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,13 +25,28 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    // 检查用户名是否已存在
+    @Override
+    public User login(String username, String password) {
+        UserExample example = new UserExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<User> users = userMapper.selectByExample(example);
+
+        if (users == null || users.isEmpty()) {
+            throw new DuplicateUsernameException("用户名不存在");
+        }
+
+        User user = users.get(0);
+        if (!user.getPassword().equals(password)) {
+            throw new DuplicateUsernameException("密码错误");
+        }
+        return user;
+    }
+
     private void checkUsernameUnique(User user) throws DuplicateUsernameException {
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         criteria.andUsernameEqualTo(user.getUsername());
 
-        // 如果是更新操作，需要排除当前用户自身
         if (user.getId() != null) {
             criteria.andIdNotEqualTo(user.getId());
         }
@@ -52,7 +74,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public int updateByExampleSelective(User record, UserExample example) {
-        // 如果修改了用户名，需要校验
         if (record.getUsername() != null) {
             checkUsernameUnique(record);
         }
@@ -62,14 +83,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public int updateByPrimaryKeySelective(User record) {
-        // 如果修改了用户名，需要校验
         if (record.getUsername() != null) {
             checkUsernameUnique(record);
         }
         return userMapper.updateByPrimaryKeySelective(record);
     }
 
-    // 以下方法保持原有实现，省略其他方法...
 
     @Override
     public long countByExample(UserExample example) {
@@ -102,7 +121,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateByPrimaryKey(User record) {
-        return userMapper.updateByPrimaryKey(record);
+    public int updateByPrimaryKey(User user) {
+        SimpleDateFormat chinaFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        chinaFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+
+        user.setLastLoginTime(new Date());
+        user.setUpdatedAt(new Date());
+
+        if (user.getLastLoginTime() != null) {
+            String formatted = chinaFormat.format(user.getLastLoginTime());
+            user.setLastLoginTime(parseDate(formatted, chinaFormat)); // 使用修正后的 parseDate
+        }
+
+        if (user.getCreatedAt() != null) {
+            user.setCreatedAt(parseDate(chinaFormat.format(user.getCreatedAt()), chinaFormat));
+        }
+
+        if (user.getUpdatedAt() != null) {
+            String updatedFormatted = chinaFormat.format(user.getUpdatedAt());
+            user.setUpdatedAt(parseDate(updatedFormatted, chinaFormat));
+        }
+
+        return userMapper.updateByPrimaryKey(user);
     }
+
+    private Date parseDate(String dateStr, SimpleDateFormat sdf) {
+        try {
+            // 设置中国时区（关键修正）
+            sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+            return sdf.parse(dateStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // 或抛出自定义异常
+        }
+    }
+
 }

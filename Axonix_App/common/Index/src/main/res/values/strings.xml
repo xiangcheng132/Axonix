@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">common</string>
     <string name="sos">SOS</string>
+
+<!--    <string name="firebase_app_id" translatable="false">1:881217285293:android:edc6abe7096bb4c5526a24</string>-->
+<!--    <string name="firebase_api_key" translatable="false">AIzaSyD3kA7Z5FosJYxKfhK_hi_pdkrqU5ybayI</string>-->
+<!--    <string name="firebase_project_id" translatable="false">axonix-ee482</string>-->
 </resources>

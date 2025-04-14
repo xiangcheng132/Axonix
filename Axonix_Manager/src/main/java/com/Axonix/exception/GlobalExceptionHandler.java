@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
     }
 
     // 通用异常处理（兜底逻辑）
-//    @ExceptionHandler(Exception.class)
-//    public String handleException(Exception e) {
-//        return "服务器错误：" + e.getMessage();
-//    }
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e) {
+        return "服务器错误：" + e.getMessage();
+    }
 }

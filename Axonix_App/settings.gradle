@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        maven { url 'https://developer.huawei.com/repo/' }
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -14,16 +15,16 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven { url 'https://developer.huawei.com/repo/' }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://jitpack.io' }
-//        maven { url 'https://maven.amap.com/other' }
         google()
         mavenCentral()
-
     }
 }
+
 
 rootProject.name = "Axonix_App"
 include ':app'

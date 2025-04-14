@@ -1,9 +1,16 @@
 server:
   port: 8080
+  address: 0.0.0.0
+  ssl:
+    key-store: classpath:myapp.p12
+    key-store-password: xie123456
+    key-store-type: PKCS12
+    key-alias: myapp
+#  keytool -genkeypair -alias myapp -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore myapp.p12 -validity 3650
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/axonix?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/axonix?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver

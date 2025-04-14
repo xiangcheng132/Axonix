@@ -40,11 +40,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!-- 其他模块的 Activity 需要在主模块注册 -->
 <!--        <activity android:name="com.Axonix.navmain.NavActivity" android:exported="true"/>-->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=113945503"/>
 
-
+        <service android:name=".service.DemoHmsMessageService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+<!--        <meta-data-->
+<!--            android:name="push_kit_auto_init_enabled"-->
+<!--            android:value="true"/>-->
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.huawei.android.pushagent.permission.READ_USERID" />
+    <uses-permission android:name="com.huawei.android.pushagent.permission.ACCESS_PUSH" />
+    <uses-permission android:name="com.huawei.android.pushagent.permission.PUSH_PROVIDER" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="com.huawei.android.pushagent.permission.READ_PUSH_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

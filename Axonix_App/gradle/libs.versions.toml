@@ -9,8 +9,11 @@ activity = "1.10.0"
 constraintlayout = "2.2.0"
 
 arouter = "1.5.2"
-transportationConsumer = "3.0.0" # ARouter 的版本号
-
+transportationConsumer = "3.0.0"
+kotlin = "1.9.24"
+coreKtx = "1.10.1"
+lifecycleViewmodelKtx = "2.2.0" # ARouter 的版本号
+#agcp = "1.9.0.300"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -25,8 +28,13 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 arouter-api = { group = "com.alibaba", name = "arouter-api", version.ref = "arouter" }
 arouter-compiler = { group = "com.alibaba", name = "arouter-compiler", version.ref = "arouter" }
 transportation-consumer = { group = "com.google.android.libraries.mapsplatform.transportation", name = "transportation-consumer", version.ref = "transportationConsumer" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+#huawei-agconnect-core = { group = "com.huawei.agconnect", name = "agconnect-core", version.ref = "agcp" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+#huawei-agconnect = { id = "com.huawei.agconnect", version = "1.9.0.300" }
 

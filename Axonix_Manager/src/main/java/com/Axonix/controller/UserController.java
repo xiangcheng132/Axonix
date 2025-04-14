@@ -5,7 +5,8 @@ import com.Axonix.demo.model.UserExample;
 import com.Axonix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -34,6 +35,10 @@ public class UserController {
         return userService.deleteByPrimaryKey(id);
     }
 
+    @PostMapping("/login")
+    public User login(@RequestBody User user) {
+        return userService.login(user.getUsername(), user.getPassword());
+    }
     // 完整注册用户（全字段）
     @PostMapping("/register")
     public int register(@RequestBody User user) {
@@ -83,4 +88,5 @@ public class UserController {
     public int updateUser(@RequestBody User user) {
         return userService.updateByPrimaryKey(user);
     }
+
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -66,25 +65,56 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <com.Axonix.usermain.InfoItem
-                        android:id="@+id/item_gender"
+                    <!-- 性别 Spinner -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:title="性别" />
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="性别"
+                            android:textSize="16sp"
+                            android:layout_marginEnd="20dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_gender"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <!-- 年龄 -->
                     <com.Axonix.usermain.InfoItem
                         android:id="@+id/item_age"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:title="年龄" />
 
-                    <com.Axonix.usermain.InfoItem
-                        android:id="@+id/item_disability"
+                    <!-- 残障类型 Spinner -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:title="残障类型" />
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="残障类型"
+                            android:textSize="16sp"
+                            android:layout_marginEnd="20dp" />
 
+                        <Spinner
+                            android:id="@+id/spinner_disability"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -101,12 +131,14 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
+                    <!-- 手机号 -->
                     <com.Axonix.usermain.InfoItem
                         android:id="@+id/item_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:title="手机号" />
 
+                    <!-- 邮箱 -->
                     <com.Axonix.usermain.InfoItem
                         android:id="@+id/item_email"
                         android:layout_width="match_parent"
@@ -141,8 +173,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:paddingEnd="8dp"
-                            android:text="地址"
-                            />
+                            android:text="地址" />
 
                         <Spinner
                             android:id="@+id/spinner_province"
@@ -151,8 +182,7 @@
                             android:layout_weight="1"
                             android:enabled="false"
                             android:focusable="false"
-                            android:clickable="false"
-                            />
+                            android:clickable="false" />
 
                         <Spinner
                             android:id="@+id/spinner_city"
@@ -161,8 +191,7 @@
                             android:layout_weight="1"
                             android:enabled="false"
                             android:focusable="false"
-                            android:clickable="false"
-                            />
+                            android:clickable="false" />
 
                         <Spinner
                             android:id="@+id/spinner_district"
@@ -171,8 +200,7 @@
                             android:layout_weight="1"
                             android:enabled="false"
                             android:focusable="false"
-                            android:clickable="false"
-                            />
+                            android:clickable="false" />
                     </LinearLayout>
 
                     <com.Axonix.usermain.InfoItem
@@ -209,4 +237,3 @@
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
-
