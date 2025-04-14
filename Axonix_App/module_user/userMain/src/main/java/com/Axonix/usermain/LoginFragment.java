@@ -173,7 +173,7 @@ public class LoginFragment extends Fragment {
                             UserUpdateManager.getInstance().updateUser(
                                     getContext(),
                                     user,
-                                    new UserUpdateManager.UpdateCallback(){
+                                    new UserUpdateManager.UpdateCallback() {
                                         @Override
                                         public void onUpdateSuccess() {
                                             // 更新成功的回调
@@ -204,8 +204,8 @@ public class LoginFragment extends Fragment {
 
     private void getDeviceToken(DeviceTokenListener listener) {
         Executors.newSingleThreadExecutor().execute(() -> {
-                String token = HmsInstanceId.getInstance(requireContext()).getToken();
-                new Handler(Looper.getMainLooper()).post(() -> listener.onTokenReceived(token));
+            String token = HmsInstanceId.getInstance(requireContext()).getToken();
+            new Handler(Looper.getMainLooper()).post(() -> listener.onTokenReceived(token));
         });
     }
 

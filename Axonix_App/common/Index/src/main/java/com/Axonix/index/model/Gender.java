@@ -1,32 +1,55 @@
 package com.Axonix.index.model;
 
-public class Gender {
-    private int gender_int;
-    public Gender() {
+import android.content.Context;
+
+import androidx.annotation.StringRes;
+
+import com.Axonix.index.R;
+
+public enum Gender {
+    UNKNOWN(0, R.string.unknown),
+    MALE(1, R.string.male),
+    FEMALE(2, R.string.female);
+
+    private final int value;
+    private final int displayRes;
+
+    Gender(int value, @StringRes int displayRes) {
+        this.value = value;
+        this.displayRes = displayRes;
     }
 
-    public Gender(String genderText) {
-        switch (genderText) {
-            case "未知":  this.gender_int = 0;break;
-            case "男":  this.gender_int =1;break;
-            case "女":  this.gender_int =2;break;
-            default: this.gender_int =-1;break;
+    public int getValue() {
+        return value;
+    }
+
+    public String getDisplayText(Context context) {
+        return context.getString(displayRes);
+    }
+
+    public static Gender fromValue(int value) {
+        for (Gender gender : values()) {
+            if (gender.value == value) {
+                return gender;
+            }
         }
+        return UNKNOWN;
     }
 
-    public String getGenderString(int gender){
-        switch (gender){
-            case 1:return "男";
-            case 2:return "女";
-            default:return "未知";
+    public static Gender fromPosition(int position) {
+        Gender[] values = values();
+        if (position >= 0 && position < values.length) {
+            return values[position];
         }
+        return UNKNOWN;
     }
 
-    public int getGender_int() {
-        return this.gender_int;
-    }
-
-    public void setGender_int(final int gender_int) {
-        this.gender_int = gender_int;
+    public static String[] getDisplayValues(Context context) {
+        Gender[] genders = values();
+        String[] displayValues = new String[genders.length];
+        for (int i = 0; i < genders.length; i++) {
+            displayValues[i] = genders[i].getDisplayText(context);
+        }
+        return displayValues;
     }
 }

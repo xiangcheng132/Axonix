@@ -9,7 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -70,6 +77,33 @@ public class UserServiceImpl implements UserService {
         checkUsernameUnique(user);
         return userMapper.insertSelective(user);
     }
+
+    @Override
+    @Transactional
+    public int register(User user, MultipartFile avatarFile) throws DuplicateUsernameException, IOException {
+        checkUsernameUnique(user);
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            // 相对路径：resources/static/images/
+            String relativePath = "src/main/resources/static/images/";
+            String savePath = System.getProperty("user.dir") + File.separator + relativePath;
+
+            File dir = new File(savePath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String fileName = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
+            File dest = new File(savePath + fileName);
+            avatarFile.transferTo(dest);
+
+            // 设置数据库保存路径
+            user.setAvatar("/images/" + fileName);
+        }
+
+        return userMapper.insert(user);
+    }
+
 
     @Override
     @Transactional
@@ -155,5 +189,33 @@ public class UserServiceImpl implements UserService {
             return null; // 或抛出自定义异常
         }
     }
+
+    @Override
+    public int updateAvatar(Integer userId, MultipartFile avatarFile) throws IOException {
+
+        if (avatarFile == null || avatarFile.isEmpty()) {
+            return 0; // 没上传文件
+        }
+
+        String relativePath = "src/main/resources/static/images/";
+        String savePath = System.getProperty("user.dir") + File.separator + relativePath;
+
+        File dir = new File(savePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String fileName = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
+        File dest = new File(savePath + fileName);
+        avatarFile.transferTo(dest);
+
+        // 创建 User 对象并更新数据库中头像字段
+        User user = new User();
+        user.setId(userId);
+        user.setAvatar("/images/" + fileName);
+
+        return userMapper.updateByPrimaryKeySelective(user); // 只更新非空字段
+    }
+
 
 }

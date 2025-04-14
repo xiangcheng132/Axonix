@@ -1,6 +1,12 @@
 package com.Axonix.usermain;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +17,37 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.Axonix.index.model.Gender;
+import com.Axonix.index.config.NetworkClient;
 import com.Axonix.index.model.User;
 import com.Axonix.index.session.UserSessionManager;
 import com.Axonix.index.controller.UserUpdateManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.Axonix.index.BaseActivity;
+import com.bumptech.glide.Glide;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @Route(path = "/user/main")
 public class UserFragment extends Fragment
@@ -32,6 +57,10 @@ public class UserFragment extends Fragment
     private boolean isEditMode = false;
     private View rootView;
     private AddressSpinnerHelper addressHelper;
+    private CircleImageView ivAvatar;
+    private static final int IMAGE_PICKER_REQUEST_CODE = 1001;
+
+    private static final String UPLOAD_AVATAR_URL = "https://192.168.43.87:8080/api/users/updateAvatar";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -66,7 +95,7 @@ public class UserFragment extends Fragment
 
         // 设置残障类型 Spinner
         ArrayAdapter<CharSequence> disabilityAdapter = ArrayAdapter.createFromResource(
-                requireContext(), R.array.disability_options, android.R.layout.simple_spinner_item);
+                requireContext(), R.array.disability_types, android.R.layout.simple_spinner_item);
         disabilityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDisability.setAdapter(disabilityAdapter);
 
@@ -78,7 +107,99 @@ public class UserFragment extends Fragment
 
         setSpinnerEditable(R.id.spinner_gender, isEditMode);
         setSpinnerEditable(R.id.spinner_disability, isEditMode);
+
+
+        ivAvatar = rootView.findViewById(R.id.iv_avatar);
+        ivAvatar.setOnClickListener(v -> {
+            ImagePicker.with(this).crop().compress(1024).maxResultSize(1080, 1080).start(IMAGE_PICKER_REQUEST_CODE);
+        });
+
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IMAGE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            OkHttpClient httpClient = NetworkClient.INSTANCE.getClient();
+            Integer userId = UserSessionManager.getInstance(requireContext()).getUser().getId();
+            MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("userId", String.valueOf(userId));
+            try {
+                Uri avatarUri = data.getData();
+                ivAvatar.setImageURI(avatarUri);
+                ContentResolver contentResolver = requireContext().getContentResolver();
+                String fileName = getFileNameFromUri(contentResolver, avatarUri);
+                InputStream inputStream = contentResolver.openInputStream(avatarUri);
+                if (inputStream != null) {
+                    byte[] fileBytes = getBytesFromInputStream(inputStream);
+                    RequestBody fileBody = RequestBody.create(fileBytes, MediaType.parse("image/*"));
+                    multipartBuilder.addFormDataPart("avatar", fileName, fileBody);
+                    Log.d("图片名字：",fileName + " body:" + fileBody);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            RequestBody requestBody = multipartBuilder.build();
+
+            Request request = new Request.Builder()
+                    .url(UPLOAD_AVATAR_URL)
+                    .put(requestBody)
+                    .build();
+
+            // 发起异步请求
+            httpClient.newCall(request).enqueue(new Callback() {
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "图片上传失败，请重试", Toast.LENGTH_SHORT).show();
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseStr = response.body() != null ? response.body().string() : "";
+                    requireActivity().runOnUiThread(() -> {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), "图片上传成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "图片上传失败，请重试" + responseStr, Toast.LENGTH_SHORT).show();
+                            Log.d("图片上传失败", responseStr);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private String getFileNameFromUri(ContentResolver contentResolver, Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
+    }
+
+    private byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     // 实现地址加载完成回调
@@ -100,7 +221,6 @@ public class UserFragment extends Fragment
     }
 
     private void performLogout() {
-        // 清除用户 session
         UserSessionManager.getInstance(requireContext()).clearSession();
 
         if (getActivity() instanceof BaseActivity) {
@@ -180,7 +300,7 @@ public class UserFragment extends Fragment
             Spinner spinner = (Spinner) itemView;
             // 根据传入的值设置 Spinner 的选中项
             ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
-            Log.d("updateItemState",value);
+            Log.d("updateItemState", value);
             int position = adapter.getPosition(value);
             if (position != -1) {
                 spinner.setSelection(position);
@@ -209,12 +329,6 @@ public class UserFragment extends Fragment
         // 设置 gender 和 disability 类型
         currentUser.setGender(getGenderInt(selectedGenderPosition));  // 转换为int类型
         currentUser.setDisabilityType(getDisabilityInt(selectedDisabilityPosition));  // 转换为int类型
-
-        Log.d("gender0",""+spinnerGender.getSelectedItem());
-        Log.d("gender1",""+selectedGenderPosition);
-        Log.d("disability0",""+spinnerDisability.getSelectedItem());
-        Log.d("disability1",""+selectedDisabilityPosition);
-
 
         // 其他字段更新
         currentUser.setAge(Integer.parseInt(getItemContent(R.id.item_age)));
@@ -275,51 +389,101 @@ public class UserFragment extends Fragment
         updateItemState(R.id.item_detail_address, currentUser.getAddress());
         updateItemState(R.id.item_create_time, currentUser.getCreatedAt().toLocaleString());
         updateItemState(R.id.spinner_disability, getDisabilityText(currentUser.getDisabilityType()));
-
-        Log.d("updateItemState1",getGenderString(currentUser.getGender()));
-        Log.d("updateItemState2",""+currentUser.getGender());
-        Log.d("updateItemState3",getDisabilityText(currentUser.getDisabilityType()));
-        Log.d("updateItemState4",""+currentUser.getDisabilityType());
         // 设置用户名和 VIP 图标
         TextView tvUsername = rootView.findViewById(R.id.tv_username);
         ImageView ivVip = rootView.findViewById(R.id.iv_vip);
         tvUsername.setText(currentUser.getUsername());
         int vipIconRes = currentUser.getIsVip() != 0 ? R.drawable.ic_vip_yes : R.drawable.ic_vip_no;
         ivVip.setImageResource(vipIconRes);
+
+
+        String avatarUrl = "https://192.168.43.87:8080" + currentUser.getAvatar();
+        OkHttpClient client = NetworkClient.INSTANCE.getClient();
+        Request request = new Request.Builder()
+                .url(avatarUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                requireActivity().runOnUiThread(() -> {
+                    ivAvatar.setImageResource(R.drawable.ic_avatar);
+                    Toast.makeText(requireContext(), "头像加载失败", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    byte[] imageBytes = response.body().bytes();
+                    requireActivity().runOnUiThread(() -> {
+                        // 将获取到的图片数据交给 Glide 处理
+                        Glide.with(requireContext())
+                                .load(imageBytes)
+                                .placeholder(R.drawable.ic_avatar)
+                                .error(R.drawable.ic_avatar)
+                                .into(ivAvatar);
+                    });
+                } else {
+                    requireActivity().runOnUiThread(() -> {
+                        ivAvatar.setImageResource(R.drawable.ic_avatar);
+                        Toast.makeText(requireContext(), "头像加载失败", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+        });
+
+
+
     }
 
     private String getGenderString(int gender) {
         switch (gender) {
-            case 1: return "男";
-            case 2: return "女";
-            default: return "未知";
+            case 1:
+                return "男";
+            case 2:
+                return "女";
+            default:
+                return "未知";
         }
     }
 
     private String getDisabilityText(int type) {
         switch (type) {
-            case 0: return "无";
-            case 1: return "视障";
-            case 2: return "听障";
-            case 3: return "其他障碍";
-            default: return "未知";
+            case 0:
+                return "无";
+            case 1:
+                return "视障";
+            case 2:
+                return "听障";
+            case 3:
+                return "其他障碍";
+            default:
+                return "未知";
         }
     }
 
     private int getGenderInt(int position) {
         switch (position) {
-            case 1: return 1; // 男
-            case 2: return 2; // 女
-            default: return 0; // 未知
+            case 1:
+                return 1; // 男
+            case 2:
+                return 2; // 女
+            default:
+                return 0; // 未知
         }
     }
 
     private int getDisabilityInt(int position) {
         switch (position) {
-            case 1: return 1; // 视障
-            case 2: return 2; // 听障
-            case 3: return 3; // 其他障碍
-            default: return 0; // 无
+            case 1:
+                return 1; // 视障
+            case 2:
+                return 2; // 听障
+            case 3:
+                return 3; // 其他障碍
+            default:
+                return 0; // 无
         }
     }
 }

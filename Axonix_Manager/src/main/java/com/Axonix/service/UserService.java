@@ -2,6 +2,10 @@ package com.Axonix.service;
 
 import com.Axonix.demo.model.User;
 import com.Axonix.demo.model.UserExample;
+import com.Axonix.exception.DuplicateUsernameException;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -26,5 +30,11 @@ public interface UserService {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
     User login(String username, String password);
+
+    int register(User user, MultipartFile avatarFile) throws DuplicateUsernameException, IOException;
+
+    int updateAvatar(Integer userId, MultipartFile avatarFile) throws IOException;
+
 }

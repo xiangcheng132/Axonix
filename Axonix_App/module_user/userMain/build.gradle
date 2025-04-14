@@ -73,4 +73,7 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     api 'com.huawei.hms:push:6.7.0.300'
     api 'com.huawei.agconnect:agconnect-core:1.6.0.300'
+
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
 }

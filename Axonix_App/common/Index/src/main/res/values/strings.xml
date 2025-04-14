@@ -2,7 +2,11 @@
     <string name="app_name">common</string>
     <string name="sos">SOS</string>
 
-<!--    <string name="firebase_app_id" translatable="false">1:881217285293:android:edc6abe7096bb4c5526a24</string>-->
-<!--    <string name="firebase_api_key" translatable="false">AIzaSyD3kA7Z5FosJYxKfhK_hi_pdkrqU5ybayI</string>-->
-<!--    <string name="firebase_project_id" translatable="false">axonix-ee482</string>-->
+    <string name="unknown">未知</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="none">无</string>
+    <string name="vision_impairment">视障</string>
+    <string name="hearing_impairment">听障</string>
+    <string name="other_disability">其他障碍</string>
 </resources>

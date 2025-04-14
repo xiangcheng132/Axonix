@@ -3,9 +3,13 @@ package com.Axonix.controller;
 import com.Axonix.demo.model.User;
 import com.Axonix.demo.model.UserExample;
 import com.Axonix.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import java.text.SimpleDateFormat;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,12 +41,23 @@ public class UserController {
 
     @PostMapping("/login")
     public User login(@RequestBody User user) {
+        user.setLastLoginTime(new Date());
         return userService.login(user.getUsername(), user.getPassword());
     }
     // 完整注册用户（全字段）
     @PostMapping("/register")
     public int register(@RequestBody User user) {
         return userService.insert(user);
+    }
+
+    @PostMapping(value = "/registerWithAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public int register(@RequestPart("user") String userJson,
+                        @RequestPart(value = "avatar", required = false) MultipartFile avatarFile) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        User user = objectMapper.readValue(userJson, User.class);
+
+        return userService.register(user, avatarFile);
     }
 
     // 选择性注册用户（仅必填字段）
@@ -87,6 +102,13 @@ public class UserController {
     @PutMapping("/update")
     public int updateUser(@RequestBody User user) {
         return userService.updateByPrimaryKey(user);
+    }
+
+    @PutMapping(value = "/updateAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public int updateAvatar(@RequestParam("userId") Integer userId,
+                            @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
+
+        return userService.updateAvatar(userId, avatarFile);
     }
 
 }
