@@ -167,7 +167,7 @@ export default {
     handleAdd() {
       this.notification = {
         id: null,
-        adminId: this.notification.adminId,  // 默认使用获取的管理员ID
+        adminId: this.notification.adminId,
         title: '',
         content: '',
         sendTime: '',
@@ -221,8 +221,6 @@ export default {
         const example = {
           oredCriteria: [{ criteria: [] }]
         };
-
-        // 可根据需要添加批量删除的筛选条件
         await NotificationAPI.deleteNotificationByExample(example);
         this.fetchNotifications();
         this.selectedNotifications = [];
@@ -239,11 +237,11 @@ export default {
           type: 'warning',
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          confirmButtonClass: 'el-button--danger',  // 将确定按钮设为红色强调
-          closeOnClickModal: false,  // 禁止点击遮罩层关闭
+          confirmButtonClass: 'el-button--danger',
+          closeOnClickModal: false,
           beforeClose: async (action, instance, done) => {
             if (action === 'confirm') {
-              instance.confirmButtonLoading = true;  // 显示加载状态
+              instance.confirmButtonLoading = true;
               try {
                 await NotificationAPI.deleteNotificationById(id);
                 this.$message.success('删除成功');
@@ -251,19 +249,18 @@ export default {
               } catch (error) {
                 console.error('删除失败', error);
                 this.$message.error('删除失败');
-                throw error;  // 重新抛出错误以阻止对话框关闭
+                throw error;
               } finally {
                 instance.confirmButtonLoading = false;
-                done();  // 无论成功失败都关闭对话框
+                done();
               }
             } else {
-              done();  // 取消操作直接关闭
+              done();
               this.$message.info('已取消删除');
             }
           }
         });
       } catch (error) {
-        // 这里捕获的是确认对话框的取消操作或beforeClose中的错误
         if (error !== 'cancel') {
           console.error('删除处理异常', error);
         }

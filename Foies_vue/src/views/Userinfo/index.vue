@@ -302,7 +302,7 @@ export default {
             this.fetchUsers();
           } catch (error) {
             console.error('删除失败', error);
-            this.$message.error('删除失败');
+            this.$message.error('删除失败，请先删除该用户的其它记录！');
           }
         })
         .catch(() => {

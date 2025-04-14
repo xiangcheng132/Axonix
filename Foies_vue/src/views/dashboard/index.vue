@@ -180,35 +180,27 @@ export default {
 
         const helpRes = await this.$api.helpinfo.countHelpRequests({})
         this.stats.helpinfo = helpRes.data
-        console.log('帮助请求统计:', helpRes.data)
-        
+
         const ailogRes = await this.$api.ailog.countAiLogs({})
         this.stats.ailog = ailogRes.data
-        console.log('AI日志统计:', ailogRes.data)
 
         const navlogRes = await this.$api.navlog.countNavLogs({})
         this.stats.navlog = navlogRes.data
-        console.log('导航日志统计:', navlogRes.data)
 
         const postinfoRes = await this.$api.postinfo.countForumPosts({})
         this.stats.postinfo = postinfoRes.data
-        console.log('论坛帖子统计:', postinfoRes.data)
 
         const commentinfoRes = await this.$api.commentinfo.countComments({})
         this.stats.commentinfo = commentinfoRes.data
-        console.log('评论统计:', commentinfoRes.data)
 
         const notificationsRes = await this.$api.notifications.countNotifications({})
         this.stats.notifications = notificationsRes.data
-        console.log('通知统计:', notificationsRes.data)
 
         const sosinfoRes = await this.$api.sosinfo.countSosNotifications({})
         this.stats.sosinfo = sosinfoRes.data
-        console.log('SOS通知统计:', sosinfoRes.data)
 
         const feedbackRes = await this.$api.feedback.countFeedbacks({})
         this.stats.feedback = feedbackRes.data
-        console.log('反馈统计:', feedbackRes.data)
 
         this.initCharts()
       } catch (error) {
@@ -218,7 +210,7 @@ export default {
     },
     async fetchNotifications() {
       try {
-        const example = {}; // 根据需要构造查询条件
+        const example = {};
         const response = await this.$api.notifications.getNotificationsByExampleWithBLOBs(example);
         this.notifications = response.data;
       } catch (error) {
@@ -238,12 +230,10 @@ export default {
     },
     async initRegionChart() {
       try {
-        // 获取地区分布数据
         const res = await this.$api.user.getUsers({
           fields: ['province']
         })
 
-        // 处理原始数据
         const rawData = Array.isArray(res.data) ? res.data : []
         const provinceData = this.processProvinceData(rawData)
         const chartData = Object.entries(provinceData).map(([name, value]) => ({
@@ -251,12 +241,10 @@ export default {
           value
         }))
 
-        // 初始化图表
         this.regionChart = echarts.init(document.getElementById('regionChart'))
         const option = this.getRegionOption(chartData)
         this.regionChart.setOption(option)
 
-        // 窗口自适应
         window.addEventListener('resize', () => this.regionChart.resize())
       } catch (error) {
         console.error('地区分布图表加载失败:', error)
@@ -265,12 +253,10 @@ export default {
     },
     async initDisabilityChart() {
       try {
-        // 获取残障类型数据
         const res = await this.$api.user.getUsers({
           fields: ['disability_type']
         })
 
-        // 处理数据
         const rawData = Array.isArray(res.data) ? res.data : []
         const disabilityData = this.processDisabilityData(rawData)
         const chartData = Object.entries(disabilityData).map(([name, value]) => ({
@@ -278,12 +264,10 @@ export default {
           value
         }))
 
-        // 初始化图表
         this.disabilityChart = echarts.init(document.getElementById('disabilityChart'))
         const option = this.getDisabilityOption(chartData)
         this.disabilityChart.setOption(option)
 
-        // 窗口自适应
         window.addEventListener('resize', () => this.disabilityChart.resize())
       } catch (error) {
         console.error('残障类型图表加载失败:', error)
@@ -306,7 +290,7 @@ export default {
       }
 
       return users.reduce((acc, user) => {
-        const type = user.disabilityType ?? 3 // 默认归类为其他障碍
+        const type = user.disabilityType ?? 3 
         const label = typeMap[type] || '其他障碍'
         acc[label] = (acc[label] || 0) + 1
         return acc
@@ -439,7 +423,7 @@ export default {
     this.updateTime()
     this.timer = setInterval(this.updateTime, 1000)
     this.fetchStats()
-    this.fetchNotifications(); // 调用新增方法
+    this.fetchNotifications();
   },
   beforeDestroy() {
     clearInterval(this.timer)
@@ -473,8 +457,8 @@ export default {
     }
 
     .notifications-table-wrapper {
-      flex: 1; // 填充剩余空间
-      overflow-y: auto; // 添加垂直滚动条
+      flex: 1;
+      overflow-y: auto;
     }
   }
 
@@ -490,7 +474,7 @@ export default {
   .dashboard-container .admin-card,
   .dashboard-container .notifications-card,
   .dashboard-container .stat-card {
-    height: auto; // 在小屏幕上取消固定高度
+    height: auto;
   }
 }
 
