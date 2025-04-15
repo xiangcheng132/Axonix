@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
@@ -52,6 +54,8 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
 
     private boolean isSearching = false; // 用来标记是否正在搜索
 
+    private LinearLayout stopNavigationContainer;
+    private ImageButton stopNavButton;
     // 注册权限请求器
     private final ActivityResultLauncher<String[]> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
@@ -75,36 +79,6 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_nav, container, false);
 
-
-        searchResultsRecyclerView = rootView.findViewById(R.id.searchResultsRecyclerView);
-        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        searchResultsAdapter = new SearchResultsAdapter(null, new SearchResultsAdapter.OnItemClickListener() {
-//            点击地点，地图位置移动
-            @Override
-            public void onItemClick(Tip tip) {
-                if (tip.getPoint() != null) {
-                    LatLng targetLatLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
-                    mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(targetLatLng, 16));
-                    mapDisplay.getAMap().addMarker(new MarkerOptions().position(targetLatLng).title(tip.getName()));
-                    searchResultsRecyclerView.setVisibility(View.GONE);
-                }
-            }
-//             出发按钮功能
-            @Override
-            public void onDepartClick(Tip tip) {
-                if (currentLocation != null && tip.getPoint() != null) {
-                    LatLng destination = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
-                    navigationManager.calculateRoute(currentLocation, destination, RouteType.DRIVING);
-                    Toast.makeText(getContext(), "正在导航...", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(getContext(), "当前位置尚未确定", Toast.LENGTH_SHORT).show();
-                }
-                searchResultsRecyclerView.setVisibility(View.GONE);
-            }
-        });
-        searchResultsRecyclerView.setAdapter(searchResultsAdapter);
-
         // 检查并请求权限
         if (MapPermissions.hasAllPermissions(requireActivity())) {
             initMapAndLocation();  // 权限已授予，直接初始化地图和定位
@@ -112,12 +86,82 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
             permissionLauncher.launch(MapPermissions.PERMISSIONS);
         }
 
-        searchView = rootView.findViewById(R.id.searchView);
-        searchView.setIconifiedByDefault(true);
-        setSearchViewInitialWidth();
-        setUpSearchView();
+        stopNavInit();//停止导航按钮初始化
+        searchInit();//搜索功能初始化
+        parameterNav();//参数导航，即其他页面进入该页面时附带导航参数时使用
 
         return rootView;
+    }
+
+    private void parameterNav(){
+        if (getArguments() != null) {
+            double latitude = getArguments().getDouble("latitude", Double.NaN);
+            double longitude = getArguments().getDouble("longitude", Double.NaN);
+
+            if (!Double.isNaN(latitude) && !Double.isNaN(longitude)) {
+                endLocation = new LatLng(latitude, longitude);
+                if (currentLocation != null) {
+                    navigationManager.stopNavi();
+                    navigationManager.calculateRoute(currentLocation, endLocation, RouteType.DRIVING);
+                    Toast.makeText(getContext(), "正在导航...", Toast.LENGTH_SHORT).show();
+                    mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
+                    stopNavigationContainer.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+    private void stopNavInit(){
+        stopNavigationContainer = rootView.findViewById(R.id.stopNavigationContainer);
+        stopNavButton = rootView.findViewById(R.id.stopNavigationButton);
+        stopNavigationContainer.setVisibility(View.GONE);
+        stopNavigationContainer.setOnClickListener(v->{
+            navigationManager.stopNavi();
+            stopNavigationContainer.setVisibility(View.GONE);
+        });
+        stopNavButton.setOnClickListener(v->{
+            navigationManager.stopNavi();
+            stopNavigationContainer.setVisibility(View.GONE);
+        });
+    }
+
+    private void searchInit(){
+        searchResultsRecyclerView = rootView.findViewById(R.id.searchResultsRecyclerView);
+        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchResultsAdapter = new SearchResultsAdapter(null, new SearchResultsAdapter.OnItemClickListener() {
+            //            点击地点，地图位置移动
+            @Override
+            public void onItemClick(Tip tip) {
+                if (tip.getPoint() != null) {
+                    LatLng targetLatLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+                    mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(targetLatLng, 16));
+                    mapDisplay.getAMap().addMarker(new MarkerOptions().position(targetLatLng).title(tip.getName()));
+                    searchResultsRecyclerView.setVisibility(View.GONE);
+                    searchView.clearFocus();
+                }
+            }
+            //             出发按钮功能
+            @Override
+            public void onDepartClick(Tip tip) {
+                if (currentLocation != null && tip.getPoint() != null) {
+                    navigationManager.stopNavi();
+                    LatLng destination = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+                    navigationManager.calculateRoute(currentLocation, destination, RouteType.DRIVING);
+                    Toast.makeText(getContext(), "正在导航...", Toast.LENGTH_SHORT).show();
+                    mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
+                    stopNavigationContainer.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(getContext(), "当前位置尚未确定", Toast.LENGTH_SHORT).show();
+                }
+                searchView.clearFocus();
+                searchResultsRecyclerView.setVisibility(View.GONE);
+            }
+        });
+        searchResultsRecyclerView.setAdapter(searchResultsAdapter);
+        searchView = rootView.findViewById(R.id.searchView);
+        searchView.setIconifiedByDefault(true);
+
+        setSearchViewInitialWidth();
+        setUpSearchView();
     }
 
     private void initMapAndLocation() {

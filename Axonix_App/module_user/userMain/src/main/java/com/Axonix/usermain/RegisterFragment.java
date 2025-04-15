@@ -66,7 +66,7 @@ public class RegisterFragment extends Fragment {
 
     private OkHttpClient httpClient;
 
-    private static final String REGISTER_URL = "https://192.168.43.87:8080/api/users/registerWithAvatar";
+    private String REGISTER_URL;
 
     @Nullable
     @Override
@@ -74,6 +74,8 @@ public class RegisterFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
+
+        REGISTER_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/users/registerWithAvatar";
         httpClient = NetworkClient.INSTANCE.getClient();
         gson = NetworkTimeClient.getGson();
 
@@ -123,7 +125,6 @@ public class RegisterFragment extends Fragment {
         AddressDropdownHelper addressHelper = new AddressDropdownHelper(
                 requireContext(), actProvince, actCity, actDistrict
         );
-
         // 头像选择
         ivAvatar.setOnClickListener(v -> ImagePicker.with(this)
                 .crop().compress(1024).maxResultSize(1080, 1080).start());

@@ -37,7 +37,6 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @NonNull
     @Override
     public SearchResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // 使用已定义的单项布局文件（例如 item_search_result.xml）
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_result, parent, false);
         return new SearchResultViewHolder(view);
     }

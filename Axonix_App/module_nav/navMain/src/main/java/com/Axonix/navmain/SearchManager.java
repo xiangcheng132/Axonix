@@ -24,7 +24,6 @@ public class SearchManager {
     }
 
     public void searchPOI(String keyword, LatLonPoint center, SearchResultListener listener) {
-        Log.d("search","搜索一次");
         InputtipsQuery query = new InputtipsQuery(keyword, center != null ? center.toString() : "");
         Inputtips inputTips = new Inputtips(context, query);
         inputTips.setInputtipsListener(new Inputtips.InputtipsListener() {

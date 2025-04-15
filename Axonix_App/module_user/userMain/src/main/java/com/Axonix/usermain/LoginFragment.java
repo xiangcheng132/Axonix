@@ -49,13 +49,15 @@ public class LoginFragment extends Fragment {
     private TextInputEditText etUsername, etPassword;
     private OkHttpClient httpClient;
     private Gson gson;
-    private static final String LOGIN_URL = "https://192.168.43.87:8080/api/users/login";
+    private String LOGIN_URL;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        LOGIN_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url)+"/api/users/login";
 
         etUsername = view.findViewById(R.id.et_username);
         etPassword = view.findViewById(R.id.et_password);

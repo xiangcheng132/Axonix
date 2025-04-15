@@ -114,18 +114,18 @@ public class NavigationManager implements AMapNaviListener {
 
     @Override
     public void onGetNavigationText(int code, String text) {
-        Toast.makeText(context, "导航提示信息（代码: " + code + "）: " + text, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "导航提示信息（代码: " + code + "）: " + text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     @Deprecated
     public void onGetNavigationText(String text) {
-        Toast.makeText(context, "导航提示信息: " + text, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "导航提示信息: " + text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEndEmulatorNavi() {
-        Toast.makeText(context, "仿真导航结束", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "仿真导航结束", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -136,22 +136,22 @@ public class NavigationManager implements AMapNaviListener {
     @Override
     @Deprecated
     public void onCalculateRouteFailure(int errorCode) {
-        Toast.makeText(context, "路径规划失败，旧错误码: " + errorCode, Toast.LENGTH_LONG).show();
+//        Toast.makeText(context, "路径规划失败，旧错误码: " + errorCode, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onReCalculateRouteForYaw() {
-        Toast.makeText(context, "偏航，重新规划路线", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "偏航，重新规划路线", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onReCalculateRouteForTrafficJam() {
-        Toast.makeText(context, "前方拥堵，重新规划路线", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "前方拥堵，重新规划路线", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onArrivedWayPoint(int wayID) {
-        Toast.makeText(context, "到达途经点，途经点 ID: " + wayID, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "到达途经点，途经点 ID: " + wayID, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -173,7 +173,7 @@ public class NavigationManager implements AMapNaviListener {
     }
 
     private void showToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -230,7 +230,7 @@ public class NavigationManager implements AMapNaviListener {
     @Override
     @Deprecated
     public void onCalculateRouteSuccess(int[] routeIds) {
-        Toast.makeText(context, "路径规划成功", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "路径规划成功", Toast.LENGTH_SHORT).show();
         // 这里暂时不处理旧的成功回调
     }
 
@@ -319,6 +319,7 @@ public class NavigationManager implements AMapNaviListener {
     @Override
     public void onPlayRing(int ringType) {
         // 可以在这里处理播放音效逻辑
+
     }
 
     @Override
@@ -339,6 +340,15 @@ public class NavigationManager implements AMapNaviListener {
         if (aMapNavi != null) {
             aMapNavi.stopNavi();
             aMapNavi.destroy();
+        }
+        if (currentRoutePolyline != null) {
+            currentRoutePolyline.remove();
+        }
+    }
+
+    public void stopNavi(){
+        if (aMapNavi != null) {
+            aMapNavi.stopNavi();
         }
         if (currentRoutePolyline != null) {
             currentRoutePolyline.remove();

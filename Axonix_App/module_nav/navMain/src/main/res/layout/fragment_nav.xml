@@ -47,4 +47,40 @@
 
     </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/stopNavigationContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/stopNavigationButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="停止导航"
+            android:elevation="8dp"
+            android:focusable="true"
+            android:importantForAccessibility="yes"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_stop_navigation" />
+
+        <TextView
+            android:id="@+id/stopNavigationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="停止导航"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,6 +47,7 @@ public class LocationManager implements AMapLocationListener {
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.getUiSettings().setMyLocationButtonEnabled(true); // 显示定位按钮
         aMap.setMyLocationEnabled(true); // 启用定位图层
+
     }
 
     @Override

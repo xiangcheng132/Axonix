@@ -60,13 +60,13 @@ public class UserFragment extends Fragment
     private CircleImageView ivAvatar;
     private static final int IMAGE_PICKER_REQUEST_CODE = 1001;
 
-    private static final String UPLOAD_AVATAR_URL = "https://192.168.43.87:8080/api/users/updateAvatar";
+    private String UPLOAD_AVATAR_URL ;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_user, container, false);
-
+        UPLOAD_AVATAR_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/users/updateAvatar";
         Button btnEdit = rootView.findViewById(R.id.btn_edit);
         Spinner provinceSpinner = rootView.findViewById(R.id.spinner_province);
         Spinner citySpinner = rootView.findViewById(R.id.spinner_city);
@@ -300,7 +300,6 @@ public class UserFragment extends Fragment
             Spinner spinner = (Spinner) itemView;
             // 根据传入的值设置 Spinner 的选中项
             ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
-            Log.d("updateItemState", value);
             int position = adapter.getPosition(value);
             if (position != -1) {
                 spinner.setSelection(position);
@@ -396,42 +395,46 @@ public class UserFragment extends Fragment
         int vipIconRes = currentUser.getIsVip() != 0 ? R.drawable.ic_vip_yes : R.drawable.ic_vip_no;
         ivVip.setImageResource(vipIconRes);
 
+        try {
+            String avatarUrl = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + currentUser.getAvatar();
+            OkHttpClient client = NetworkClient.INSTANCE.getClient();
+            Request request = new Request.Builder()
+                    .url(avatarUrl)
+                    .build();
 
-        String avatarUrl = "https://192.168.43.87:8080" + currentUser.getAvatar();
-        OkHttpClient client = NetworkClient.INSTANCE.getClient();
-        Request request = new Request.Builder()
-                .url(avatarUrl)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                requireActivity().runOnUiThread(() -> {
-                    ivAvatar.setImageResource(R.drawable.ic_avatar);
-                    Toast.makeText(requireContext(), "头像加载失败", Toast.LENGTH_SHORT).show();
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    byte[] imageBytes = response.body().bytes();
-                    requireActivity().runOnUiThread(() -> {
-                        // 将获取到的图片数据交给 Glide 处理
-                        Glide.with(requireContext())
-                                .load(imageBytes)
-                                .placeholder(R.drawable.ic_avatar)
-                                .error(R.drawable.ic_avatar)
-                                .into(ivAvatar);
-                    });
-                } else {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
                     requireActivity().runOnUiThread(() -> {
                         ivAvatar.setImageResource(R.drawable.ic_avatar);
                         Toast.makeText(requireContext(), "头像加载失败", Toast.LENGTH_SHORT).show();
                     });
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        byte[] imageBytes = response.body().bytes();
+                        requireActivity().runOnUiThread(() -> {
+                            // 将获取到的图片数据交给 Glide 处理
+                            Glide.with(requireContext())
+                                    .load(imageBytes)
+                                    .placeholder(R.drawable.ic_avatar)
+                                    .error(R.drawable.ic_avatar)
+                                    .into(ivAvatar);
+                        });
+                    } else {
+                        requireActivity().runOnUiThread(() -> {
+                            ivAvatar.setImageResource(R.drawable.ic_avatar);
+                            Toast.makeText(requireContext(), "头像加载失败", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.d("图片获取失败",e.toString());
+        }
+
 
 
 
