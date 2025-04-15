@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainFragment"
-    android:id="@+id/container"
+    tools:context=".MainFragment">
 
-    >
+    <!-- 原本的内容作为子 LinearLayout 放在 FrameLayout 里 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 原有内容照旧 -->
         <TextView
             android:id="@+id/tv_welcome"
             android:layout_width="match_parent"
@@ -20,15 +23,15 @@
             android:textColor="@color/primary_color"
             android:gravity="center"
             android:padding="16dp"
-            android:background="@color/light_gray"/>
+            android:background="@color/light_gray" />
 
-        <!-- 功能按钮区域 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp">
 
+            <!-- 三个按钮 -->
             <Button
                 android:id="@+id/btn_ai"
                 android:layout_width="0dp"
@@ -38,7 +41,7 @@
                 android:textAllCaps="false"
                 android:backgroundTint="@color/primary_color"
                 android:textColor="@color/white"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp" />
 
             <Button
                 android:id="@+id/btn_traffic"
@@ -49,25 +52,33 @@
                 android:textAllCaps="false"
                 android:backgroundTint="@color/primary_color"
                 android:textColor="@color/white"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginStart="4dp" />
 
             <Button
                 android:id="@+id/btn_communicate"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="无障碍交流"
+                android:text="翻译助手"
                 android:textAllCaps="false"
                 android:backgroundTint="@color/primary_color"
                 android:textColor="@color/white"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginStart="4dp" />
         </LinearLayout>
 
-        <!-- 联系人列表 -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_contacts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"/>
+            android:padding="8dp" />
+    </LinearLayout>
 
-</LinearLayout>
+    <!-- 悬浮按钮保持不变，但现在它的 parent 是 FrameLayout，就能生效了 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:srcCompat="@drawable/ic_add_post" />
+</FrameLayout>

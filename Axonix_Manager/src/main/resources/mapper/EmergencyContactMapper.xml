@@ -71,6 +71,20 @@
   <sql id="Base_Column_List">
     id, user_id, contact_user_id, contact_phone, relationship, created_at, updated_at
   </sql>
+  <select id="selectByUserIdWithUsername" resultType="com.Axonix.demo.dto.EmergencyContactDto">
+    SELECT
+      ec.id,
+      ec.user_id AS userId,
+      ec.contact_user_id AS contactUserId,
+      ec.contact_phone AS contactPhone,
+      ec.relationship,
+      ec.created_at AS createdAt,
+      ec.updated_at AS updatedAt,
+      u.username AS contactUsername
+    FROM emergency_contact ec
+           INNER JOIN user u ON ec.contact_user_id = u.id
+    WHERE ec.user_id = #{userId}
+  </select>
   <select id="selectByExample" parameterType="com.Axonix.demo.model.EmergencyContactExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

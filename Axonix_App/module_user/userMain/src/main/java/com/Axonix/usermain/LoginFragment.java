@@ -100,9 +100,6 @@ public class LoginFragment extends Fragment {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        Log.d("LoginFragment", "用户名：" + username);
-        Log.d("LoginFragment", "密码：" + password);
-
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -179,14 +176,12 @@ public class LoginFragment extends Fragment {
                                         @Override
                                         public void onUpdateSuccess() {
                                             // 更新成功的回调
-                                            Toast.makeText(getContext(), "保存成功", Toast.LENGTH_SHORT).show();
                                             handleLoginSuccess(user);
                                         }
 
                                         @Override
                                         public void onUpdateFailure() {
                                             // 更新失败的回调
-                                            Toast.makeText(getContext(), "保存失败，请重试", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                             );

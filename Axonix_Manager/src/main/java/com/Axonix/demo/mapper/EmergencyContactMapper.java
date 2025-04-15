@@ -1,5 +1,6 @@
 package com.Axonix.demo.mapper;
 
+import com.Axonix.demo.dto.EmergencyContactDto;
 import com.Axonix.demo.model.EmergencyContact;
 import com.Axonix.demo.model.EmergencyContactExample;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface EmergencyContactMapper {
     int updateByPrimaryKeySelective(EmergencyContact record);
 
     int updateByPrimaryKey(EmergencyContact record);
+
+    List<EmergencyContactDto> selectByUserIdWithUsername(@Param("userId") Integer userId);
 }

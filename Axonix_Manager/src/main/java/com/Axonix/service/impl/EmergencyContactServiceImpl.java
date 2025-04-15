@@ -1,5 +1,6 @@
 package com.Axonix.service.impl;
 
+import com.Axonix.demo.dto.EmergencyContactDto;
 import com.Axonix.demo.mapper.EmergencyContactMapper;
 import com.Axonix.demo.model.EmergencyContact;
 import com.Axonix.demo.model.EmergencyContactExample;
@@ -67,5 +68,10 @@ public class EmergencyContactServiceImpl implements EmergencyContactService {
     @Override
     public int updateByPrimaryKey(EmergencyContact record) {
         return emergencyContactMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public List<EmergencyContactDto> getEmergencyContactDetail(Integer userId) {
+        return emergencyContactMapper.selectByUserIdWithUsername(userId);
     }
 }

@@ -5,4 +5,8 @@
     <color name="light_gray">#F5F5F5</color>
     <color name="white">#FFFFFF</color>
     <color name="lightGray">#D3D3D3</color>
+    <color name="ripple_color">#B3B3B3</color>    <!-- 按钮点击时的波纹颜色 -->
+    <color name="stroke_color">#3700B3</color>    <!-- 按钮的边框颜色 -->
+
+
 </resources>

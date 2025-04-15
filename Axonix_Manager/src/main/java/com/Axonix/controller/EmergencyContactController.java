@@ -1,5 +1,6 @@
 package com.Axonix.controller;
 
+import com.Axonix.demo.dto.EmergencyContactDto;
 import com.Axonix.demo.model.EmergencyContact;
 import com.Axonix.demo.model.EmergencyContactExample;
 import com.Axonix.service.EmergencyContactService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -84,5 +86,11 @@ public class EmergencyContactController {
     @PutMapping("/update")
     public int updateByPrimaryKey(@RequestBody EmergencyContact record) {
         return emergencyContactService.updateByPrimaryKey(record);
+    }
+
+    @PostMapping("/select_By_userId")
+    public List<EmergencyContactDto> getEmergencyContactDetail(@RequestBody Map<String, Object> requestBody) {
+        Integer userId = (Integer) requestBody.get("userId");
+        return emergencyContactService.getEmergencyContactDetail(userId);
     }
 }

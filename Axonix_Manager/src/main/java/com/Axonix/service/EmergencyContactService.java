@@ -1,5 +1,6 @@
 package com.Axonix.service;
 
+import com.Axonix.demo.dto.EmergencyContactDto;
 import com.Axonix.demo.model.EmergencyContact;
 import com.Axonix.demo.model.EmergencyContactExample;
 import java.util.List;
@@ -26,4 +27,6 @@ public interface EmergencyContactService {
     int updateByPrimaryKeySelective(EmergencyContact record);
 
     int updateByPrimaryKey(EmergencyContact record);
+
+    List<EmergencyContactDto> getEmergencyContactDetail(Integer userId);
 }
