@@ -33,6 +33,7 @@ import com.Axonix.index.session.UserSessionManager;
 import com.Axonix.index.model.EmergencyContact;
 import com.Axonix.index.model.EmergencyContactExample;
 import com.Axonix.index.model.EmergencyContactTable;
+import com.Axonix.navmain.NavFragment;
 import com.Axonix.usermain.LoginFragment;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -70,19 +72,30 @@ public class MainFragment extends Fragment {
     private MaterialButton addBtu;
 
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // 初始化 URL 和网络客户端
         EMERGENCY_CONTACT_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/emergency-contact/select_By_userId";
         ALL_USER_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/users/list";
         ADD_EMERGENCY_CONTANCT_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/emergency-contact/insert";
         DELETE_EMERGENCY = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/emergency-contact/delete/by-example";
+
         httpClient = NetworkClient.INSTANCE.getClient();
-        butInit();//按钮功能初始化
-        setupContacts();// 初始化联系人列表
-        addEmergencyContact();//添加联系人功能
-        return view;
+
+        butInit();               // 按钮功能初始化
+        setupContacts();         // 初始化联系人列表
+        addEmergencyContact();   // 添加联系人功能
     }
 
     private void butInit(){

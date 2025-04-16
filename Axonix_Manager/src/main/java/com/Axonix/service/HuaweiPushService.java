@@ -42,7 +42,6 @@ public class HuaweiPushService {
                 .queryParam("client_secret", properties.getClientSecret())
                 .toUriString();
 
-        System.out.println("URL:"+url);
         return webClient.get()
                 .uri(url)
                 .retrieve()
@@ -53,7 +52,6 @@ public class HuaweiPushService {
     public void sendPush(String deviceToken, String title, String body) {
         try {
             String accessToken = getAccessToken();
-            System.out.println("accessToken：" + accessToken);
             String pushUrl = properties.getPushUrl().replace("{appId}", properties.getAppId());
 
             PushMessageRequest request = buildPushRequest(deviceToken, title, body);
@@ -66,7 +64,6 @@ public class HuaweiPushService {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
-            System.out.println("推送响应：" + response);
         } catch (Exception e) {
             System.out.println("推送失败" + e.getMessage());
         }

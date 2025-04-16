@@ -62,6 +62,8 @@ public class BaseActivity extends AppCompatActivity {
     private Context that;
     private String address;
     private GeocodeSearch geocodeSearch;
+
+    private boolean hasNavigated = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +74,40 @@ public class BaseActivity extends AppCompatActivity {
         httpClient = NetworkClient.INSTANCE.getClient();
         that = this;
 
+
         initRoutes();
         setupNavigation();
         setupSOSButton();
 
         initLocation();
+        if (!hasNavigated) {
+
+            Intent intent = getIntent();
+            double lat = intent.getDoubleExtra("latitude", Double.NaN);
+            double lon = intent.getDoubleExtra("longitude", Double.NaN);
+
+            if (!Double.isNaN(lat) && !Double.isNaN(lon)) {
+
+                Fragment fragment = (Fragment) ARouter.getInstance()
+                        .build("/nav/main")
+                        .withDouble("latitude", lat)//北京测试用地址：39.908823
+                        .withDouble("longitude", lon)//北京测试用地址：116.397470
+                        .navigation();
+                if (fragment != null) {
+                    replaceFragment(fragment);
+                    bottomNavigation.setOnNavigationItemSelectedListener(null);
+                    bottomNavigation.setSelectedItemId(R.id.nav_nav);
+                    bottomNavigation.setOnNavigationItemSelectedListener(this::onNavItemSelected);
+                }
+
+                // 移除以防重复跳转
+                intent.removeExtra("latitude");
+                intent.removeExtra("longitude");
+
+                hasNavigated = true;
+                return;
+            }
+        }
         if (savedInstanceState == null) {
             switchFragment(R.id.nav_home);
         }

@@ -61,44 +61,66 @@ public class DemoHmsMessageService extends HmsMessageService {
 
     // 用于展示通知
     private void sendNotification(String title, String body) {
-        // 构造通知 builder
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(com.Axonix.usermain.R.drawable.ic_avatar)  // 请将 ic_notification 替换为你项目中的通知图标
-                .setContentTitle(title)
-                .setContentText(body)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
+        double latitude = Double.NaN;
+        double longitude = Double.NaN;
 
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.bigText(body);
-        builder.setStyle(bigTextStyle);
+        // 使用正则提取经纬度
+        try {
+            // 正则匹配“经度：xxx.xxx” 和 “纬度：xxx.xxx”
+            java.util.regex.Pattern latPattern = java.util.regex.Pattern.compile("纬度[:：]\\s*([\\d.]+)");
+            java.util.regex.Pattern lonPattern = java.util.regex.Pattern.compile("经度[:：]\\s*([\\d.]+)");
 
-        // 点击通知时打开 MainActivity（可根据需求修改为其他 Activity）
+            java.util.regex.Matcher latMatcher = latPattern.matcher(body);
+            java.util.regex.Matcher lonMatcher = lonPattern.matcher(body);
+
+            if (latMatcher.find()) {
+                latitude = Double.parseDouble(latMatcher.group(1));
+            }
+            if (lonMatcher.find()) {
+                longitude = Double.parseDouble(lonMatcher.group(1));
+            }
+        } catch (Exception e) {
+            Log.w("HMS", "正则解析经纬度失败: " + e.getMessage());
+        }
+
+        // 创建 Intent，跳转 NavFragment 所在的 Activity
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // 如果解析到有效经纬度，添加为 extra 参数
+        if (!Double.isNaN(latitude) && !Double.isNaN(longitude)) {
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+        }
+
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
                 intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
         );
-        builder.setContentIntent(pendingIntent);
 
-        // 获取 NotificationManager 并创建通知通道
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(com.Axonix.usermain.R.drawable.ic_avatar)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Android 8.0 (API 26) 及以上需要创建通知通道
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelName = "Default Channel";
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    channelName,
+                    "Default Channel",
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             notificationManager.createNotificationChannel(channel);
         }
 
-        // 发出通知，id 可根据需求定义
         notificationManager.notify(0, builder.build());
     }
+
 }

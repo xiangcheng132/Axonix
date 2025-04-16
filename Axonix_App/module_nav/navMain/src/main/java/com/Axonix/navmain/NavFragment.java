@@ -38,6 +38,7 @@ import java.util.List;
 
 @Route(path = "/nav/main")
 public class NavFragment extends Fragment implements LocationManager.LocationListener {
+    private boolean hasParameterNavInitialized = false;
     private MapView mapView;
     private MapDisplayManager mapDisplay;
     private LocationManager locationManager;
@@ -86,10 +87,8 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
             permissionLauncher.launch(MapPermissions.PERMISSIONS);
         }
 
-        stopNavInit();//停止导航按钮初始化
-        searchInit();//搜索功能初始化
-        parameterNav();//参数导航，即其他页面进入该页面时附带导航参数时使用
-
+        stopNavInit();
+        searchInit();
         return rootView;
     }
 
@@ -97,15 +96,15 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
         if (getArguments() != null) {
             double latitude = getArguments().getDouble("latitude", Double.NaN);
             double longitude = getArguments().getDouble("longitude", Double.NaN);
-
             if (!Double.isNaN(latitude) && !Double.isNaN(longitude)) {
-                endLocation = new LatLng(latitude, longitude);
                 if (currentLocation != null) {
                     navigationManager.stopNavi();
-                    navigationManager.calculateRoute(currentLocation, endLocation, RouteType.DRIVING);
+                    LatLng destination = new LatLng(latitude, longitude);
+                    navigationManager.calculateRoute(currentLocation, destination, RouteType.DRIVING);
                     Toast.makeText(getContext(), "正在导航...", Toast.LENGTH_SHORT).show();
                     mapDisplay.getAMap().moveCamera(com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
                     stopNavigationContainer.setVisibility(View.VISIBLE);
+
                 }
             }
         }
@@ -346,6 +345,10 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
     public void onLocationReceived(double lat, double lng) {
         currentLocation = new LatLng(lat, lng);
 
+        if (!hasParameterNavInitialized) {
+            hasParameterNavInitialized = true;
+            parameterNav();
+        }
     }
 
 
