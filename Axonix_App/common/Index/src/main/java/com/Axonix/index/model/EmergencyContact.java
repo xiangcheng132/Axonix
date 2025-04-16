@@ -1,4 +1,4 @@
-package com.Axonix.model;
+package com.Axonix.index.model;
 
 public class EmergencyContact {
     private final String name;

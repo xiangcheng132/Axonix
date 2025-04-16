@@ -19,15 +19,12 @@ public class EmergencyButtonView extends FrameLayout {
     }
 
     private void init(Context context) {
-        // 加载布局
         LayoutInflater.from(context).inflate(R.layout.emergency_button, this, true);
 
-        // 设置按钮点击事件
         Button emergencyButton = findViewById(R.id.btn_emergency);
         emergencyButton.setOnClickListener(v -> {
-            // 处理一键求助的逻辑
             Toast.makeText(context, "一键求助触发！", Toast.LENGTH_SHORT).show();
-            // 可在这里发送求助信息，调用后台接口等
+
         });
     }
 }

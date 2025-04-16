@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.Axonix.model.Message;
+import com.Axonix.index.model.Message;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.appbar.MaterialToolbar;
 

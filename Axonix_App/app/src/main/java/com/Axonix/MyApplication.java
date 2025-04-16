@@ -7,6 +7,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.huawei.agconnect.config.AGConnectServicesConfig;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.huawei.hms.common.ApiException;
+import com.huawei.hms.push.HmsMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +51,16 @@ public class MyApplication extends Application {
                 Log.d("HMS", "手动读取 appId 成功: " + appId);
 
                 String token = HmsInstanceId.getInstance(this).getToken(appId, "HCM"); // "HCM" 是华为推送服务名
+                Log.d("消息推送MyApp", HmsMessaging.getInstance(this).isAutoInitEnabled()+"");
+                HmsMessaging.getInstance(this).turnOnPush()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d("消息推送：", "Push turned on");
+                            } else {
+                                Log.e("消息推送：", "Failed to turn on push");
+                            }
+                        });
+
                 if (!token.isEmpty()) {
                     Log.d("获取token成功: " , token);
                     // 可以上传到服务器或者本地保存

@@ -7,6 +7,13 @@ server:
     key-store-type: PKCS12
     key-alias: myapp
 #  keytool -genkeypair -alias myapp -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore myapp.p12 -validity 3650
+huawei:
+  push:
+    client-id: 113945503
+    client-secret: af816b61fff47cdb35fde2f66562bfc442b72aa261688e251282b89bb02c25a6
+    app-id: 113945503
+    oauth-url: https://oauth-login.cloud.huawei.com/oauth2/v3/token
+    push-url: https://push-api.cloud.huawei.com/v1/{appId}/messages:send
 
 spring:
   datasource:

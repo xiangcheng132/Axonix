@@ -216,6 +216,9 @@ public class LoginFragment extends Fragment {
             activity.bottomNavigation.setSelectedItemId(com.Axonix.index.R.id.nav_home);
             activity.switchFragment(com.Axonix.index.R.id.nav_home);
         }
-        Toast.makeText(getContext(), "登录成功，欢迎 " + user.getUsername(), Toast.LENGTH_SHORT).show();
+        if (isAdded()) {
+            Toast.makeText(requireContext(), "登录成功，欢迎 " + user.getUsername(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

@@ -91,7 +91,6 @@ public class EmergencyFragment extends Fragment {
     private void animateCircleColor(int targetColorRes) {
         GradientDrawable drawable = (GradientDrawable) circleView.getBackground();
         if (drawable != null) {
-            // 修复：从当前颜色开始过渡
             int startColor = ((GradientDrawable) circleView.getBackground()).getColor().getDefaultColor();
             int endColor = ContextCompat.getColor(requireContext(), targetColorRes);
 
@@ -110,18 +109,20 @@ public class EmergencyFragment extends Fragment {
 
 
     private void showPrivacyDialog() {
-        new AlertDialog.Builder(getContext())
-                .setTitle("隐私政策")
-                .setMessage("为了提供更好的服务，我们需要获取您的位置信息。请您阅读并同意《隐私政策》")
-                .setPositiveButton("同意", (dialog, which) -> {
-                    AMapLocationClient.updatePrivacyShow(getContext(), true, true);
-                    AMapLocationClient.updatePrivacyAgree(getContext(), true);
-                    initLocation(getContext());
-                })
-                .setNegativeButton("拒绝", (dialog, which) -> {
-                    Toast.makeText(getContext(), "您拒绝了权限，无法使用定位功能", Toast.LENGTH_LONG).show();
-                })
-                .show();
+        AMapLocationClient.updatePrivacyShow(getContext(), true, true);
+        AMapLocationClient.updatePrivacyAgree(getContext(), true);
+//        new AlertDialog.Builder(getContext())
+//                .setTitle("隐私政策")
+//                .setMessage("为了提供更好的服务，我们需要获取您的位置信息。请您阅读并同意《隐私政策》")
+//                .setPositiveButton("同意", (dialog, which) -> {
+//                    AMapLocationClient.updatePrivacyShow(getContext(), true, true);
+//                    AMapLocationClient.updatePrivacyAgree(getContext(), true);
+//                    initLocation(getContext());
+//                })
+//                .setNegativeButton("拒绝", (dialog, which) -> {
+//                    Toast.makeText(getContext(), "您拒绝了权限，无法使用定位功能", Toast.LENGTH_LONG).show();
+//                })
+//                .show();
     }
 
     private void initLocation(Context context) {

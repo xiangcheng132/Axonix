@@ -1,4 +1,4 @@
-package com.Axonix.model;
+package com.Axonix.index.model;
 
 public class Message {
     public static final int TYPE_SENT = 1;     // 用户发送消息

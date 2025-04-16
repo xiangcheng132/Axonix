@@ -1,4 +1,4 @@
-package com.Axonix.model;
+package com.Axonix.index.model;
 
 import java.util.ArrayList;
 import java.util.Date;

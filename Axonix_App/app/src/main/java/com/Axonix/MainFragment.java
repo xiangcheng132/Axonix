@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,28 +25,24 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.Axonix.adapter.ContactAdapter;
-import com.Axonix.dto.EmergencyContactDto;
+import com.Axonix.index.dto.EmergencyContactDto;
 import com.Axonix.index.config.NetworkClient;
 import com.Axonix.index.config.NetworkTimeClient;
 import com.Axonix.index.model.User;
 import com.Axonix.index.session.UserSessionManager;
-import com.Axonix.model.EmergencyContact;
-import com.Axonix.model.EmergencyContactExample;
-import com.Axonix.model.EmergencyContactTable;
-import com.Axonix.socialmain.PostDetailFragment;
-import com.alibaba.android.arouter.launcher.ARouter;
+import com.Axonix.index.model.EmergencyContact;
+import com.Axonix.index.model.EmergencyContactExample;
+import com.Axonix.index.model.EmergencyContactTable;
+import com.Axonix.usermain.LoginFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import okhttp3.Call;
@@ -111,7 +106,16 @@ public class MainFragment extends Fragment {
     private void setupContacts() {
         rvContacts = view.findViewById(R.id.rv_contacts);
         List<EmergencyContact> contacts = new ArrayList<>();
-
+        User currentUser = UserSessionManager.getInstance(requireContext()).getUser();
+        if (currentUser == null){
+            FragmentTransaction transaction = requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction();
+            transaction.replace(R.id.container, new LoginFragment());
+            transaction.addToBackStack(null); // 可选
+            transaction.commit();
+            return;
+        }
         Integer userId = UserSessionManager.getInstance(requireContext()).getUser().getId();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);

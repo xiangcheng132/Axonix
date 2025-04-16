@@ -46,9 +46,11 @@
             android:name="com.huawei.hms.client.appid"
             android:value="appid=113945503"/>
 
-        <service android:name=".service.DemoHmsMessageService" android:exported="false">
+        <service
+            android:name=".service.DemoHmsMessageService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 <!--        <meta-data-->
@@ -64,5 +66,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="com.huawei.android.pushagent.permission.READ_PUSH_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 
 </manifest>

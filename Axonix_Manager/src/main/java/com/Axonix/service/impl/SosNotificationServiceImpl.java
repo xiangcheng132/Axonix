@@ -1,18 +1,26 @@
 package com.Axonix.service.impl;
 
+import com.Axonix.demo.dto.HuaweiNotificationDto;
 import com.Axonix.demo.mapper.SosNotificationMapper;
 import com.Axonix.demo.model.SosNotification;
 import com.Axonix.demo.model.SosNotificationExample;
+import com.Axonix.demo.model.User;
+import com.Axonix.service.HuaweiNotification;
 import com.Axonix.service.SosNotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.Axonix.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SosNotificationServiceImpl implements SosNotificationService {
 
-    @Autowired
-    private SosNotificationMapper sosNotificationMapper;
+    private final SosNotificationMapper sosNotificationMapper;
+    private final UserService userService;
+    private final HuaweiNotification huaweiNotification;
 
     @Override
     public long countByExample(SosNotificationExample example) {
@@ -31,6 +39,17 @@ public class SosNotificationServiceImpl implements SosNotificationService {
 
     @Override
     public int insert(SosNotification record) {
+        record.setSendTime(new Date());
+        //插入紧急sos表的同时需要进行通知
+        User contact = userService.selectByPrimaryKey(record.getContactId());
+        User user = userService.selectByPrimaryKey(record.getUserId());
+
+        HuaweiNotificationDto dto = new HuaweiNotificationDto();
+        dto.setToken(contact.getDeviceToken());
+        dto.setTitle(record.getTitle());
+        dto.setContent(user.getUsername() + " 在" +record.getContent()+ "\n经度："+record.getLng() + "   纬度：" + record.getLat());
+
+        huaweiNotification.sendPeriodicNotification(dto);
         return sosNotificationMapper.insert(record);
     }
 

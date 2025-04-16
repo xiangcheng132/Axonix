@@ -1,8 +1,6 @@
 package com.Axonix.adapter;
 
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.Axonix.R;
-import com.Axonix.model.EmergencyContact;
+import com.Axonix.index.model.EmergencyContact;
 
 import java.util.List;
 
