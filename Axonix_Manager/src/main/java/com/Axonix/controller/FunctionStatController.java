@@ -85,4 +85,10 @@ public class FunctionStatController {
     public int updateByPrimaryKey(@RequestBody FunctionStat record) {
         return functionStatService.updateByPrimaryKey(record);
     }
+
+    @PutMapping("/increment/{userId}")
+    public int incrementField(@PathVariable Integer userId, @RequestParam String fieldName) {
+        return functionStatService.incrementField(userId, fieldName);
+    }
+
 }

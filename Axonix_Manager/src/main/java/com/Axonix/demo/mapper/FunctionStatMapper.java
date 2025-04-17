@@ -27,4 +27,7 @@ public interface FunctionStatMapper {
     int updateByPrimaryKeySelective(FunctionStat record);
 
     int updateByPrimaryKey(FunctionStat record);
+
+    int incrementField(@Param("userId") Integer userId, @Param("fieldName") String fieldName);
+
 }

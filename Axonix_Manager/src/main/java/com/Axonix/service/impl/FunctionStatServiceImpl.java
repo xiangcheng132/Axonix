@@ -68,4 +68,14 @@ public class FunctionStatServiceImpl implements FunctionStatService {
     public int updateByPrimaryKey(FunctionStat record) {
         return functionStatMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public int incrementField(Integer userId, String fieldName) {
+//        List<String> allowedFields = List.of("navigateCount", "helpCount", "postCount"); // 根据实际字段列出
+//        if (!allowedFields.contains(fieldName)) {
+//            throw new IllegalArgumentException("非法字段名：" + fieldName);
+//        }
+        return functionStatMapper.incrementField(userId, fieldName);
+    }
+
 }

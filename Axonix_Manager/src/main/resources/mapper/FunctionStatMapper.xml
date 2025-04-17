@@ -211,6 +211,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <update id="incrementField">
+    UPDATE function_stat
+    SET ${fieldName} = ${fieldName} + 1
+    WHERE user_id = #{userId}
+  </update>
+
   <update id="updateByExampleSelective" parameterType="map">
     update function_stat
     <set>

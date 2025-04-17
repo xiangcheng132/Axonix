@@ -26,4 +26,7 @@ public interface FunctionStatService {
     int updateByPrimaryKeySelective(FunctionStat record);
 
     int updateByPrimaryKey(FunctionStat record);
+
+    int incrementField(Integer userId, String fieldName);
+
 }

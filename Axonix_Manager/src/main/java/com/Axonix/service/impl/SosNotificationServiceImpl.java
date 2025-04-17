@@ -40,6 +40,7 @@ public class SosNotificationServiceImpl implements SosNotificationService {
     @Override
     public int insert(SosNotification record) {
         record.setSendTime(new Date());
+        record.setCreatedAt(new Date());
         //插入紧急sos表的同时需要进行通知
         User contact = userService.selectByPrimaryKey(record.getContactId());
         User user = userService.selectByPrimaryKey(record.getUserId());
