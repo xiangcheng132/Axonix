@@ -29,6 +29,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.Axonix.index.config.NetworkClient;
+import com.Axonix.index.config.NetworkTimeClient;
+import com.Axonix.index.model.Feedback;
 import com.Axonix.index.model.User;
 import com.Axonix.index.session.UserSessionManager;
 import com.Axonix.index.controller.UserUpdateManager;
@@ -38,11 +40,13 @@ import com.Axonix.index.BaseActivity;
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
@@ -65,14 +69,17 @@ public class UserFragment extends Fragment
     private CircleImageView ivAvatar;
     private static final int IMAGE_PICKER_REQUEST_CODE = 1001;
 
-    private String UPLOAD_AVATAR_URL ;
+    private String UPLOAD_AVATAR_URL ,FEEDBACK_ADD_URL;
+    private OkHttpClient httpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_user, container, false);
         UPLOAD_AVATAR_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/users/updateAvatar";
-        Button btnEdit = rootView.findViewById(R.id.btn_edit);
+        FEEDBACK_ADD_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/feedback/insert";
+        httpClient = NetworkClient.INSTANCE.getClient();
+        MaterialButton btnEdit = rootView.findViewById(R.id.btn_edit);
         Spinner provinceSpinner = rootView.findViewById(R.id.spinner_province);
         Spinner citySpinner = rootView.findViewById(R.id.spinner_city);
         Spinner districtSpinner = rootView.findViewById(R.id.spinner_district);
@@ -106,9 +113,56 @@ public class UserFragment extends Fragment
 
         btnEdit.setOnClickListener(v -> toggleEditMode());
 
-        Button btnLogout = rootView.findViewById(R.id.btn_logout);
+        MaterialButton btnLogout = rootView.findViewById(R.id.btn_logout);
         btnLogout.setVisibility(View.VISIBLE);
         btnLogout.setOnClickListener(v -> performLogout());
+
+        MaterialButton btnFeedBack = rootView.findViewById(R.id.btn_feedback);
+        btnFeedBack.setVisibility(View.VISIBLE);
+        btnFeedBack.setOnClickListener(v -> {
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_feedback, null);
+            AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                    .setView(dialogView)
+                    .setCancelable(true)
+                    .create();
+
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+            MaterialButton btnfFeedBackAdd = dialogView.findViewById(R.id.btn_add_feedBack);
+            Log.d("FEEDBACK",R.id.btn_add_feedBack+" ");
+            btnfFeedBackAdd.setOnClickListener(v1->{
+                EditText text = dialogView.findViewById(R.id.et_advice);
+                Feedback feedback = new Feedback();
+                feedback.setUserId(UserSessionManager.getInstance(requireContext()).getUser().getId());
+                feedback.setIssue(text.getText().toString().trim());
+                feedback.setCreatedAt(new Date());
+                feedback.setStatus(0);
+                Gson gson = NetworkTimeClient.getGson();
+                String jsonPost = gson.toJson(feedback);
+                RequestBody body2 = RequestBody.create(jsonPost, MediaType.get("application/json; charset=utf-8"));
+                Request request2 = new Request.Builder()
+                        .url(FEEDBACK_ADD_URL)  // 你的后端插入接口地址
+                        .post(body2)
+                        .build();
+
+                httpClient.newCall(request2).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e("FeedBack", "反馈失败", e);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (!response.isSuccessful()) {
+                            Log.e("FeedBack", "反馈失败，状态码：" + response.code());
+                            return;
+                        }
+                        requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "反馈成功", Toast.LENGTH_SHORT).show());
+                        dialog.dismiss();
+                    }
+                });
+            });
+        });
 
         setSpinnerEditable(R.id.spinner_gender, isEditMode);
         setSpinnerEditable(R.id.spinner_disability, isEditMode);
@@ -127,7 +181,6 @@ public class UserFragment extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMAGE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            OkHttpClient httpClient = NetworkClient.INSTANCE.getClient();
             Integer userId = UserSessionManager.getInstance(requireContext()).getUser().getId();
             MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -267,6 +320,8 @@ public class UserFragment extends Fragment
 
         Button loginOut = rootView.findViewById(R.id.btn_logout);
         loginOut.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
+        MaterialButton feedback = rootView.findViewById(R.id.btn_feedback);
+        feedback.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
 
         // 设置地址选择器状态
         addressHelper.setSpinnerEnabled(isEditMode);
@@ -412,12 +467,11 @@ public class UserFragment extends Fragment
 
         try {
             String avatarUrl = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + currentUser.getAvatar();
-            OkHttpClient client = NetworkClient.INSTANCE.getClient();
             Request request = new Request.Builder()
                     .url(avatarUrl)
                     .build();
 
-            client.newCall(request).enqueue(new Callback() {
+            httpClient.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     requireActivity().runOnUiThread(() -> {

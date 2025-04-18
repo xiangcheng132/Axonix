@@ -22,49 +22,58 @@
             android:textStyle="bold"
             android:textColor="@color/primary_color"
             android:gravity="center"
-            android:padding="16dp"
-            android:background="@color/light_gray" />
+            android:padding="16dp" />
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/assist_button_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:layout_margin="8dp"
+            app:singleSelection="false"
+            app:selectionRequired="false">
 
-            <!-- 三个按钮 -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_ai"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:text="AI助理"
                 android:textAllCaps="false"
-                android:backgroundTint="@color/primary_color"
-                android:textColor="@color/white"
+                android:textSize="12dp"
+                app:cornerRadius="16dp"
+                android:checkable="false"
                 android:layout_marginEnd="4dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_traffic"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:text="路况识别"
                 android:textAllCaps="false"
-                android:backgroundTint="@color/primary_color"
-                android:textColor="@color/white"
-                android:layout_marginStart="4dp" />
+                android:textSize="12dp"
+                app:cornerRadius="16dp"
+                android:checkable="false"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_communicate"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:text="翻译助手"
                 android:textAllCaps="false"
-                android:backgroundTint="@color/primary_color"
-                android:textColor="@color/white"
+                android:textSize="12dp"
+                app:cornerRadius="16dp"
+                android:checkable="false"
                 android:layout_marginStart="4dp" />
-        </LinearLayout>
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_contacts"

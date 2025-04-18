@@ -7,4 +7,9 @@
     <color name="blue_light">#6495ED</color>
     <color name="gray">#E0E0E0</color>
     <color name="background_color">#FEF7FF</color>
+
+    <color name="stroke_color">#3700B3</color>
+    <color name="primary_color">#2196F3</color>
+    <color name="ripple_color">#B3B3B3</color>
+
 </resources>

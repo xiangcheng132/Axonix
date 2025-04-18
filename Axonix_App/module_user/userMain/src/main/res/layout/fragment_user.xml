@@ -219,20 +219,46 @@
             </androidx.cardview.widget.CardView>
 
             <!-- 操作按钮 -->
-            <Button
-                android:id="@+id/btn_edit"
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/account_button_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="编辑信息" />
+                android:layout_margin="16dp"
+                app:singleSelection="false"
+                app:selectionRequired="false">
 
-            <Button
-                android:id="@+id/btn_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/logout"
-                android:visibility="gone" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_edit"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="编辑信息"
+                    app:cornerRadius="16dp"
+                    android:textSize="12dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_logout"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/logout"
+                    app:cornerRadius="16dp"
+                    android:textSize="12dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_feedback"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="问题反馈"
+                    app:cornerRadius="16dp"
+                    android:textSize="12dp"/>
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
 
         </LinearLayout>
     </ScrollView>
