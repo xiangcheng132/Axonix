@@ -6,6 +6,7 @@ import com.Axonix.service.ForumCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -37,6 +38,9 @@ public class ForumCommentController {
     // 完整插入（包含BLOB字段）
     @PostMapping("/insert")
     public int insert(@RequestBody ForumComment record) {
+        record.setCreatedAt(new Date());
+        record.setLikes(0);
+        record.setDislikes(0);
         return forumCommentService.insert(record);
     }
 

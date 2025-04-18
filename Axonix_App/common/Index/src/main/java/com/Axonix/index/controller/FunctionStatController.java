@@ -1,4 +1,5 @@
 package com.Axonix.index.controller;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -8,12 +9,10 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import com.Axonix.index.R;
 
 public class FunctionStatController {
 
     private static final String TAG = "FunctionStatHttpHelper";
-    private static final String BASE_URL = R.string.Base_url; // 替换为你的服务器地址
     private static final OkHttpClient client = new OkHttpClient();
 
     /**
@@ -21,8 +20,8 @@ public class FunctionStatController {
      * @param userId 用户 ID
      * @param fieldName 字段名
      */
-    public static void incrementField(int userId, String fieldName) {
-        String url = BASE_URL + "/api/function-stat/increment/" + userId + "?fieldName=" + fieldName;
+    public static void incrementField(Context context ,int userId, String fieldName) {
+        String url = context.getString(com.Axonix.index.R.string.Base_url) + "/api/function-stat/increment/" + userId + "?fieldName=" + fieldName;
 
         Request request = new Request.Builder()
                 .url(url)

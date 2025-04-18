@@ -11,4 +11,10 @@
     <color name="toolbar_background">#FFFFFF</color>
     <color name="primary_text">#212121</color>
 
+    <color name="colorPrimary">#9B47C7</color>
+    <color name="colorPrimaryVariant">#7A2FA7</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="ripple_color">#B3B3B3</color>    <!-- 按钮点击时的波纹颜色 -->
+    <color name="stroke_color">#3700B3</color>
+    <color name="primary_color">#2196F3</color>
 </resources>

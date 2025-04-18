@@ -33,7 +33,6 @@ import com.Axonix.index.session.UserSessionManager;
 import com.Axonix.index.model.EmergencyContact;
 import com.Axonix.index.model.EmergencyContactExample;
 import com.Axonix.index.model.EmergencyContactTable;
-import com.Axonix.navmain.NavFragment;
 import com.Axonix.usermain.LoginFragment;
 
 import java.io.IOException;
@@ -41,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;

@@ -6,6 +6,7 @@ import com.Axonix.service.ForumPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -37,6 +38,8 @@ public class ForumPostController {
     // 完整插入帖子（含BLOB内容）
     @PostMapping("/insert")
     public int insert(@RequestBody ForumPost record) {
+        record.setCreatedAt(new Date());
+        record.setUpdatedAt(new Date());
         return forumPostService.insert(record);
     }
 

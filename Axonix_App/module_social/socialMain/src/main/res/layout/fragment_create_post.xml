@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/backgroundColor">
 
-    <!-- 文本格式工具栏 -->
+    <!-- 工具栏 -->
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,69 +16,71 @@
         android:padding="8dp"
         android:background="@color/backgroundColor">
 
-        <!-- 返回按钮（最左边） -->
+        <!-- 返回按钮 -->
         <Button
             android:id="@+id/btn_create_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="返回"/>
 
-        <!-- 中间空白填充 -->
+        <!-- 占位空白 -->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"/>
 
-        <!-- 发布按钮（最右边） -->
+        <!-- 发布按钮 -->
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发布"/>
-
-        <!-- 返回按钮 -->
-
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_bold"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="B"-->
-<!--            android:textStyle="bold"-->
-<!--            android:backgroundTint="@color/primary_blue"-->
-<!--            android:textColor="@android:color/white"/>-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_italic"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="I"-->
-<!--            android:textStyle="italic"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:backgroundTint="@color/primary_blue"-->
-<!--            android:textColor="@android:color/white"/>-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_image"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="图片"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:backgroundTint="@color/primary_blue"-->
-<!--            android:textColor="@android:color/white"/>-->
-
     </LinearLayout>
 
-    <!-- 富文本编辑器 -->
-    <jp.wasabeef.richeditor.RichEditor
-        android:id="@+id/editor"
+    <!-- 帖子标题输入框 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/title_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="请输入帖子标题"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primary_color"
+        app:hintEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:inputType="textCapSentences"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- 帖子内容输入框 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/content_input_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="输入帖子内容"
-        android:padding="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="请输入帖子内容"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primary_color"
+        app:hintEnabled="true">
 
-
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:minLines="10"
+            android:padding="8dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

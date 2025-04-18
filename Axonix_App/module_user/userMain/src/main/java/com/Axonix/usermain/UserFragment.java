@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +37,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.Axonix.index.BaseActivity;
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.button.MaterialButton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -394,6 +399,16 @@ public class UserFragment extends Fragment
         tvUsername.setText(currentUser.getUsername());
         int vipIconRes = currentUser.getIsVip() != 0 ? R.drawable.ic_vip_yes : R.drawable.ic_vip_no;
         ivVip.setImageResource(vipIconRes);
+        ivVip.setOnClickListener(v->{
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_vip, null);
+            AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                    .setView(dialogView)
+                    .setCancelable(true)
+                    .create();
+
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+        });
 
         try {
             String avatarUrl = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + currentUser.getAvatar();

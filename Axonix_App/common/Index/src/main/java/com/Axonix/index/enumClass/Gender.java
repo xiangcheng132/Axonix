@@ -1,4 +1,4 @@
-package com.Axonix.index.model;
+package com.Axonix.index.enumClass;
 
 import android.content.Context;
 
