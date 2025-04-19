@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.Axonix.adapter.ContactAdapter;
+import com.Axonix.index.controller.FunctionStatController;
 import com.Axonix.index.dto.EmergencyContactDto;
 import com.Axonix.index.config.NetworkClient;
 import com.Axonix.index.config.NetworkTimeClient;
@@ -100,11 +101,13 @@ public class MainFragment extends Fragment {
         view.findViewById(R.id.btn_ai).setOnClickListener(v -> {
             Fragment aiFragment = new AIAssistantFragment();
             navigateToFragment(aiFragment, "ai");
+            FunctionStatController.incrementField(requireContext(),UserSessionManager.getInstance(requireContext()).getUser().getId(),"ai_assistant");
         });
 
         view.findViewById(R.id.btn_traffic).setOnClickListener(v -> {
             Fragment trafficFragment = new TrafficRecognitionFragment();
             navigateToFragment(trafficFragment, "traffic");
+            FunctionStatController.incrementField(requireContext(),UserSessionManager.getInstance(requireContext()).getUser().getId(),"traffic_recognition");
         });
 
         view.findViewById(R.id.btn_communicate).setOnClickListener(v -> {

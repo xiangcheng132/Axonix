@@ -26,4 +26,5 @@ public interface HelpRequestService {
     int updateByPrimaryKeySelective(HelpRequest record);
 
     int updateByPrimaryKey(HelpRequest record);
+
 }

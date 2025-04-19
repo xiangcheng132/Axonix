@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.Axonix.index.config.NetworkClient;
 import com.Axonix.index.config.NetworkTimeClient;
+import com.Axonix.index.controller.FunctionStatController;
 import com.Axonix.index.model.Feedback;
 import com.Axonix.index.model.User;
 import com.Axonix.index.session.UserSessionManager;
@@ -157,6 +158,8 @@ public class UserFragment extends Fragment
                             Log.e("FeedBack", "反馈失败，状态码：" + response.code());
                             return;
                         }
+                        FunctionStatController.incrementField(requireContext(), UserSessionManager.getInstance(requireContext()).getUser().getId(),"feedback");
+
                         requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "反馈成功", Toast.LENGTH_SHORT).show());
                         dialog.dismiss();
                     }

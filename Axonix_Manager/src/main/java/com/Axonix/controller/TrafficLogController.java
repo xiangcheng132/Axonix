@@ -15,7 +15,10 @@ public class TrafficLogController {
 
     @Autowired
     private TrafficLogService trafficLogService;
-
+    @PostMapping("/aitraffic")
+    public String aitraffic(@RequestBody String s) {
+        return "已收到数据：" + s;
+    }
     // 统计路况记录数量
     @PostMapping("/count")
     public long countByExample(@RequestBody TrafficLogExample example) {

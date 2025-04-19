@@ -15,10 +15,11 @@
         app:title="返回"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="路况识别功能待实现"
-        android:layout_gravity="center"/>
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        />
 
 </FrameLayout>

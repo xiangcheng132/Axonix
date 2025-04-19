@@ -32,40 +32,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 按钮区域 -->
-    <LinearLayout
-        android:id="@+id/ll_buttons"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/et_input"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btn_voice_to_text"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/assist_button_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="语音转文字" />
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:checkedButton="@id/btn_voice_to_text"
+            app:selectionRequired="true"
+            app:singleSelection="true"
+            app:layout_constraintTop_toBottomOf="@id/et_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btn_text_to_voice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="文字转语音" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_voice_to_text"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="语音转文字"
+                android:textAllCaps="false"
+                android:textSize="12dp"
+                app:cornerRadius="16dp"
+                android:layout_marginEnd="4dp" />
 
-        <Button
-            android:id="@+id/btn_translate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="翻译" />
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_text_to_voice"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="文字转语音"
+                android:textAllCaps="false"
+                android:textSize="12dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                app:cornerRadius="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_translate"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="翻译"
+                android:textAllCaps="false"
+                android:textSize="12dp"
+                app:cornerRadius="16dp"
+                android:layout_marginStart="4dp" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
 
     <ScrollView
         android:id="@+id/sv_output"
@@ -75,7 +94,7 @@
         android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_buttons">
+        app:layout_constraintTop_toBottomOf="@id/assist_button_group">
 
         <TextView
             android:id="@+id/tv_output"

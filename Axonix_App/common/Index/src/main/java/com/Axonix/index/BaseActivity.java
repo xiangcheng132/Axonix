@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.Axonix.index.config.NetworkClient;
+import com.Axonix.index.controller.FunctionStatController;
 import com.Axonix.index.dto.EmergencyContactDto;
 import com.Axonix.index.model.SosNotification;
 import com.Axonix.index.session.UserSessionManager;
@@ -252,6 +253,7 @@ public class BaseActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<EmergencyContactDto>>() {}.getType();
                     List<EmergencyContactDto> contactList = gson.fromJson(responseBody.string(), listType);
+                    FunctionStatController.incrementField(getApplicationContext(), UserSessionManager.getInstance(getApplicationContext()).getUser().getId(),"sos");
 
                     for (EmergencyContactDto item : contactList) {
                         SosNotification sos = new SosNotification();

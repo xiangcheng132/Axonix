@@ -1,60 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EmergencyFragment"
-    >
+    android:background="@color/background_color">
 
     <!-- 历史记录按钮 -->
     <Button
         android:id="@+id/btnHistory"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-    android:minWidth="120dp"
-    android:layout_gravity="top|end"
-    android:layout_margin="16dp"
-    android:text="历史记录"
-    android:textColor="@color/white"
-    android:textSize="14sp"
-    android:backgroundTint="@color/history_button_color"
-    android:drawableStart="@android:drawable/ic_menu_recent_history"
-    android:drawablePadding="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"/>
+        android:minWidth="120dp"
+        android:text="历史记录"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:backgroundTint="@color/history_button_color"
+        android:drawableStart="@android:drawable/ic_menu_recent_history"
+        android:drawablePadding="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
 
-    <!-- 中央大圆 -->
     <View
         android:id="@+id/circleView"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@drawable/circle_background"
-        android:layout_gravity="center" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
 
-    <!-- 寻求帮助按钮 -->
-    <Button
-        android:id="@+id/btnSeekHelp"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-    android:minWidth="120dp"
-    android:text="寻求帮助"
-    android:textColor="@color/white"
-    android:backgroundTint="@color/seek_help_color"
-    android:layout_gravity="bottom|center_horizontal"
-    android:layout_marginBottom="100dp"/>
+    <!-- 按钮组 -->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/assist_button_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/circleView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- 提供帮助按钮 -->
-    <Button
-        android:id="@+id/btnProvideHelp"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-    android:minWidth="120dp"
-    android:text="提供帮助"
-    android:textColor="@color/white"
-    android:backgroundTint="@color/provide_help_color"
-    android:layout_gravity="bottom|center_horizontal"
-    android:layout_marginBottom="30dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSeekHelp"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="寻求帮助"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            app:cornerRadius="16dp"
+            android:layout_marginEnd="4dp" />
 
-</FrameLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnProvideHelp"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="提供帮助"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            app:cornerRadius="16dp"
+            android:layout_marginStart="4dp" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,8 @@ package com.Axonix.index.controller;
 import android.content.Context;
 import android.util.Log;
 
+import com.Axonix.index.config.NetworkClient;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -13,7 +15,7 @@ import okhttp3.Response;
 public class FunctionStatController {
 
     private static final String TAG = "FunctionStatHttpHelper";
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = NetworkClient.INSTANCE.getClient();
 
     /**
      * 对某字段 +1 请求

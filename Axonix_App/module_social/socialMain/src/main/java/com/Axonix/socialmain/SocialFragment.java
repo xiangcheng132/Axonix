@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Axonix.index.config.NetworkClient;
 import com.Axonix.index.config.NetworkTimeClient;
+import com.Axonix.index.controller.FunctionStatController;
 import com.Axonix.index.enumClass.ForumStatus;
 import com.Axonix.index.model.ForumComment;
 import com.Axonix.index.model.ForumPost;
@@ -177,6 +178,8 @@ public class SocialFragment extends Fragment {
                         Log.e("COMMENT_ADD", "添加评论失败，状态码：" + response.code());
                         return;
                     }
+                    FunctionStatController.incrementField(requireContext(), UserSessionManager.getInstance(requireContext()).getUser().getId(),"comment");
+
                     requireActivity().runOnUiThread(() ->
                             Toast.makeText(getContext(), "添加评论成功", Toast.LENGTH_SHORT).show());
                     getChildFragmentManager().popBackStack();

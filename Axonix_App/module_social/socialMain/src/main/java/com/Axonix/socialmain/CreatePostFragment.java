@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.Axonix.index.config.NetworkClient;
 import com.Axonix.index.config.NetworkTimeClient;
+import com.Axonix.index.controller.FunctionStatController;
 import com.Axonix.index.enumClass.ForumStatus;
 import com.Axonix.index.model.ForumPost;
 import com.Axonix.index.model.User;
@@ -107,6 +108,7 @@ public class CreatePostFragment extends Fragment {
                         Log.e("CreatePost", "添加帖子失败，状态码：" + response.code());
                         return;
                     }
+                    FunctionStatController.incrementField(requireContext(), UserSessionManager.getInstance(requireContext()).getUser().getId(),"post_publish");
                     requireActivity().runOnUiThread(()->Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_SHORT).show());
                     if (getParentFragment() != null) {
                         Bundle result = new Bundle();

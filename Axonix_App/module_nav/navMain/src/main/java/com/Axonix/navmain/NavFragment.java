@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.Axonix.index.controller.FunctionStatController;
+import com.Axonix.index.session.UserSessionManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.maps.MapView;
@@ -86,7 +88,7 @@ public class NavFragment extends Fragment implements LocationManager.LocationLis
         } else {
             permissionLauncher.launch(MapPermissions.PERMISSIONS);
         }
-
+        FunctionStatController.incrementField(requireContext(), UserSessionManager.getInstance(requireContext()).getUser().getId(),"navigation");
         stopNavInit();
         searchInit();
         return rootView;

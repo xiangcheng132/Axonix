@@ -15,6 +15,10 @@ public class AiLogController {
 
     @Autowired
     private AiLogService aiLogService;
+    @PostMapping("/ai_assistant")
+    public String ai_assistant(@RequestBody String question) {
+        return "测试数据" + question;
+    }
 
     // 统计数量
     @PostMapping("/count")
