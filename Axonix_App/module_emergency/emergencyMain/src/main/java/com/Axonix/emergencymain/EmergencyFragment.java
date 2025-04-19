@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,37 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.Axonix.index.config.NetworkClient;
+import com.Axonix.index.config.NetworkTimeClient;
+import com.Axonix.index.model.HelpRequest;
+import com.Axonix.index.session.UserSessionManager;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.Axonix.emergencymain.R;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.graphics.drawable.GradientDrawable;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @Route(path = "/emergency/main")
 public class EmergencyFragment extends Fragment {
@@ -32,6 +57,9 @@ public class EmergencyFragment extends Fragment {
     private Animation pulseAnimation;
     private boolean isSeekingHelp = false;
     private AMapLocationClient locationClient;
+    private OkHttpClient httpClient;
+    private String HELP_URL;
+
 
     @Nullable
     @Override
@@ -47,6 +75,8 @@ public class EmergencyFragment extends Fragment {
         btnSeekHelp = view.findViewById(R.id.btnSeekHelp);
         btnProvideHelp = view.findViewById(R.id.btnProvideHelp);
 
+        httpClient = NetworkClient.INSTANCE.getClient();
+        HELP_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/help-request/insert/selective";
         // 点击寻求帮助
         btnSeekHelp.setOnClickListener(v -> showConfirmDialog(true));
 
@@ -86,6 +116,7 @@ public class EmergencyFragment extends Fragment {
 
         // **确保隐私合规**
         showPrivacyDialog();
+        initLocation(requireContext());
     }
 
     private void animateCircleColor(int targetColorRes) {
@@ -111,18 +142,6 @@ public class EmergencyFragment extends Fragment {
     private void showPrivacyDialog() {
         AMapLocationClient.updatePrivacyShow(getContext(), true, true);
         AMapLocationClient.updatePrivacyAgree(getContext(), true);
-//        new AlertDialog.Builder(getContext())
-//                .setTitle("隐私政策")
-//                .setMessage("为了提供更好的服务，我们需要获取您的位置信息。请您阅读并同意《隐私政策》")
-//                .setPositiveButton("同意", (dialog, which) -> {
-//                    AMapLocationClient.updatePrivacyShow(getContext(), true, true);
-//                    AMapLocationClient.updatePrivacyAgree(getContext(), true);
-//                    initLocation(getContext());
-//                })
-//                .setNegativeButton("拒绝", (dialog, which) -> {
-//                    Toast.makeText(getContext(), "您拒绝了权限，无法使用定位功能", Toast.LENGTH_LONG).show();
-//                })
-//                .show();
     }
 
     private void initLocation(Context context) {
@@ -143,14 +162,52 @@ public class EmergencyFragment extends Fragment {
         if (aMapLocation != null && aMapLocation.getErrorCode() == 0) {
             double latitude = aMapLocation.getLatitude();
             double longitude = aMapLocation.getLongitude();
-            Toast.makeText(getContext(), "定位成功！\n纬度: " + latitude + "\n经度: " + longitude, Toast.LENGTH_SHORT).show();
 
-            circleView.postDelayed(() -> {
-                circleView.clearAnimation();
-                Toast.makeText(getContext(), "已找到匹配的帮助者！", Toast.LENGTH_LONG).show();
-            }, 3000);
+            // 向服务器发起匹配请求
+            sendMatchRequest(latitude, longitude, isSeekingHelp);
         } else {
             Toast.makeText(getContext(), "定位失败！请检查 GPS 设置", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void sendMatchRequest(double latitude, double longitude, boolean isSeekingHelp) {
+        HelpRequest helpRequest = new HelpRequest();
+        if (isSeekingHelp){
+            helpRequest.setRequesterId(UserSessionManager.getInstance(requireContext()).getUser().getId());
+            helpRequest.setRequesterLat(BigDecimal.valueOf(latitude));
+            helpRequest.setRequesterLng(BigDecimal.valueOf(longitude));
+            helpRequest.setCreatedAt(new Date());
+            helpRequest.setStatus(1);
+        }else {
+            helpRequest.setHelperId(UserSessionManager.getInstance(requireContext()).getUser().getId());
+            helpRequest.setHelperLat(BigDecimal.valueOf(latitude));
+            helpRequest.setHelperLng(BigDecimal.valueOf(longitude));
+            helpRequest.setCreatedAt(new Date());
+            helpRequest.setStatus(1);
+        }
+        Gson gson = NetworkTimeClient.getGson();
+        String json = gson.toJson(helpRequest);
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(HELP_URL)
+                .post(body)
+                .build();
+
+        httpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("匹配情况", "匹配失败", e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    Log.e("匹配情况", "匹配失败，状态码：" + response.code());
+                    return;
+                }
+            }
+        });
+    }
+
+
 }
