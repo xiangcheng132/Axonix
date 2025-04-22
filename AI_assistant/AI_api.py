@@ -15,8 +15,8 @@ app.config.update(
     PREFERRED_URL_SCHEME='https'
 )
 
-# 初始化OpenAI客户端（⚠️请妥善保管API Key）
-client = OpenAI(api_key="sk-d9d74b65503245ada7a059e006333e13", base_url="https://api.deepseek.com")
+# 初始化OpenAI客户端（⚠️⚠️⚠️请妥善保管并使用自己的API Key⚠️⚠️⚠️）
+client = OpenAI(api_key="⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️", base_url="https://api.deepseek.com")
 
 
 def generate_self_signed_cert():
@@ -27,7 +27,7 @@ def generate_self_signed_cert():
                 'openssl', 'req', '-x509', '-newkey', 'rsa:4096',
                 '-keyout', 'ssl.key', '-out', 'ssl.cert',
                 '-days', '365', '-nodes',
-                '-subj', '/CN=172.20.10.3'#根据实际的IP地址修改
+                '-subj', '/CN=172.20.10.3'#⚠️⚠️⚠️根据实际的IP地址修改⚠️⚠️⚠️
             ], check=True)
             print("✅ 自签名证书生成成功")
         except Exception as e:
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     generate_self_signed_cert()
 
     # 启动服务器
-    print(f"🚀 服务启动: https://192.168.43.180:5000")
+    print(f"🚀 服务启动")
     app.run(
         host='0.0.0.0',
         port=5004,
