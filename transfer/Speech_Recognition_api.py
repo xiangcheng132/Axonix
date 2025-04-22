@@ -130,7 +130,7 @@ if __name__ == "__main__":
     # 服务器配置
     #IP地址根据自己的实际地址修改
     SERVER_HOST = '0.0.0.0'
-    SERVER_PORT = 5000
+    SERVER_PORT = 5002
     SERVER_IP = '0.0.0.0'
     # 生成自签名证书（确保 OpenSSL 已安装并添加到 PATH）
     if not (os.path.exists("key.pem") and os.path.exists("cert.pem")):
