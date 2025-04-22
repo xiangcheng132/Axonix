@@ -47,13 +47,13 @@ def chat_stream():
                 yield f"data: {json.dumps({'text': chunk.choices[0].delta.content})}\n\n"
 
     return Response(generate(), mimetype='text/event-stream')
-
+#⚠️⚠️⚠️下方host需替换，请自行查询ip4地址⚠️⚠️⚠️
 if __name__ == '__main__':
     # 本地测试用自签名证书（生产环境请替换为正规证书）
     context = ('ssl.cert', 'ssl.key')  # 需提前生成证书
     app.run(
         host='0.0.0.0',
-        port=5001,
+        port=5004,
         ssl_context=context,  # 启用HTTPS
         debug=True
     )
