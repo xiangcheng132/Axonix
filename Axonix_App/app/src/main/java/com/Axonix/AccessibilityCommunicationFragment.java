@@ -2,6 +2,7 @@ package com.Axonix;
 
 import android.content.Intent;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.Axonix.index.config.NetworkClient;
@@ -128,7 +130,7 @@ public class AccessibilityCommunicationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 etInput.setEnabled(true);
-                String translate_url = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url) + "translate";
+                String translate_url = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url_translate);
                 String text = etInput.getText().toString().trim();
                 if (text.isEmpty()){
                     tvOutput.setText("请输入文字后再点击按钮");
@@ -169,6 +171,16 @@ public class AccessibilityCommunicationFragment extends Fragment {
 
     private void startRecording() {
         int bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT);
+        if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT, bufferSize);
 
@@ -291,7 +303,7 @@ public class AccessibilityCommunicationFragment extends Fragment {
                     .build();
 
             Request request = new Request.Builder()
-                    .url(requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url) + "aud")
+                    .url(requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url_toCN))
                     .post(multipartBody)
                     .build();
 

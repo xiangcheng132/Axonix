@@ -56,7 +56,7 @@ public class AIAssistantFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ai, container, false);
         httpClient = NetworkClient.INSTANCE.getClient();
 //        AI_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/ai-log/ai_assistant";
-        AI_URL = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url) + "chat_stream";
+        AI_URL = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url_aiChat);
         // 设置 Toolbar
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {

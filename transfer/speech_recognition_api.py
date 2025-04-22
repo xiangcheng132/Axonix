@@ -1,114 +1,146 @@
 import os
-import pyaudio
 import threading
-import keyboard
 import json
+import wave
+import logging
 from vosk import Model, KaldiRecognizer
-from transformers import AutoTokenizer, AutoModelForMaskedLM
-import torch
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+import string
+from flask.json.provider import DefaultJSONProvider
+import torch
+
+# 自定义 JSON 编码器，不进行 ASCII 转义
+class CustomJSONProvider(DefaultJSONProvider):
+    ensure_ascii = False
+
+# 配置日志
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+app = Flask(__name__)
+app.json = CustomJSONProvider(app)  # 使用自定义 JSON 编码器
+app.config['JSON_AS_ASCII'] = False  # 解决中文乱码问题
+CORS(app)
+lock = threading.Lock()
 
 # 强制使用 GPU
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# 定义全局变量
-stop_recognition = False
-app = Flask(__name__)
-
-# 模型路径
+# 模型路径（根据实际的存储地址修改）
 base_model_path = r"D:\anxio\Axonix-2\transfer\model"
 vosk_model_path = os.path.join(base_model_path, "vosk-model-cn-kaldi-multicn-0.15")
-bert_model_path = os.path.join(base_model_path, "bert-base-chinese")
 
-# 初始化 BERT 模型和分词器
-try:
-    bert_tokenizer = AutoTokenizer.from_pretrained(bert_model_path)
-    from transformers import BertForMaskedLM
-    bert_model = BertForMaskedLM.from_pretrained(bert_model_path, ignore_mismatched_sizes=True).to(device)
-    bert_model.eval()
-except Exception as e:
-    print(f"❌ BERT 模型加载失败: {e}")
-    exit(1)
-
-def correct_with_bert(text):
-    """使用 BERT 进行语义纠错"""
-    inputs = bert_tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512).to(device)
-    with torch.no_grad():
-        outputs = bert_model(**inputs)
-    corrected_text = bert_tokenizer.decode(inputs['input_ids'][0], skip_special_tokens=True)
-    return corrected_text
-
-# 全局变量
+# 全局识别器（单例模式）
 recognizer = None
-stream = None
-audio = None
-sentence_list = []
-full_text = ""
-stop_recognition = False
 
-def setup_vosk():
-    """设置 Vosk 语音识别模型"""
-    global recognizer, audio, stream
-    if not os.path.exists(vosk_model_path):
-        return "❌ 语音模型未找到，请下载模型并解压到指定路径"
-    model = Model(vosk_model_path)
-    recognizer = KaldiRecognizer(model, 16000)
-    recognizer.SetWords(True)
-    audio = pyaudio.PyAudio()
-    stream = audio.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=4000)
-    stream.start_stream()
-    return "✅ Vosk 模型加载成功"
+# 设置置信度阈值
+CONFIDENCE_THRESHOLD = 0.6
 
-@app.route('/start_recognition', methods=['POST'])
-def start_recognition():
-    """开始语音识别"""
-    global stop_recognition, sentence_list, full_text
-    setup_vosk()
-    stop_recognition = False
-    sentence_list = []
-    full_text = ""
-    threading.Thread(target=recognize_audio).start()
-    return jsonify({"message": "语音识别已启动"})
+def init_vosk():
+    """初始化 Vosk 识别器（线程安全）"""
+    global recognizer
+    with lock:
+        if not recognizer:
+            if not os.path.exists(vosk_model_path):
+                raise FileNotFoundError(f"❌ Vosk 模型路径不存在: {vosk_model_path}")
+            model = Model(vosk_model_path)
+            recognizer = KaldiRecognizer(model, 16000)  # 设置正确的音频采样率
+            recognizer.SetWords(True)
+    return recognizer
 
-@app.route('/stop_recognition', methods=['POST'])
-def stop_recognition_api():
-    """停止语音识别"""
-    global stop_recognition
-    stop_recognition = True
-    return jsonify({
-        "message": "语音识别已停止", 
-        "final_result": ' '.join(sentence_list)
-    })
 
-def recognize_audio():
-    """语音识别主函数"""
-    global full_text, sentence_list, stop_recognition
+@app.route('/aud', methods=['POST'])
+def audio_stream():
     try:
-        while not stop_recognition:
-            data = stream.read(4000, exception_on_overflow=False)
-            if recognizer.AcceptWaveform(data):
-                result_json = recognizer.Result()
-                result_dict = json.loads(result_json)
-                new_text = result_dict.get("text", "")
-                new_text = ''.join(new_text.split())
-                full_text += " " + new_text
-                sentence_list.append(new_text)
+        logging.info("收到 /aud 请求")
+        logging.info(f"请求头: {request.headers}")
+        logging.info(f"请求表单数据: {request.form}")
+        logging.info(f"请求文件: {request.files}")
+
+        init_vosk()
+        # 检查是否有文件上传
+        if 'audio' not in request.files:
+            logging.error("未提供音频文件")
+            return jsonify({"error": "未提供音频文件"}), 400
+        file = request.files['audio']
+        # 检查文件是否为空
+        if file.filename == '':
+            logging.error("空音频文件")
+            return jsonify({"error": "空音频文件"}), 400
+        logging.info(f"接收到的音频文件名为: {file.filename}")
+        # 检查文件扩展名是否为.wav
+        if not file.filename.lower().endswith('.wav'):
+            logging.error("文件不是 WAV 格式")
+            return jsonify({"error": "文件必须是 WAV 格式"}), 400
+
+        # 保存传输过来的音频文件
+        save_dir ='received_audio'
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        save_path = os.path.join(save_dir, file.filename)
+        file.seek(0)  # 确保文件指针在文件开头
+        file.save(save_path)
+        logging.info(f"音频文件已保存到: {save_path}")
+
+        # Vosk 处理音频数据
+        try:
+            with lock:
+                with wave.open(save_path, 'rb') as wav_file:
+                    print(wav_file)  # 添加调试信息
+                    # 初始化识别器状态
+                    recognizer.Reset()
+                    while True:
+                        data = wav_file.readframes(4000)
+                        if len(data) == 0:
+                            break
+                        if recognizer.AcceptWaveform(data):
+                            # 部分识别结果
+                            partial_result = recognizer.PartialResult()
+                            logging.debug(f"部分识别结果: {partial_result}")
+                    # 最终识别结果
+                    final_result_json = recognizer.FinalResult()
+                    final_result_dict = json.loads(final_result_json)
+                    logging.debug(f"最终识别结果 JSON: {final_result_dict}")
+
+                    # 过滤掉置信度较低的识别结果
+                    filtered_result = [word for word in final_result_dict.get('result', []) if word['conf'] >= CONFIDENCE_THRESHOLD]
+                    # 按照时间顺序排序
+                    sorted_result = sorted(filtered_result, key=lambda x: x['start'])
+                    # 添加调试信息，输出排序后的结果
+                    logging.debug(f"排序后的识别结果: {sorted_result}")
+                    # 按顺序提取词
+                    final_text_list = []
+                    for word in sorted_result:
+                        final_text_list.append(word['word'])
+                    final_text = "".join(final_text_list)  # 直接拼接成字符串
+                    # 添加调试信息，输出最终文本
+                    logging.info(f"Vosk 识别结果: {final_text}")
+                    return final_text
+        except Exception as e:
+            logging.error(f"Vosk 识别出错: {e}")
+            return jsonify({"error": "Vosk 识别失败"}), 500
+
     except Exception as e:
-        print(f"❗ 语音识别出错: {e}")
-    finally:
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()
+        logging.error(f"处理失败: {e}")
+        return jsonify({"error": f"处理失败: {str(e)}"}), 500
+
 
 if __name__ == "__main__":
-    # 生成自签名证书（仅用于测试，生产环境需替换为 CA 证书）
-    os.system("openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=localhost'")
-    
+    # 服务器配置
+    #IP地址根据自己的实际地址修改
+    SERVER_HOST = '0.0.0.0'
+    SERVER_PORT = 5002
+    SERVER_IP = '0.0.0.0'
+    # 生成自签名证书（确保 OpenSSL 已安装并添加到 PATH）
+    if not (os.path.exists("key.pem") and os.path.exists("cert.pem")):
+        os.system(
+            f"openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN={SERVER_IP}'")
     # 启动 HTTPS 服务器
     app.run(
-        host='0.0.0.0',
-        port=8000,
-        ssl_context=('cert.pem', 'key.pem'),  # 配置 SSL 证书
-        threaded=True
+        host=SERVER_HOST,
+        port=SERVER_PORT,
+        ssl_context=('cert.pem', 'key.pem'),
+        threaded=True,
+        debug=False
     )

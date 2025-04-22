@@ -91,7 +91,7 @@ public class TrafficRecognitionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_traffic, container, false);
         startTime = new Date();
 //        TRAFFIC_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/traffic-logs/aitraffic";
-        TRAFFIC_URL = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url)+"chat_stream";
+        TRAFFIC_URL = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url_traffic);
         previewView = view.findViewById(R.id.previewView);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         imageView = view.findViewById(R.id.resultImageView);

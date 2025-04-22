@@ -10,6 +10,11 @@
     <string name="hearing_impairment">听障</string>
     <string name="other_disability">其他障碍</string>
 
-    <string name="Base_url">https://192.168.43.87:8080</string>
-    <string name="python_base_url">https://172.20.10.4:5001/</string>
+    <string name="Base_url">https://172.20.10.3:8090</string>
+
+    <string name="python_base_url_aiChat">https://172.20.10.3:5004/chat_stream</string>
+    <string name="python_base_url_traffic">https://172.20.10.3:5001/analyze</string>
+    <string name="python_base_url_toCN">https://172.20.10.3:5002/aud</string>
+    <string name="python_base_url_translate">https://172.20.10.3:5003/translate</string>
+
 </resources>
