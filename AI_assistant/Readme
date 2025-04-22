@@ -1,0 +1,6 @@
+使用https可能会需要自签名证书
+如何生成自签名证书（测试用）
+在项目目录下运行以下命令生成证书
+# 生成密钥和证书（有效期365天）
+openssl req -x509 -newkey rsa:4096 -nodes -out ssl.cert -keyout ssl.key -days 365
+将生成的 ssl.cert 和 ssl.key 文件放在项目目录下。
