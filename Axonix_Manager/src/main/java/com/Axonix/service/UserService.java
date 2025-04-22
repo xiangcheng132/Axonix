@@ -35,6 +35,6 @@ public interface UserService {
 
     int register(User user, MultipartFile avatarFile) throws DuplicateUsernameException, IOException;
 
-    int updateAvatar(Integer userId, MultipartFile avatarFile) throws IOException;
+    String updateAvatar(Integer userId, MultipartFile avatarFile) throws IOException;
 
 }

@@ -191,10 +191,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateAvatar(Integer userId, MultipartFile avatarFile) throws IOException {
+    public String updateAvatar(Integer userId, MultipartFile avatarFile) throws IOException {
 
         if (avatarFile == null || avatarFile.isEmpty()) {
-            return 0; // 没上传文件
+            return "0"; // 没上传文件
         }
 
         String relativePath = "src/main/resources/static/images/";
@@ -213,8 +213,8 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setId(userId);
         user.setAvatar("/images/" + fileName);
-
-        return userMapper.updateByPrimaryKeySelective(user); // 只更新非空字段
+        userMapper.updateByPrimaryKeySelective(user); // 只更新非空字段
+        return user.getAvatar();
     }
 
 

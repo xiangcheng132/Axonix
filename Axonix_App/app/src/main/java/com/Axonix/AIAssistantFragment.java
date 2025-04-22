@@ -1,6 +1,8 @@
 package com.Axonix;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,7 +46,7 @@ public class AIAssistantFragment extends Fragment {
     private EditText editTextMessage;
     private String AI_URL;
     private OkHttpClient httpClient;
-
+    private TextView aiReplyTextView;
 
     @Nullable
     @Override
@@ -51,7 +55,8 @@ public class AIAssistantFragment extends Fragment {
         // 加载新的布局文件
         View view = inflater.inflate(R.layout.fragment_ai, container, false);
         httpClient = NetworkClient.INSTANCE.getClient();
-        AI_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/ai-log/ai_assistant";
+//        AI_URL = requireContext().getResources().getString(com.Axonix.index.R.string.Base_url) + "/api/ai-log/ai_assistant";
+        AI_URL = requireContext().getResources().getString(com.Axonix.index.R.string.python_base_url) + "chat_stream";
         // 设置 Toolbar
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -81,6 +86,7 @@ public class AIAssistantFragment extends Fragment {
 
         Message sentMessage = new Message(Message.TYPE_SENT, text);
         messageList.add(sentMessage);
+        messageList.add(new Message(Message.TYPE_RECEIVED, "AI 回复：正在生成中，请稍等片刻。"));
         chatAdapter.notifyItemInserted(messageList.size() - 1);
         recyclerView.scrollToPosition(messageList.size() - 1);
         editTextMessage.setText("");
@@ -95,17 +101,22 @@ public class AIAssistantFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("AIAssistant", "获取失败", e);
+
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    Log.e("PostDetail", "修改不喜欢数失败，状态码：" + response.code());
+                    Log.e("aiChat", "aiChat失败，状态码：" + response.code());
                     return;
                 }
+
                 String aiReply = "AI 回复：" + response.body().string();
-                requireActivity().runOnUiThread(()->{
+
+                requireActivity().runOnUiThread(() -> {
                     Message replyMessage = new Message(Message.TYPE_RECEIVED, aiReply);
+                    messageList.remove(messageList.size() - 1);
+                    chatAdapter.notifyItemRemoved(messageList.size());
                     messageList.add(replyMessage);
                     chatAdapter.notifyItemInserted(messageList.size() - 1);
                     recyclerView.scrollToPosition(messageList.size() - 1);
@@ -114,4 +125,6 @@ public class AIAssistantFragment extends Fragment {
         });
 
     }
+
 }
+

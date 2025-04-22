@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 
-
 android.applicationVariants.all { variant ->
     variant.outputs.all {
         def taskName = "print${variant.name.capitalize()}SHA1"
@@ -33,7 +32,7 @@ android {
         versionCode 1
         versionName "1.0"
         manifestPlaceholders += [
-                hw_app_id : "113945503" // 与AndroidManifest中的appid保持一致
+                hw_app_id: "113945503" // 与AndroidManifest中的appid保持一致
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
@@ -90,10 +89,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-     implementation 'com.huawei.hms:hwid:6.11.0.300'
-     implementation 'com.huawei.hms:hmscoreinstaller:6.11.0.301'
-     implementation 'com.huawei.agconnect:agconnect-core:1.9.1.300'
-     implementation 'com.huawei.hms:push:6.12.0.300'
+    implementation 'com.huawei.hms:hwid:6.11.0.300'
+    implementation 'com.huawei.hms:hmscoreinstaller:6.11.0.301'
+    implementation 'com.huawei.agconnect:agconnect-core:1.9.1.300'
+    implementation 'com.huawei.hms:push:6.12.0.300'
     implementation 'com.amap.api:location:6.1.0'
     implementation "androidx.camera:camera-camera2:1.2.3"
     implementation "androidx.camera:camera-lifecycle:1.2.3"

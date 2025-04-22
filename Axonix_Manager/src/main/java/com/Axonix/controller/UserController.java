@@ -105,7 +105,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/updateAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public int updateAvatar(@RequestParam("userId") Integer userId,
+    public String updateAvatar(@RequestParam("userId") Integer userId,
                             @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
 
         return userService.updateAvatar(userId, avatarFile);

@@ -226,8 +226,11 @@ public class UserFragment extends Fragment
                     requireActivity().runOnUiThread(() -> {
                         if (response.isSuccessful()) {
                             Toast.makeText(getContext(), "图片上传成功", Toast.LENGTH_SHORT).show();
+                            Log.d("图片返回结果:",responseStr);
+                            currentUser.setAvatar(responseStr);
                         } else {
                             Toast.makeText(getContext(), "图片上传失败，请重试" + responseStr, Toast.LENGTH_SHORT).show();
+
                             Log.d("图片上传失败", responseStr);
                         }
                     });
@@ -451,7 +454,6 @@ public class UserFragment extends Fragment
         updateItemState(R.id.item_detail_address, currentUser.getAddress());
         updateItemState(R.id.item_create_time, currentUser.getCreatedAt().toLocaleString());
         updateItemState(R.id.spinner_disability, getDisabilityText(currentUser.getDisabilityType()));
-        // 设置用户名和 VIP 图标
         TextView tvUsername = rootView.findViewById(R.id.tv_username);
         ImageView ivVip = rootView.findViewById(R.id.iv_vip);
         tvUsername.setText(currentUser.getUsername());
@@ -488,7 +490,7 @@ public class UserFragment extends Fragment
                     if (response.isSuccessful() && response.body() != null) {
                         byte[] imageBytes = response.body().bytes();
                         requireActivity().runOnUiThread(() -> {
-                            // 将获取到的图片数据交给 Glide 处理
+
                             Glide.with(requireContext())
                                     .load(imageBytes)
                                     .placeholder(R.drawable.ic_avatar)

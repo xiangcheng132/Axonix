@@ -2,6 +2,7 @@ package com.Axonix.controller;
 
 import com.Axonix.demo.model.TrafficLog;
 import com.Axonix.demo.model.TrafficLogExample;
+import com.Axonix.demo.model.TrafficLogUpdata;
 import com.Axonix.service.TrafficLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -64,17 +65,14 @@ public class TrafficLogController {
     // 条件选择性更新（忽略空字段）
     @PutMapping("/update/by-example/selective")
     public int updateByExampleSelective(
-            @RequestBody TrafficLog record,
-            @RequestBody TrafficLogExample example) {
-        return trafficLogService.updateByExampleSelective(record, example);
+            @RequestBody TrafficLogUpdata request) {
+        return trafficLogService.updateByExampleSelective(request.getRecord(), request.getExample());
     }
 
     // 条件完整更新（全字段覆盖）
     @PutMapping("/update/by-example")
-    public int updateByExample(
-            @RequestBody TrafficLog record,
-            @RequestBody TrafficLogExample example) {
-        return trafficLogService.updateByExample(record, example);
+    public int updateByExample(@RequestBody TrafficLogUpdata request) {
+        return trafficLogService.updateByExample(request.getRecord(), request.getExample());
     }
 
     // 主键选择性更新（忽略空字段）

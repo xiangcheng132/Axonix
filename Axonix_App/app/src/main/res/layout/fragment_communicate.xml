@@ -30,7 +30,8 @@
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="false"/>
 
 
         <com.google.android.material.button.MaterialButtonToggleGroup
@@ -104,7 +105,7 @@
             android:background="#EEEEEE"
             android:gravity="start"
             android:padding="16dp"
-            android:text="返回结果会显示在这里"
+            android:text="请按住[语音转文字]按钮说话，松开后将进行转换"
             android:textSize="16sp" />
     </ScrollView>
 

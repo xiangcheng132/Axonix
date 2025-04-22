@@ -22,6 +22,8 @@
         android:theme="@style/Theme.Axonix_App"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
+
+<!--        高德地图配置-->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="0dcfd95dadb0e0949a7c0e319562b2a7"/>
         <!-- ARouter 需要的 meta-data 配置 -->
         <meta-data
@@ -42,6 +44,8 @@
         </activity>
         <!-- 其他模块的 Activity 需要在主模块注册 -->
 <!--        <activity android:name="com.Axonix.navmain.NavActivity" android:exported="true"/>-->
+
+<!--        华为配置-->
         <meta-data
             android:name="com.huawei.hms.client.appid"
             android:value="appid=113945503"/>
@@ -70,6 +74,17 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA"
         tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+
+
 
 
 

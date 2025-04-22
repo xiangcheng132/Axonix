@@ -10,5 +10,6 @@
     <string name="hearing_impairment">听障</string>
     <string name="other_disability">其他障碍</string>
 
-    <string name="Base_url">https://192.168.43.87:8080</string>>
+    <string name="Base_url">https://192.168.43.87:8080</string>
+    <string name="python_base_url">https://172.20.10.4:5001/</string>
 </resources>
