@@ -13,12 +13,12 @@ app = Flask(__name__)
 
 # 加载模型
 base_dir = os.path.dirname(__file__)
-blind_model = YOLO(os.path.join(base_dir, 'lumos.pt'))  # 盲道模型
-obstacle_model = YOLO(os.path.join(base_dir, 'yolo11n.pt'))  # 障碍物模型
+blind_model = YOLO('bpm.pt')  # 盲道模型
+obstacle_model = YOLO('yolo11n.pt')  # 障碍物模型
 
 # 将模型移动到相应设备
-blind_model.to("cuda")
-obstacle_model.to("cuda")
+blind_model.to("mps")
+obstacle_model.to("mps")
 
 # 盲道参数
 BOTTOM_WIDTH_RATIO = 0.5
@@ -33,6 +33,11 @@ SMOOTHING_WINDOW = 5       # 平滑窗口大小
 # 存储上一次的状态
 last_status = None
 last_tts_text = None
+
+# 想要识别的物品类别
+target_classes = ['person', 'car', 'bus', 'truck','motorcycle', 'bicycle',
+                  'traffic_sign', 'traffic_light', 'traffic_cone', 'pothole',
+                  'barrier', 'animal','cell phone']  # 这里可以修改为你想要识别的类别
 
 class DistanceCalculator:
     def __init__(self, window_size=5):
@@ -51,8 +56,13 @@ class DistanceCalculator:
             return None
 
         offset_ratio = abs(box_center_x - image_center_x) / image_center_x
-        compensation = 1 + 0.15 * offset_ratio
+        # 调整补偿系数，可根据实际情况调整
+        compensation = 1 + 0.1 * offset_ratio
         return (KNOWN_WIDTH * self.focal_length) / (perceived_width * compensation)
+
+# 初始化距离计算器和校准标志
+distance_calc = DistanceCalculator(window_size=SMOOTHING_WINDOW)
+calibrated = False
 
 def get_trapezoid_bounds(h, w):
     bottom_width = w * BOTTOM_WIDTH_RATIO
@@ -108,11 +118,7 @@ def analyze_blind_box(box, trapezoid, boundaries):
 
 @app.route('/analyze', methods=['POST'])
 def analyze_image():
-    global last_status, last_tts_text
-
-    # 初始化距离计算器
-    distance_calc = DistanceCalculator(window_size=SMOOTHING_WINDOW)
-    calibrated = False
+    global last_status, last_tts_text, calibrated, distance_calc
 
     # 获取请求参数
     data = request.json
@@ -181,6 +187,10 @@ def analyze_image():
             x1, y1, x2, y2 = box.xyxy[0]
             cls_id = int(box.cls[0])
             label = obstacle_model.names[cls_id]
+
+            # 只处理目标类别
+            if label not in target_classes:
+                continue
 
             current_width = x2 - x1
             box_center_x = (x1 + x2) // 2
@@ -252,7 +262,7 @@ def analyze_image():
     close_obstacles = [o for o in obstacles if o['distance'] and o['distance'] < 1.0]
     if close_obstacles:
         status = "warning:obstacle!"
-        tts_text = f"前方{close_obstacles[0]['label']}，距离{close_obstacles[0]['distance']:.1f}米"
+        tts_text = f"前方{close_obstacles[0]['label']}"#，距离{close_obstacles[0]['distance']:.1f}米
         vibrate = True
 
     # 只有当状态变化时才更新tts_text和vibrate
@@ -278,7 +288,7 @@ def analyze_image():
     cv2.putText(frame, status, (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     # 转成 base64 返回图像结果
-    _, buffer = cv2.imencode('.jpg',frame)
+    _, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
     response_data['image_annotated'] = jpg_as_text
 
@@ -300,7 +310,7 @@ if __name__ == "__main__":
 
     # 启动服务器
     app.run(
-        host='0.0.0.0',
+        host='172.20.10.4',
         port=5001,
         ssl_context=('cert.pem', 'key.pem'),
         threaded=True,
