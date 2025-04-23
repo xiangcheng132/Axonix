@@ -19,7 +19,7 @@ public class HttpConnectorConfig {
 
     private Connector createHttpConnector() {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-        connector.setPort(5173); // 这里设置 HTTP 端口，比如 8081
+        connector.setPort(8080); // 这里设置 HTTP 端口，比如 8081
         return connector;
     }
 }
