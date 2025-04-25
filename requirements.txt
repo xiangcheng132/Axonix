@@ -1,0 +1,26 @@
+# 基础深度学习框架
+torch>=2.1.0
+torchvision>=0.16.0
+
+# YOLO模型
+ultralytics>=8.0.0
+
+# 计算机视觉
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# 语音识别
+vosk>=0.3.45
+SpeechRecognition>=3.10.0
+
+# Web服务框架
+flask>=2.3.0
+flask-cors>=4.0.0
+fastapi>=0.104.0
+uvicorn>=0.23.0
+httpx>=0.25.0
+pydantic>=2.4.0
+
+# 工具库
+python-multipart>=0.0.6
+typing-extensions>=4.8.0
